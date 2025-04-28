@@ -1,0 +1,194 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Shell.ShellView"
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Shell"
+	x:DataType="vm:ShellViewModel" 
+	Background="Transparent"
+	>
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+		 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:ShellViewModel />
+	</Design.DataContext>
+
+	<Grid
+		x:Name="InnerGrid"
+		Background="Transparent"
+		>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="0"/>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="72"/>
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<Image
+			Stretch="UniformToFill"
+			Source="\Assets\Images\dark.jpg"
+			Grid.ColumnSpan="999" Grid.RowSpan="999"
+			/>
+		<Rectangle
+			Fill="#58000020"
+			Grid.ColumnSpan="999" Grid.RowSpan="999"
+			/>
+		<Rectangle
+			Fill="#70000020"
+			Grid.Column="1" Grid.ColumnSpan="999" Grid.RowSpan="1"
+			/>
+		<Rectangle
+			Fill="#70000020"
+			Grid.ColumnSpan="1" Grid.RowSpan="999"
+			/>
+		<Image
+			Stretch="UniformToFill"
+			Source="\Assets\Images\Translator.png"
+			Grid.Row="0" Grid.Column="0" 
+			Width="38" Height="38"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Margin="12 0 0 0"
+			/>
+		<TextBlock 
+			Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+			Text="{DynamicResource Shell.AppName}" 
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Margin="68 0 0 0"
+			FontSize="34" 
+			FontStyle="Normal"
+			FontWeight="DemiBold"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			TextWrapping="Wrap"
+			/>
+		<!-- View Selector - Main toolbar - Aligned left -->
+		<StackPanel
+			IsVisible="{Binding MainToolbarIsVisible}"
+			Orientation="Horizontal"
+			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
+			Margin="460 0 0 0"
+			HorizontalAlignment="Left"
+			>
+			<!-- 
+			<glyphs:SelectionGroup x:Name="SelectionGroup" />
+			<glyphs:GlyphButton
+				x:Name="TodayButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="calendar_today"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				GlyphAngle="0"
+				Text="{DynamicResource Shell.Today}"
+				IsSelected="True"
+				Command="{Binding TodayCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+			<glyphs:GlyphButton
+				x:Name="CollectionButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="collections"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				GlyphAngle="0"
+				Text="{DynamicResource Shell.Collection}"
+				Command="{Binding CollectionCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+			<glyphs:GlyphButton
+				x:Name="SettingsButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="settings"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				GlyphAngle="20"
+				Text="{DynamicResource Shell.Settings}"
+				Command="{Binding SettingsCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+			<glyphs:GlyphButton
+				x:Name="FlagButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="flag"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				Text="{DynamicResource Shell.Language}"
+				Command="{Binding LanguageCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+			<glyphs:GlyphButton
+				x:Name="IntroButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="arrow_up"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				Text="{DynamicResource Shell.About}"
+				Command="{Binding InfoCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+				-->
+		</StackPanel>
+
+		<!-- View Selector - Close tool bar - Aligned Right -->
+		<StackPanel
+			Orientation="Horizontal"
+			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
+			Margin="0 0 16 0"
+			HorizontalAlignment="Right"
+			>
+			<glyphs:GlyphButton
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="4 12 4 12"
+				GlyphSource="dismiss"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				Text="{DynamicResource Shell.Close}"
+				Command="{Binding CloseCommand}"
+				/>
+		</StackPanel>
+
+		<!-- View Specific toolbar - Aligned Center -->
+		<ContentControl
+			x:Name="ShellViewToolbar"
+			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
+			Margin="980 0 0 0"
+			VerticalAlignment="Stretch" HorizontalAlignment="Left"
+			/>
+		<!-- Do not add rows and/or columns to the toaster host-->
+		<Grid
+			x:Name="ToasterHost"
+			Grid.Column="1" Grid.Row="1"
+			VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+			> 			
+			<ContentControl
+				x:Name="ShellViewContent"
+				VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+				/>
+		</Grid>
+	</Grid>
+</UserControl>

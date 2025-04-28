@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Google\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Interfaces\Lyt.Avalonia.Interfaces.csproj" />
+  </ItemGroup>
+
 </Project>

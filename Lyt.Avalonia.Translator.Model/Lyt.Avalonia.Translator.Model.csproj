@@ -1,9 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<TargetFramework>net9.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Interfaces\Lyt.Avalonia.Interfaces.csproj" />
+		<ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Model\Lyt.Avalonia.Model.csproj" />
+		<ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Persistence\Lyt.Avalonia.Persistence.csproj" />
+		<ProjectReference Include="..\Lyt.Avalonia.Translator.Service\Lyt.Avalonia.Translator.Service.csproj" />
+	</ItemGroup>
 
 </Project>
