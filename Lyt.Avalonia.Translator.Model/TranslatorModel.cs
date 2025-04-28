@@ -124,7 +124,7 @@ public sealed partial class TranslatorModel : ModelBase
                 var fileInfo = new FileInfo(path);
                 if (fileInfo.Length < 1024)
                 {
-                    if (Debugger.IsAttached) { Debugger.Break(); }
+                    // if (Debugger.IsAttached) { Debugger.Break(); }
                     this.Logger.Warning("Model file is too small!");
                 }
             }

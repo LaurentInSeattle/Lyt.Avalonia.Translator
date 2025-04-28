@@ -1,11 +1,19 @@
 ﻿namespace Lyt.Avalonia.Translator.Service;
 
-public class TranslatorService(ILogger logger, IRandomizer randomizer)
+public class TranslatorService
 {
-    private readonly ILogger logger = logger;
-    private readonly IRandomizer randomizer = randomizer;
+    private readonly ILogger logger;
+    private readonly GoogleTranslate googleTranslate;
 
-    public async Task<List<string>> Translate(ProviderKey provider)
+    public TranslatorService(ILogger logger)
+    {
+        this.logger = logger;
+        this.googleTranslate = new GoogleTranslate();
+    }
+
+    public async Task<Tuple<bool, string>> Translate(
+        ProviderKey provider, 
+        string sourceText, string sourceLanguageKey, string destinationLanguageKey)
     {
         try
         {
@@ -13,7 +21,7 @@ public class TranslatorService(ILogger logger, IRandomizer randomizer)
             {
                 case ProviderKey.Google:
                     await Task.Delay(100); 
-                    return []; //  await GoogleService.Translate(....);
+                    return await this.googleTranslate.Translate(sourceText, sourceLanguageKey, destinationLanguageKey);
 
                 default:
                     break;

@@ -10,6 +10,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     private const int MinutesToMillisecs = 60 * 1_000;
 
     private readonly TranslatorModel translatorModel;
+    private readonly TranslatorService translatorService;
     private readonly IToaster toaster;
     private readonly IMessenger messenger;
     private readonly ILocalizer localizer;
@@ -26,9 +27,12 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     #endregion To please the XAML viewer 
 
     public ShellViewModel(
-        TranslatorModel astroPicModel, ILocalizer localizer, IToaster toaster, IMessenger messenger)
+        TranslatorModel translatorModel,
+        TranslatorService translatorService, 
+        ILocalizer localizer, IToaster toaster, IMessenger messenger)
     {
-        this.translatorModel = astroPicModel;
+        this.translatorModel = translatorModel;
+        this.translatorService = translatorService; 
         this.localizer = localizer;
         this.toaster = toaster;
         this.messenger = messenger;
@@ -86,6 +90,13 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     private async void ActivateInitialView()
     {
+        var result = await this.translatorService.Translate(
+            ProviderKey.Google, "Hello! Have you been able to complete the translation?", "en", "es");
+        if (result is not null && result.Item1)
+        {
+            Debug.WriteLine(result.Item2);
+        } 
+
         //if (this.translatorModel.IsFirstRun)
         //{
         //    this.OnViewActivation(ActivatedView.Intro, parameter: null, isFirstActivation: true);
