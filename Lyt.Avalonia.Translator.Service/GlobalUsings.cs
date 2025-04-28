@@ -15,11 +15,11 @@ global using System.Net.Sockets;
 global using System.Text.Json;
 global using System.Text.Json.Serialization;
 global using System.Threading.Tasks;
-
+global using System.Web;
 
 global using Lyt.Avalonia.Interfaces.Messenger;
 global using Lyt.Avalonia.Interfaces.Logger;
 global using Lyt.Avalonia.Interfaces.Random;
 
 global using Lyt.Avalonia.Translator.Service;
-// global using Lyt.Avalonia.Translator.Service.Google;
+global using Lyt.Avalonia.Translator.Service.Google;
