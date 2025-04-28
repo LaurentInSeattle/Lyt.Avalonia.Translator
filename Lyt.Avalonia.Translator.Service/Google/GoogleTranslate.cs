@@ -111,20 +111,20 @@ internal class GoogleTranslate
                         string? maybeTranslation = sentence.Translation;
                         if (!string.IsNullOrWhiteSpace(maybeTranslation))
                         {
-                            translation = string.Concat ( translation , " " , maybeTranslation);
+                            translation = string.Concat(translation, " ", maybeTranslation);
                         }
                     }
 
                     if (!string.IsNullOrWhiteSpace(translation))
                     {
-                        return new Tuple<bool, string>(true, translation);
+                        return new Tuple<bool, string>(true, translation.Trim());
                     }
                 }
             }
 
             throw new Exception("Deserialization Error");
         }
-        catch ( Exception ex) 
+        catch (Exception ex)
         {
             return new Tuple<bool, string>(false, ex.Message);
         }

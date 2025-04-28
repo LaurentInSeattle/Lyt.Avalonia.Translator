@@ -1,15 +1,9 @@
 ﻿namespace Lyt.Avalonia.Translator.Service;
 
-public class TranslatorService
+public class TranslatorService(ILogger logger)
 {
-    private readonly ILogger logger;
-    private readonly GoogleTranslate googleTranslate;
-
-    public TranslatorService(ILogger logger)
-    {
-        this.logger = logger;
-        this.googleTranslate = new GoogleTranslate();
-    }
+    private readonly ILogger logger = logger;
+    private readonly GoogleTranslate googleTranslate = new();
 
     public async Task<Tuple<bool, string>> Translate(
         ProviderKey provider, 
