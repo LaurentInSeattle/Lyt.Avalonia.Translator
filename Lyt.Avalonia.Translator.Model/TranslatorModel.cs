@@ -38,13 +38,13 @@ public sealed partial class TranslatorModel : ModelBase
 
     public TranslatorModel(
         FileManagerModel fileManager,
-        TranslatorService astroPicService,
+        TranslatorService translatorService,
         ILocalizer localizer,
         IMessenger messenger,
         ILogger logger) : base(messenger, logger)
     {
         this.fileManager = fileManager;
-        this.translatorService = astroPicService;
+        this.translatorService = translatorService;
         this.localizer = localizer;
         this.modelFileId = new FileId(Area.User, Kind.Json, TranslatorModel.TranslatorModelFilename);
         this.ShouldAutoSave = true;
@@ -122,7 +122,7 @@ public sealed partial class TranslatorModel : ModelBase
             {
                 string path = this.fileManager.MakePath(this.modelFileId);
                 var fileInfo = new FileInfo(path);
-                if (fileInfo.Length < 1024)
+                if (fileInfo.Length < 256)
                 {
                     // if (Debugger.IsAttached) { Debugger.Break(); }
                     this.Logger.Warning("Model file is too small!");

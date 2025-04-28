@@ -2,8 +2,8 @@
 
 internal class GoogleTranslate
 {
-    private const string RequestUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0";
-    private const string RequestGoogleTranslatorUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&hl=en&dt=t&dt=bd&dj=1&source=icon&tk=467103.467103&q={2}";
+    private const string UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0";
+    private const string GoogleTranslatorUrl = "https://translate.googleapis.com/translate_a/single?client=gtx&sl={0}&tl={1}&hl=en&dt=t&dt=bd&dj=1&source=icon&tk=467103.467103&q={2}";
 
     private readonly Dictionary<string, string> Languages =
         new()
@@ -84,7 +84,7 @@ internal class GoogleTranslate
     public GoogleTranslate()
     {
         this.client = new();
-        this.client.DefaultRequestHeaders.Add("UserAgent", RequestUserAgent);
+        this.client.DefaultRequestHeaders.Add("UserAgent", UserAgent);
         this.client.Timeout = TimeSpan.FromSeconds(10);
     }
 
@@ -94,13 +94,13 @@ internal class GoogleTranslate
         try
         {
             sourceText = HttpUtility.UrlEncode(sourceText);
-            string url = string.Format(RequestGoogleTranslatorUrl, sourceLanguageKey, destinationLanguageKey, sourceText);
+            string url = string.Format(GoogleTranslatorUrl, sourceLanguageKey, destinationLanguageKey, sourceText);
             using var response = await this.client.GetAsync(url);
             var stream = await response.Content.ReadAsStreamAsync();
             using var reader = new StreamReader(stream, Encoding.UTF8);
             string jsonText = reader.ReadToEnd();
-            var responseObject = JsonSerializer.Deserialize<Translation>(jsonText);
-            if (responseObject is Translation translationResponse)
+            var responseObject = JsonSerializer.Deserialize<TranslationResponse>(jsonText);
+            if (responseObject is TranslationResponse translationResponse)
             {
                 var sentences = translationResponse.Sentences;
                 if (sentences is not null && sentences.Count > 0)
