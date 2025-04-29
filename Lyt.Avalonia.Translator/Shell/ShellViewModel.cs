@@ -1,4 +1,6 @@
-﻿namespace Lyt.Avalonia.Translator.Shell;
+﻿using System;
+
+namespace Lyt.Avalonia.Translator.Shell;
 
 //using static MessagingExtensions;
 //using static ViewActivationMessage;
@@ -95,7 +97,22 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         if (result is not null && result.Item1)
         {
             Debug.WriteLine(result.Item2);
-        } 
+        }
+
+        Dictionary<string, string> dictionary = new Dictionary<string, string>()
+        {
+            { "key1" , "Hello! Have you been able to complete the translation?"},
+            { "key2" , "Not yet! But it will be finished tonight."},
+        }; 
+
+        var results = await this.translatorService.BatchTranslate(ProviderKey.Google, dictionary, "en", "it");
+        if (results is not null && results.Item1 && results.Item2.Count > 0)
+        {
+            foreach (var item in results.Item2)
+            {
+                Debug.WriteLine(item.Key + ":  " + item.Value);
+            }
+        }
 
         //if (this.translatorModel.IsFirstRun)
         //{
