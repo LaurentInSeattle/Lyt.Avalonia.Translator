@@ -114,6 +114,13 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
             }
         }
 
+        string sourcePath =
+            @"C:\Users\Laurent\source\repos\Lyt.Avalonia.Translator\Lang_en-US - Copy.axaml";
+        var fileResults = await this.translatorModel.TranslateAxamlResourceFile(
+            ProviderKey.Google, sourcePath, "en", "fr");
+
+        Debugger.Break();
+
         //if (this.translatorModel.IsFirstRun)
         //{
         //    this.OnViewActivation(ActivatedView.Intro, parameter: null, isFirstActivation: true);

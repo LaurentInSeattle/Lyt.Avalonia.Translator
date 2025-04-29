@@ -58,7 +58,7 @@ public sealed partial class TranslatorModel : ModelBase
              ProviderKey.Google,
              sourceDictionary,
              sourceLanguageKey, destinationLanguageKey,
-             throttleDelayMillisecs: 5_000);
+             throttleDelayMillisecs: 2_000);
         if (result is null || !result.Item1)
         {
             return false;
@@ -120,11 +120,11 @@ public sealed partial class TranslatorModel : ModelBase
             {
                 string key = item.Key;
                 string value = item.Value;
-                string line = string.Format(ResourceDictionaryEntryFormat, value, key);
+                string line = string.Format(ResourceDictionaryEntryFormat, key, value);
                 stringBuilder.Append(line);
             }
 
-            File.WriteAllText(stringBuilder.ToString(), destinationPath);
+            File.WriteAllText(destinationPath, stringBuilder.ToString());
 
             return true;
         }

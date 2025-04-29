@@ -117,6 +117,7 @@ internal class GoogleTranslate
 
                     if (!string.IsNullOrWhiteSpace(translation))
                     {
+                        Debug.WriteLine(sourceText + " :  " + translation.Trim());
                         return new Tuple<bool, string>(true, translation.Trim());
                     }
                 }
