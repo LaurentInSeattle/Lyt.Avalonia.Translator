@@ -19,8 +19,10 @@ internal class GoogleTranslate
     {
         try
         {
-            sourceText = HttpUtility.UrlEncode(sourceText);
-            string url = string.Format(GoogleTranslatorUrl, sourceLanguageKey, destinationLanguageKey, sourceText);
+            string encodedSourceText = HttpUtility.UrlEncode(sourceText);
+            string url = 
+                string.Format(
+                    GoogleTranslatorUrl, sourceLanguageKey, destinationLanguageKey, encodedSourceText);
             using var response = await this.client.GetAsync(url);
             var stream = await response.Content.ReadAsStreamAsync();
             using var reader = new StreamReader(stream, Encoding.UTF8);
