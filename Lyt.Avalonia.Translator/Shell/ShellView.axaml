@@ -72,24 +72,25 @@
 			Margin="460 0 0 0"
 			HorizontalAlignment="Left"
 			>
-			<!-- 
+			
 			<glyphs:SelectionGroup x:Name="SelectionGroup" />
 			<glyphs:GlyphButton
-				x:Name="TodayButton"
+				x:Name="TranslateButton"
 				Style="{StaticResource ToolbarIconButton}"
 				Behaviour="Tap"
 				HorizontalAlignment="Left" VerticalAlignment="Center"
 				Width="82" Height="56"
 				Margin="8 4 8 4"
-				GlyphSource="calendar_today"
+				GlyphSource="translate"
 				ButtonBackground="BorderlessRectangle"
 				GlyphStrokeThickness="0"
 				GlyphAngle="0"
-				Text="{DynamicResource Shell.Today}"
+				Text="{DynamicResource Shell.Translate}"
 				IsSelected="True"
-				Command="{Binding TodayCommand}"
+				Command="{Binding TranslateCommand}"
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
+			<!-- 
 			<glyphs:GlyphButton
 				x:Name="CollectionButton"
 				Style="{StaticResource ToolbarIconButton}"

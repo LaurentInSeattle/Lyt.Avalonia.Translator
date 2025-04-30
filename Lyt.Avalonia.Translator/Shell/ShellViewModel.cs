@@ -1,9 +1,7 @@
 ﻿namespace Lyt.Avalonia.Translator.Shell;
 
-//using static MessagingExtensions;
-//using static ViewActivationMessage;
-
-// https://stackoverflow.com/questions/385793/programmatically-start-application-on-login 
+using static MessagingExtensions;
+using static ViewActivationMessage;
 
 public sealed partial class ShellViewModel : Bindable<ShellView>
 {
@@ -37,8 +35,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         this.toaster = toaster;
         this.messenger = messenger;
 
-        //this.Messenger.Subscribe<ViewActivationMessage>(this.OnViewActivation);
-        //this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+        this.Messenger.Subscribe<ViewActivationMessage>(this.OnViewActivation);
         this.Messenger.Subscribe<LanguageChangedMessage>(this.OnLanguageChanged);
     }
 
@@ -46,7 +44,10 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     {
     }
 
-    // private void OnToolbarCommand(ToolbarCommandMessage _) => this.rotatorTimer.Reset();
+    
+    private void OnToolbarCommand(ToolbarCommandMessage _)
+    {
+    }
 
     protected override void OnViewLoaded()
     {
@@ -90,6 +91,9 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     private async void ActivateInitialView()
     {
+        this.Logger.Debug("ActivateInitialView: Internet connected: " + this.translatorModel.IsInternetConnected);
+        this.OnViewActivation(ActivatedView.Interactive, parameter: null, isFirstActivation: true);
+        this.Logger.Debug("OnViewLoaded OnViewActivation complete");
 
         //if (this.translatorModel.IsFirstRun)
         //{
@@ -123,109 +127,95 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     //    this.Logger.Debug("Model update, property: " + msgProp + " method: " + msgMethod);
     //}
 
-    //private void OnViewActivation(ViewActivationMessage message)
-    //    => this.OnViewActivation(message.View, message.ActivationParameter, false);
+    private void OnViewActivation(ViewActivationMessage message)
+        => this.OnViewActivation(message.View, message.ActivationParameter, false);
 
-    //private void OnViewActivation(ActivatedView activatedView, object? parameter = null, bool isFirstActivation = false)
-    //{
-    //    Bindable? CurrentViewModel()
-    //    {
-    //        object? currentView = this.View.ShellViewContent.Content;
-    //        if (currentView is Control control &&
-    //            control.DataContext is Bindable currentViewModel)
-    //        {
-    //            return currentViewModel;
-    //        }
+    private void OnViewActivation(ActivatedView activatedView, object? parameter = null, bool isFirstActivation = false)
+    {
+        Bindable? CurrentViewModel()
+        {
+            object? currentView = this.View.ShellViewContent.Content;
+            if (currentView is Control control &&
+                control.DataContext is Bindable currentViewModel)
+            {
+                return currentViewModel;
+            }
 
-    //        return null;
-    //    }
+            return null;
+        }
 
-    //    // Navigation also reset the wallpaper rotation timer
-    //    this.rotatorTimer.Reset();
+        if (activatedView == ActivatedView.Exit)
+        {
+            OnExit();
+        }
 
-    //    if (activatedView == ActivatedView.Exit)
-    //    {
-    //        OnExit();
-    //    }
+        if (activatedView == ActivatedView.GoBack)
+        {
+            // We always go back to the Intro View 
+            activatedView = ActivatedView.Intro;
+        }
 
-    //    if (activatedView == ActivatedView.GoBack)
-    //    {
-    //        // We always go back to the Intro View 
-    //        activatedView = ActivatedView.Intro;
-    //    }
+        bool programmaticNavigation = false;
+        ActivatedView hasBeenActivated = ActivatedView.Exit;
+        Bindable? currentViewModel = null;
+        if (parameter is bool navigationType)
+        {
+            programmaticNavigation = navigationType;
+            currentViewModel = CurrentViewModel();
+        }
 
-    //    bool programmaticNavigation = false;
-    //    ActivatedView hasBeenActivated = ActivatedView.Exit;
-    //    Bindable? currentViewModel = null;
-    //    if (parameter is bool navigationType)
-    //    {
-    //        programmaticNavigation = navigationType;
-    //        currentViewModel = CurrentViewModel();
-    //    }
+        switch (activatedView)
+        {
+            default:
+            case ActivatedView.Interactive:
+                this.Activate<InteractiveViewModel, InteractiveView>(isFirstActivation, null);
+                hasBeenActivated = ActivatedView.Interactive;
+                break;
 
-    //    switch (activatedView)
-    //    {
-    //        default:
-    //        case ActivatedView.Gallery:
-    //            if (!(programmaticNavigation && currentViewModel is GalleryViewModel))
-    //            {
-    //                this.SetupToolbar<GalleryToolbarViewModel, GalleryToolbarView>();
-    //                this.Activate<GalleryViewModel, GalleryView>(isFirstActivation, null);
-    //                hasBeenActivated = ActivatedView.Gallery;
-    //            }
-    //            break;
+                //case ActivatedView.Intro:
+                //    this.SetupToolbar<IntroToolbarViewModel, IntroToolbarView>();
+                //    this.Activate<IntroViewModel, IntroView>(isFirstActivation, null);
+                //    break;
 
-    //        case ActivatedView.Collection:
-    //            if (!(programmaticNavigation && currentViewModel is CollectionViewModel))
-    //            {
-    //                this.SetupToolbar<CollectionToolbarViewModel, CollectionToolbarView>();
-    //                this.Activate<CollectionViewModel, CollectionView>(isFirstActivation, null);
-    //                hasBeenActivated = ActivatedView.Collection;
-    //            }
-    //            break;
 
-    //        case ActivatedView.Language:
-    //            // No toolbar
-    //            this.View.ShellViewToolbar.Content = null;
-    //            this.Activate<LanguageViewModel, LanguageView>(isFirstActivation, null);
-    //            break;
+                //case ActivatedView.Collection:
+                //    if (!(programmaticNavigation && currentViewModel is CollectionViewModel))
+                //    {
+                //        this.SetupToolbar<CollectionToolbarViewModel, CollectionToolbarView>();
+                //        this.Activate<CollectionViewModel, CollectionView>(isFirstActivation, null);
+                //        hasBeenActivated = ActivatedView.Collection;
+                //    }
+                //    break;
 
-    //        case ActivatedView.Intro:
-    //            this.SetupToolbar<IntroToolbarViewModel, IntroToolbarView>();
-    //            this.Activate<IntroViewModel, IntroView>(isFirstActivation, null);
-    //            break;
+                //case ActivatedView.Language:
+                //    // No toolbar
+                //    this.View.ShellViewToolbar.Content = null;
+                //    this.Activate<LanguageViewModel, LanguageView>(isFirstActivation, null);
+                //    break;
 
-    //        case ActivatedView.Settings:
-    //            if (!(programmaticNavigation && currentViewModel is SettingsViewModel))
-    //            {
-    //                this.SetupToolbar<SettingsToolbarViewModel, SettingsToolbarView>();
-    //                this.Activate<SettingsViewModel, SettingsView>(isFirstActivation, parameter);
-    //                hasBeenActivated = ActivatedView.Settings;
-    //            }
-    //            break;
-    //    }
+        }
 
-    //    // Reflect in the navigation toolbar the programmatic change 
-    //    if (programmaticNavigation && (hasBeenActivated != ActivatedView.Exit))
-    //    {
-    //        if (this.View is not ShellView view)
-    //        {
-    //            throw new Exception("No view: Failed to startup...");
-    //        }
+        // Reflect in the navigation toolbar the programmatic change 
+        //if (programmaticNavigation && (hasBeenActivated != ActivatedView.Exit))
+        //{
+        //    if (this.View is not ShellView view)
+        //    {
+        //        throw new Exception("No view: Failed to startup...");
+        //    }
 
-    //        var selector = view.SelectionGroup;
-    //        var button = hasBeenActivated switch
-    //        {
-    //            ActivatedView.Intro => view.IntroButton,
-    //            ActivatedView.Collection => view.CollectionButton,
-    //            ActivatedView.Settings => view.SettingsButton,
-    //            _ => view.TodayButton,
-    //        };
-    //        selector.Select(button);
-    //    }
+        //    var selector = view.SelectionGroup;
+        //    var button = hasBeenActivated switch
+        //    {
+        //        ActivatedView.Intro => view.IntroButton,
+        //        ActivatedView.Collection => view.CollectionButton,
+        //        ActivatedView.Settings => view.SettingsButton,
+        //        _ => view.TodayButton,
+        //    };
+        //    selector.Select(button);
+        //}
 
-    //    this.MainToolbarIsVisible = CurrentViewModel() is not IntroViewModel;
-    //}
+        this.MainToolbarIsVisible = true; // LATER:  CurrentViewModel() is not IntroViewModel;
+    }
 
     private static async void OnExit()
     {
@@ -286,7 +276,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
             vm.CreateViewAndBind();
         }
 
-        //CreateAndBind<GalleryViewModel, GalleryView>();
+        CreateAndBind<InteractiveViewModel, InteractiveView>();
         //CreateAndBind<GalleryToolbarViewModel, GalleryToolbarView>();
         //CreateAndBind<CollectionViewModel, CollectionView>();
         //CreateAndBind<CollectionToolbarViewModel, CollectionToolbarView>();
@@ -301,7 +291,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 #pragma warning disable IDE0051 // Remove unused private members
 #pragma warning disable CA1822 // Mark members as static
 
-    //private void OnToday(object? _) => this.OnViewActivation(ActivatedView.Gallery);
+    private void OnTranslate(object? _) => this.OnViewActivation(ActivatedView.Interactive);
 
     //private void OnCollection(object? _) => this.OnViewActivation(ActivatedView.Collection);
 
@@ -317,7 +307,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0079
 
-    //public ICommand TodayCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+    public ICommand TranslateCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     //public ICommand CollectionCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 

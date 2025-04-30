@@ -3,21 +3,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	>
+
 	<!-- Toast-->
 	<system:String x:Key="Toast.Dismiss">Close</system:String>
 
 	<!-- Shell -->
 	<system:String x:Key="Shell.AppName">Translator</system:String>
 	<system:String x:Key="Shell.About">About...</system:String>
-	<system:String x:Key="Shell.Today">Today</system:String>
-	<system:String x:Key="Shell.Collection">Collection</system:String>
+	
+	<system:String x:Key="Shell.Translate">Translator</system:String>
 	<system:String x:Key="Shell.Settings">Settings</system:String>
 	<system:String x:Key="Shell.Language">Language</system:String>
-	<system:String x:Key="Shell.ToTray">To Tray Icon</system:String>
 	<system:String x:Key="Shell.Exit">Quit</system:String>
 	<system:String x:Key="Shell.Close">Close</system:String>
 	<system:String x:Key="Shell.Ready">Ready.</system:String>
 	<system:String x:Key="Shell.Greetings">Welcome to Translator!</system:String>
+
+	<!-- Interactive -->
+	<system:String x:Key="Interactive.SourceLanguage">Source Language:</system:String>
+	<system:String x:Key="Interactive.TargetLanguage">Target Language:</system:String>
 
 	<!-- Collection -->
 	<system:String x:Key="Collection.SetWallpaper">Use as Wallpaper</system:String>

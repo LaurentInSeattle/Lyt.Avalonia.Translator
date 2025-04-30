@@ -22,7 +22,7 @@ public partial class App : ApplicationBase
         [
            // Singletons
            typeof(ShellViewModel),
-           //typeof(GalleryViewModel),
+           typeof(InteractiveViewModel),
            //typeof(GalleryToolbarViewModel),
            //typeof(CollectionViewModel),
            //typeof(CollectionToolbarViewModel),
