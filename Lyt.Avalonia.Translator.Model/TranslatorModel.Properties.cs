@@ -14,6 +14,9 @@ public sealed partial class TranslatorModel : ModelBase
     [JsonRequired]
     public List<Provider> Providers { get; set; } = [];
 
+    [JsonRequired]
+    public List<Project> Projects { get; set; } = []; 
+
     #endregion Serialized -  No model changed event
 
 
@@ -24,6 +27,9 @@ public sealed partial class TranslatorModel : ModelBase
 
     [JsonIgnore]
     public bool ModelLoadedNotified { get; set; } = false;
+
+    [JsonIgnore]
+    public Project ActiveProject { get; set; } = new() { Name = "Empty" } ;
 
     #endregion Not serialized - No model changed event
 

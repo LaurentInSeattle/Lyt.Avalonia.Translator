@@ -15,7 +15,8 @@ public sealed partial class TranslatorModel : ModelBase
             Providers =
             [
                 new Provider(ProviderKey.Google, "Google Translate"),
-            ]
+            ],
+            Projects = [],
         };
 
     private readonly FileManagerModel fileManager;

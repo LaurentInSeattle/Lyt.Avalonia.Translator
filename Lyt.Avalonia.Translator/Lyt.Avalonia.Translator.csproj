@@ -65,7 +65,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	<Folder Include="Workflow\" />
+	<Folder Include="Workflow\Intro\" />
+	<Folder Include="Workflow\Interactive\" />
+	<Folder Include="Workflow\Project\" />
+	<Folder Include="Workflow\OpenCreate\" />
   </ItemGroup>
 
 	<ItemGroup>
