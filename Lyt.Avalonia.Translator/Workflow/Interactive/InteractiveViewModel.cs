@@ -1,4 +1,6 @@
-﻿namespace Lyt.Avalonia.Translator.Workflow.Interactive;
+﻿using static Lyt.Avalonia.Translator.Messaging.ViewActivationMessage;
+
+namespace Lyt.Avalonia.Translator.Workflow.Interactive;
 
 public sealed class InteractiveViewModel : Bindable<InteractiveView>
 {
@@ -24,9 +26,27 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         }
 
         this.SourceLanguages = [.. this.languages];
+        this.SelectedSourceLanguageIndex = 0; 
         this.TargetLanguages = [.. this.languages];
+        this.SelectedTargetLanguageIndex = 1;
         this.isInitializing = false;
     }
+
+#pragma warning disable IDE0079 
+#pragma warning disable IDE0051 // Remove unused private members
+#pragma warning disable CA1822 // Mark members as static
+
+    private void OnClearSource(object? _) { }
+
+    private void OnCopyTarget(object? _) { } 
+
+#pragma warning restore CA1822
+#pragma warning restore IDE0051 // Remove unused private members
+#pragma warning restore IDE0079
+
+    public ICommand ClearSourceCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
+    public ICommand CopyTargetCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     public int SelectedSourceLanguageIndex
     {

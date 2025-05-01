@@ -1,5 +1,7 @@
 <UserControl 
 	x:Class="Lyt.Avalonia.Translator.Workflow.Interactive.InteractiveView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Interactive"
+	x:DataType="vm:InteractiveViewModel" 
 
 	xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -8,8 +10,7 @@
 	mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
 	
 	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
-	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Interactive"
-	x:DataType="vm:InteractiveViewModel" 
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
 	>
 	<Grid
 		Margin="12"
@@ -50,7 +51,7 @@
 			VerticalAlignment="Center" HorizontalAlignment="Right"
 			ItemsSource="{Binding SourceLanguages}"
 			SelectedIndex="{Binding SelectedSourceLanguageIndex}"
-			Width="360" Height="52" MaxDropDownHeight="400"
+			Width="360" Height="52" MaxDropDownHeight="450"
 			>
 			<ComboBox.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -71,6 +72,22 @@
 			FontSize="20"
 			>
 		</TextBox>
+		<glyphs:GlyphButton
+			Grid.Column="1" Grid.Row="3"
+			Margin="8"
+			Width="44" Height="44"
+			x:Name="ClearSourceButton"
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Right" VerticalAlignment="Top"
+			GlyphSource="dismiss"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource Interactive.ClearSource}"
+			Command="{Binding ClearSourceCommand}"
+			/>
+
 		<TextBlock
 			Grid.Column="3" Grid.Row="1"
 			Margin="0 0 0 0"
@@ -81,14 +98,13 @@
 			VerticalAlignment="Center" HorizontalAlignment="Stretch"
 			TextWrapping="Wrap"
 			/>
-
 		<ComboBox
 			x:Name="TargetLanguageComboBox"
 			Grid.Column="3" Grid.Row="1"
 			VerticalAlignment="Center" HorizontalAlignment="Right"
 			ItemsSource="{Binding TargetLanguages}"
 			SelectedIndex="{Binding SelectedTargetLanguageIndex}"
-			Width="360" Height="52" MaxDropDownHeight="400"
+			Width="360" Height="52" MaxDropDownHeight="450"
 			>
 			<ComboBox.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -111,7 +127,21 @@
 			TextWrapping="Wrap"
 			IsReadOnly="True"
 			FontSize="20"
-			>
-		</TextBox>
+			/>
+		<glyphs:GlyphButton
+			Grid.Column="3" Grid.Row="3"
+			Margin="8"
+			Width="44" Height="44"
+			x:Name="CopyTargetButton"
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Right" VerticalAlignment="Top"
+			GlyphSource="copy"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource Interactive.CopyTarget}"
+			Command="{Binding CopyTargetCommand}"
+			/>
 	</Grid>
 </UserControl>

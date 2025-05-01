@@ -1,5 +1,20 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+	<!--  copy  -->
+	<DrawingGroup x:Key = "copyDrawingGroup">
+		<DrawingGroup>
+			<DrawingGroup.ClipGeometry>
+				<RectangleGeometry Rect="0,0,24,24" />
+			</DrawingGroup.ClipGeometry>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M5.5028,4.627L5.5,6.75 5.5,17.2542C5.5,19.0491,6.9551,20.5042,8.75,20.5042L17.3663,20.5045C17.0573,21.3782,16.224,22.0042,15.2444,22.0042L8.75,22.0042C6.1267,22.0042,4,19.8776,4,17.2542L4,6.75C4,5.7693,4.6275,4.9351,5.5028,4.627z M17.75,2C18.9926,2,20,3.0074,20,4.25L20,17.25C20,18.4926,18.9926,19.5,17.75,19.5L8.75,19.5C7.5074,19.5,6.5,18.4926,6.5,17.25L6.5,4.25C6.5,3.0074,7.5074,2,8.75,2L17.75,2z M17.75,3.5L8.75,3.5C8.3358,3.5,8,3.8358,8,4.25L8,17.25C8,17.6642,8.3358,18,8.75,18L17.75,18C18.1642,18,18.5,17.6642,18.5,17.25L18.5,4.25C18.5,3.8358,18.1642,3.5,17.75,3.5z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingGroup>
+	<DrawingImage x:Key="copy" Drawing="{StaticResource copyDrawingGroup}" />
+
 	<!--  translate  -->
 	<DrawingGroup x:Key = "translateDrawingGroup">
 		<DrawingGroup>

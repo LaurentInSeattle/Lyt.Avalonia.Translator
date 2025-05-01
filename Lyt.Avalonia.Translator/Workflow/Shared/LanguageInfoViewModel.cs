@@ -7,20 +7,23 @@ public sealed class LanguageInfoViewModel : Bindable<LanguageInfoView>
 
     public LanguageInfoViewModel(string key, string name, string flagOne, string? flagTwo)
     {
+        static Bitmap? From(string? flag)
+            => string.IsNullOrWhiteSpace(flag) ?
+                    null :
+                    new Bitmap(AssetLoader.Open(new Uri(string.Concat(UriPath, flag, Extension))));
+
+        this.DisablePropertyChangedLogging = true;
         this.Key = key;
         this.Name = name;
-        this.FlagOne = new Bitmap(AssetLoader.Open(new Uri(UriPath + flagOne + Extension)));
-        this.FlagTwo =
-            string.IsNullOrWhiteSpace(flagTwo) ?
-                null :
-                new Bitmap(AssetLoader.Open(new Uri(UriPath + flagTwo + Extension)));
+        this.FlagOne = From(flagOne);
+        this.FlagTwo = From(flagTwo);
     }
 
     public string Key { get => this.Get<string>()!; set => this.Set(value); }
 
     public string Name { get => this.Get<string>()!; set => this.Set(value); }
 
-    public Bitmap FlagOne { get => this.Get<Bitmap>()!; set => this.Set(value); }
+    public Bitmap? FlagOne { get => this.Get<Bitmap>(); set => this.Set(value); }
 
-    public Bitmap? FlagTwo { get => this.Get<Bitmap>()!; set => this.Set(value); }
+    public Bitmap? FlagTwo { get => this.Get<Bitmap>(); set => this.Set(value); }
 }

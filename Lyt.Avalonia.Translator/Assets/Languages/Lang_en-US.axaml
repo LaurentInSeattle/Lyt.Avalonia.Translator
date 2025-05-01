@@ -21,7 +21,9 @@
 
 	<!-- Interactive -->
 	<system:String x:Key="Interactive.SourceLanguage">Source Language:</system:String>
+	<system:String x:Key="Interactive.ClearSource">Clear</system:String>
 	<system:String x:Key="Interactive.TargetLanguage">Target Language:</system:String>
+	<system:String x:Key="Interactive.CopyTarget">Copy</system:String>
 
 	<!-- Collection -->
 	<system:String x:Key="Collection.SetWallpaper">Use as Wallpaper</system:String>
