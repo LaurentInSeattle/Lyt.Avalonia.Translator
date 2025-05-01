@@ -1,16 +1,21 @@
-﻿using static Lyt.Avalonia.Translator.Messaging.ViewActivationMessage;
-
-namespace Lyt.Avalonia.Translator.Workflow.Interactive;
+﻿namespace Lyt.Avalonia.Translator.Workflow.Interactive;
 
 public sealed class InteractiveViewModel : Bindable<InteractiveView>
 {
     private readonly TranslatorModel translatorModel;
+    private readonly TranslatorService translatorService; 
     private readonly List<LanguageInfoViewModel> languages;
-    private bool isInitializing;
 
-    public InteractiveViewModel(TranslatorModel translatorModel)
+    private bool isInitializing;
+    private Language? selectedSourceLanguage;
+    private Language? selectedTargetLanguage;
+    private string? lastTranslatedText ; 
+
+    public InteractiveViewModel(
+        TranslatorModel translatorModel, TranslatorService translatorService )
     {
         this.translatorModel = translatorModel;
+        this.translatorService = translatorService;
         this.languages = [];
         this.PopulateLanguages();
     }
@@ -18,6 +23,8 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
     private void PopulateLanguages()
     {
         this.isInitializing = true;
+        this.ProgressRingIsActive = false; 
+        this.SourceText = string.Empty;
         foreach (Language language in Language.Languages.Values)
         {
             LanguageInfoViewModel languageInfoViewModel =
@@ -26,9 +33,12 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         }
 
         this.SourceLanguages = [.. this.languages];
-        this.SelectedSourceLanguageIndex = 0; 
+        this.SelectedSourceLanguageIndex = 0;
+        this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[0].Key];
+
         this.TargetLanguages = [.. this.languages];
         this.SelectedTargetLanguageIndex = 1;
+        this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[1].Key];
         this.isInitializing = false;
     }
 
@@ -36,18 +46,158 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
 #pragma warning disable IDE0051 // Remove unused private members
 #pragma warning disable CA1822 // Mark members as static
 
-    private void OnClearSource(object? _) { }
+    private void OnClearSource(object? _)
+    {
+        this.SourceText = string.Empty;
+        this.TargetText = string.Empty;
+    }
 
-    private void OnCopyTarget(object? _) { } 
+    private async void OnCopyTarget(object? _) 
+    { 
+        string? maybeTranslation = this.TargetText;
+        if (string.IsNullOrWhiteSpace(maybeTranslation))
+        {
+            return ;
+        }
+
+        maybeTranslation = maybeTranslation.Trim();
+        if (string.IsNullOrWhiteSpace(maybeTranslation))
+        {
+            return;
+        }
+
+        var clipboard = App.MainWindow.Clipboard;
+        if ( clipboard is null)
+        {
+            return;
+        }
+
+        await clipboard.SetTextAsync(maybeTranslation);
+    }
+
+    private void OnEnter(object? _) 
+    {
+        // Nothing to translate
+        string? maybeSourceText = this.SourceText;
+        if (string.IsNullOrWhiteSpace(maybeSourceText))
+        {
+            return;
+        }
+
+        maybeSourceText = maybeSourceText.Trim();
+        if (string.IsNullOrWhiteSpace(maybeSourceText))
+        {
+            return;
+        }
+
+        // Dont translate again same text 
+        if ( this.lastTranslatedText is not null && (this.lastTranslatedText == maybeSourceText))
+        {
+            return;
+        }
+
+        async Task<bool> TryTranslate()
+        {
+            if ((this.selectedSourceLanguage is null) || (this.selectedTargetLanguage is null))
+            {
+                return false ;
+            }
+
+            this.lastTranslatedText = maybeSourceText; 
+            var result = await this.translatorService.Translate(
+                this.translatorModel.ActiveProvider,
+                maybeSourceText,
+                this.selectedSourceLanguage.LanguageKey,
+                this.selectedTargetLanguage.LanguageKey);
+            bool success = result.Item1;
+            await Task.Delay(111);
+            Dispatch.OnUiThread(() =>
+            {
+                if (success)
+                {
+                    this.TargetText = result.Item2;
+                }
+                else
+                {
+                    this.TargetText = string.Empty;
+                }
+
+                this.CompleteOnlineOperation(); 
+            });
+
+            return result.Item1; 
+        }
+
+        this.TryOnlineOperation(TryTranslate);
+    }
+
 
 #pragma warning restore CA1822
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0079
 
+    private void TryOnlineOperation(Func<Task<bool>> action)
+    {
+        // string? wasWelcomeMessage = this.Welcome;
+        try
+        {
+            // Check internet 
+            if (!this.translatorModel.IsInternetConnected)
+            {
+                this.UpdateInternetConnectionStatus();
+                return;
+            }
+
+            var view = this.View;
+            this.Logger.Debug(view.GetType().FullName!);
+
+            // Block the UI
+            this.View.Opacity = 0.666;
+            this.View.IsEnabled = false;
+            this.View.IsHitTestVisible = false;
+
+            // Launch spinner and show new message 
+            this.ProgressRingIsActive = true;
+
+            // Now onto the job 
+            _ = action();
+        }
+        catch (Exception ex)
+        {
+            // Logging 
+            this.Logger.Error(ex.ToString());
+        }
+    }
+
+    private void CompleteOnlineOperation()
+    {
+        Dispatch.OnUiThread(() =>
+        {
+            // Unlock the UI, clear spinner, etc...
+            this.View.Opacity = 1.0;
+            this.View.IsEnabled = true;
+            this.View.IsHitTestVisible = true;
+            this.ProgressRingIsActive = false;
+        });
+    }
+
+    private void UpdateInternetConnectionStatus()
+    {
+        // TODO ! 
+    }
+
+    public string? SourceText { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
+
+    public bool ProgressRingIsActive { get => this.Get<bool>(); set => this.Set(value); }
+
+    public ICommand EnterCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
     public ICommand ClearSourceCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     public ICommand CopyTargetCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
+    
     public int SelectedSourceLanguageIndex
     {
         get => this.Get<int>();
@@ -62,8 +212,8 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 return;
             }
 
-            // string languageKey = this.Languages[value].Key;
-            // Debug.WriteLine("Selected language: " + languageKey);
+            this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
+            Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
         }
     }
 
@@ -87,8 +237,8 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 return;
             }
 
-            // string languageKey = this.Languages[value].Key;
-            // Debug.WriteLine("Selected language: " + languageKey);
+            this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[value].Key];
+            Debug.WriteLine("Selected Target language: " + this.selectedTargetLanguage);
         }
     }
 

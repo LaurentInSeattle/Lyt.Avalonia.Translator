@@ -4,6 +4,11 @@
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	>
 
+	<!-- TextBox/SelectableTextBox flyout -->
+	<x:String x:Key="StringTextFlyoutCutText">Cut</x:String>
+	<x:String x:Key="StringTextFlyoutCopyText">Copy</x:String>
+	<x:String x:Key="StringTextFlyoutPasteText">Paste</x:String>
+	
 	<!-- Toast-->
 	<system:String x:Key="Toast.Dismiss">Close</system:String>
 

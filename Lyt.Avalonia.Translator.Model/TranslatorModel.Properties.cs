@@ -31,6 +31,9 @@ public sealed partial class TranslatorModel : ModelBase
     [JsonIgnore]
     public Project ActiveProject { get; set; } = new() { Name = "Empty" } ;
 
+    [JsonIgnore]
+    public ProviderKey ActiveProvider { get; set; } = ProviderKey.Google;
+
     #endregion Not serialized - No model changed event
 
 
