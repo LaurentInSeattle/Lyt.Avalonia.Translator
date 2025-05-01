@@ -110,7 +110,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 this.selectedSourceLanguage.LanguageKey,
                 this.selectedTargetLanguage.LanguageKey);
             bool success = result.Item1;
-            await Task.Delay(111);
+            await Task.Delay(50);
             Dispatch.OnUiThread(() =>
             {
                 if (success)
@@ -125,7 +125,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 this.CompleteOnlineOperation(); 
             });
 
-            return result.Item1; 
+            return success; 
         }
 
         this.TryOnlineOperation(TryTranslate);

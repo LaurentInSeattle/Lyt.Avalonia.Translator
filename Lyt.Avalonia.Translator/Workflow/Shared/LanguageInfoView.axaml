@@ -9,7 +9,7 @@
 	x:DataType="vm:LanguageInfoViewModel" 
 	>
 	<Grid
-		Height="52"
+		Height="44"
 		>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="180" />
@@ -23,7 +23,7 @@
 			VerticalAlignment="Center"
 			FontSize="22"
 			FontWeight="DemiBold"
-			Margin="8"
+			Margin="8 4 4 4"
 			Foreground="{StaticResource LightAqua_0_080}"
 			/>
 		<Image

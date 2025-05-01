@@ -17,6 +17,18 @@ public sealed class Language(
         {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體中文", "China") },
         {  "zh-TW" , new Language( "zh-TW", "zh-TW", "Chinese (Traditional)", "繁體中文", "Taiwan") },
         {  "el-EL" , new Language( "el-EL", "el", "Greek", "ελληνική", "Greece", "Cyprus") },
+        {  "da-DA" , new Language( "da-DA", "da", "Danish", "Dansk", "Denmark") },
+        {  "nl-NL" , new Language( "nl-NL", "nl", "Dutch", "Hollands", "Netherlands") },
+        {  "de-DE" , new Language( "de-DE", "de", "German", "Deutsch", "Germany", "Austria") },
+        {  "ka-KA" , new Language( "ka-KA", "ka", "Georgian", "ქართული", "Georgia") },
+        {  "hi-HI" , new Language( "hi-HI", "hi", "Hindi", "हिन्दी", "India") },
+        {  "bn-BN" , new Language( "bn-BN", "bn", "Bengali", "বাঙ্গালী", "Bangladesh", "India" ) },
+        {  "hu-HU" , new Language( "hu-HU", "hu", "Hungarian", "Magyar", "Hungary") },
+        {  "ko-KO" , new Language( "ko-KO", "ko", "Korean", "한국인", "South_Korea", "North_Korea") },
+        {  "pl-PL" , new Language( "pl-PL", "pl", "Polish", "Polski", "Poland") },
+        {  "pt-PT" , new Language( "pt-PT", "pt-PT", "Portuguese", "Português", "Portugal", "Brazil") },
+        {  "ro-RO" , new Language( "ro-RO", "ro", "Romanian", "Românesc", "Romania", "Moldova") },
+        {  "th-TH" , new Language( "th-TH", "th", "Thai", "แบบไทย", "Thailand") },
 
         // TODO: Add more definitions here and provide flags 
         // For flags, see: https://en.wikipedia.org/wiki/List_of_national_flags_of_sovereign_states
@@ -37,7 +49,9 @@ public sealed class Language(
     #region Google Keys 
 
     /*
-     
+
+    Only the ones not yet in our Language list 
+    
     private static readonly Dictionary<string, string> Languages =
     new()
     {
@@ -48,38 +62,22 @@ public sealed class Language(
             {"az", "Azerbaijani"},
             {"eu", "Basque"},
             {"be", "Belarusian"},
-            {"bn", "Bengali"},
-            {"bg", "Bulgarian"},
             {"ca", "Catalan"},
-            {"zh-CN", "Chinese (Simplified)"},
-            {"zh-TW", "Chinese (Traditional)"},
             {"hr", "Croatian"},
             {"cs", "Czech"},
-            {"da", "Danish"},
-            {"nl", "Dutch"},
-            {"en", "English"},
             {"eo", "Esperanto"},
             {"et", "Estonian"},
             {"tl", "Filipino"},
             {"fi", "Finnish"},
-            {"fr", "French"},
             {"gl", "Galician"},
-            {"ka", "Georgian"},
-            {"de", "German"},
-            {"el", "Greek"},
             {"gu", "Gujarati"},
             {"ht", "Haitian Creole"},
             {"iw", "Hebrew"},
-            {"hi", "Hindi"},
-            {"hu", "Hungarian"},
             {"is", "Icelandic"},
             {"id", "Indonesian"},
             {"ga", "Irish"},
-            {"it", "Italian"},
-            {"ja", "Japanese"},
             {"kn", "Kannada"},
             {"km", "Khmer"},
-            {"ko", "Korean"},
             {"lo", "Lao"},
             {"la", "Latin"},
             {"lv", "Latvian"},
@@ -89,24 +87,16 @@ public sealed class Language(
             {"mt", "Maltese"},
             {"no", "Norwegian"},
             {"fa", "Persian"},
-            {"pl", "Polish"},
-            {"pt-PT", "Portuguese - Portugal"},
-            {"pt-BR", "Portuguese - Brazil"},
-            {"ro", "Romanian"},
             {"ru", "Russian"},
             {"sr", "Serbian"},
             {"sk", "Slovak"},
             {"sl", "Slovenian"},
-            {"es", "Spanish"},
             {"sw", "Swahili"},
             {"sv", "Swedish"},
             {"ta", "Tamil"},
             {"te", "Telugu"},
-            {"th", "Thai"},
             {"tr", "Turkish"},
-            {"uk", "Ukrainian"},
             {"ur", "Urdu"},
-            {"vi", "Vietnamese"},
             {"cy", "Welsh"},
             {"yi", "Yiddish"}
     };
