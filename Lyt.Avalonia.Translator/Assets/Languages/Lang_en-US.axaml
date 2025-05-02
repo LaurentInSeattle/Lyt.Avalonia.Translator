@@ -1,7 +1,7 @@
 <ResourceDictionary 
 	xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
 	>
 
 	<!-- TextBox/SelectableTextBox flyout -->
@@ -17,6 +17,8 @@
 	<system:String x:Key="Shell.About">About...</system:String>
 	
 	<system:String x:Key="Shell.Translate">Translator</system:String>
+	<system:String x:Key="Shell.CreateNew">New Project</system:String>
+
 	<system:String x:Key="Shell.Settings">Settings</system:String>
 	<system:String x:Key="Shell.Language">Language</system:String>
 	<system:String x:Key="Shell.Exit">Quit</system:String>
@@ -30,14 +32,22 @@
 	<system:String x:Key="Interactive.TargetLanguage">Target Language:</system:String>
 	<system:String x:Key="Interactive.CopyTarget">Copy</system:String>
 
-	<!-- Collection -->
-	<system:String x:Key="Collection.SetWallpaper">Use as Wallpaper</system:String>
-	<system:String x:Key="Collection.Remove">Remove</system:String>
+	<!-- Create New Project -->
+	<system:String x:Key="CreateNew.DropZone">Drag and Drop Zone</system:String>
+	<system:String x:Key="CreateNew.DropZoneHelp">Drag and drop here the file containing the text resources definitions in the source language.</system:String>
+	
+	<system:String x:Key="CreateNew.ProjectName">Project Name:</system:String>
+	<system:String x:Key="CreateNew.SourceLanguage">Source Language:</system:String>
+	<system:String x:Key="CreateNew.FileFormat">File Format:</system:String>
+	<system:String x:Key="CreateNew.AvailableLanguages">Available Languages</system:String>
+	<system:String x:Key="CreateNew.TargetLanguages">Target Languages</system:String>
+
+
+	<system:String x:Key="CreateNew.SetWallpaper">Use as Wallpaper</system:String>
+	<system:String x:Key="CreateNew.Remove">Remove</system:String>
+
 	<system:String x:Key="Collection.SaveToDesktop">Save to Desktop</system:String>
 	<system:String x:Key="Collection.BadPicture">Can't download this picture!</system:String>
-	<system:String x:Key="Collection.DropZone">Drag and Drop Zone</system:String>
-	<system:String x:Key="Collection.DropZoneHelp">Drag and drop files here to add them to your wallpaper collection.</system:String>
-
 	<system:String x:Key="Collection.Statistics">Statistics</system:String>
 	<system:String x:Key="Collection.Stats.AlertTextQuota">Too many images in your collection!</system:String>
 	<system:String x:Key="Collection.Stats.AlertTextSpace">Pay attention to the available space on disk!</system:String>

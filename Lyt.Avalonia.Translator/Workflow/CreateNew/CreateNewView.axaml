@@ -1,0 +1,146 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Workflow.CreateNew.CreateNewView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.CreateNew"
+	x:DataType="vm:CreateNewViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
+	
+	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	>
+	<Grid
+		Margin="12"
+		>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="8" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="24" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="8" />
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="8" />
+			<RowDefinition Height="72" />
+			<RowDefinition Height="72" />
+			<RowDefinition Height="72" />
+			<RowDefinition Height="12" />
+			<RowDefinition Height="72" />
+
+			<RowDefinition Height="*" />
+			<RowDefinition Height="8" />
+		</Grid.RowDefinitions>
+
+		<vm:DropView
+			Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+			/>
+		<TextBlock
+			Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
+			Margin="0 0 0 0"
+			Text="{Binding SourcePath}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<TextBlock
+			Grid.Column="3" Grid.Row="1"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.ProjectName}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<TextBox
+			Grid.Column="3" Grid.Row="1"
+			Width="360" Height="52"
+			Foreground="{StaticResource LightAqua_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Right"			
+			FontSize="22"  FontWeight="DemiBold"
+			VerticalContentAlignment="Center"
+			Text="{Binding ProjectName}" TextWrapping="NoWrap"
+			/>
+		<TextBlock
+			Grid.Column="3" Grid.Row="2"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.SourceLanguage}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+
+		<ComboBox
+			x:Name="SourceLanguageComboBox"
+			Grid.Column="3" Grid.Row="2" 
+			VerticalAlignment="Center" HorizontalAlignment="Right"
+			ItemsSource="{Binding SourceLanguages}"
+			SelectedIndex="{Binding SelectedSourceLanguageIndex}"
+			Width="360" Height="52" MaxDropDownHeight="450"
+			>
+			<ComboBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Vertical"/>
+				</ItemsPanelTemplate>
+			</ComboBox.ItemsPanel>
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<shared:LanguageInfoView />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
+		</ComboBox>
+
+		<TextBlock
+			Grid.Column="3" Grid.Row="3"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.FileFormat}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<ComboBox
+			x:Name="FormatComboBox"
+			Grid.Column="3" Grid.Row="3"
+			VerticalAlignment="Center" HorizontalAlignment="Right"
+			ItemsSource="{Binding FileFormats}"
+			SelectedIndex="{Binding SelectedFileFormatIndex}"
+			Width="360" Height="52" MaxDropDownHeight="450"
+			>
+			<ComboBox.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Vertical"/>
+				</ItemsPanelTemplate>
+			</ComboBox.ItemsPanel>
+		</ComboBox>
+
+		<TextBlock
+			Grid.Column="1" Grid.Row="5"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.AvailableLanguages}"
+			FontSize="24"
+			TextAlignment="Center"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<TextBlock
+			Grid.Column="3" Grid.Row="5"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.TargetLanguages}"
+			FontSize="24"
+			TextAlignment="Center"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+	</Grid>
+</UserControl>

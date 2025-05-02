@@ -172,6 +172,11 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
                 hasBeenActivated = ActivatedView.Interactive;
                 break;
 
+            case ActivatedView.CreateNew:
+                this.Activate<CreateNewViewModel, CreateNewView>(isFirstActivation, null);
+                hasBeenActivated = ActivatedView.Interactive;
+                break;
+
                 //case ActivatedView.Intro:
                 //    this.SetupToolbar<IntroToolbarViewModel, IntroToolbarView>();
                 //    this.Activate<IntroViewModel, IntroView>(isFirstActivation, null);
@@ -277,8 +282,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         }
 
         CreateAndBind<InteractiveViewModel, InteractiveView>();
-        //CreateAndBind<GalleryToolbarViewModel, GalleryToolbarView>();
-        //CreateAndBind<CollectionViewModel, CollectionView>();
+        CreateAndBind<CreateNewViewModel, CreateNewView>();
+
         //CreateAndBind<CollectionToolbarViewModel, CollectionToolbarView>();
         //CreateAndBind<IntroViewModel, IntroView>();
         //CreateAndBind<IntroToolbarViewModel, IntroToolbarView>();
@@ -293,7 +298,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     private void OnTranslate(object? _) => this.OnViewActivation(ActivatedView.Interactive);
 
-    //private void OnCollection(object? _) => this.OnViewActivation(ActivatedView.Collection);
+    private void OnCreateNew(object? _) => this.OnViewActivation(ActivatedView.CreateNew);
 
     //private void OnSettings(object? _) => this.OnViewActivation(ActivatedView.Settings);
 
@@ -308,6 +313,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 #pragma warning restore IDE0079
 
     public ICommand TranslateCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
+    public ICommand CreateNewCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     //public ICommand CollectionCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 

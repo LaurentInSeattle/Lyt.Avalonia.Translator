@@ -5,7 +5,7 @@ public sealed partial class TranslatorModel : ModelBase
     #region Serialized -  No model changed event
 
     [JsonRequired]
-    public string Language { get => this.Get<string>()!; set => this.Set(value); } 
+    public string Language { get => this.Get<string>()!; set => this.Set(value); }
 
     /// <summary> This should stay true, ==> But... Just FOR NOW !  </summary>
     [JsonRequired]
@@ -15,7 +15,7 @@ public sealed partial class TranslatorModel : ModelBase
     public List<Provider> Providers { get; set; } = [];
 
     [JsonRequired]
-    public List<Project> Projects { get; set; } = []; 
+    public List<Project> Projects { get; set; } = [];
 
     #endregion Serialized -  No model changed event
 
@@ -29,7 +29,13 @@ public sealed partial class TranslatorModel : ModelBase
     public bool ModelLoadedNotified { get; set; } = false;
 
     [JsonIgnore]
-    public Project ActiveProject { get; set; } = new() { Name = "Empty" } ;
+    public Project ActiveProject { get; set; } = new()
+    {
+        Name = "Empty",
+        Format = ResourceFormat.Unknown,
+        FolderPath = string.Empty,
+        SourceFile = string.Empty,
+    };
 
     [JsonIgnore]
     public ProviderKey ActiveProvider { get; set; } = ProviderKey.Google;

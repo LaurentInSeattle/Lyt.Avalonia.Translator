@@ -5,9 +5,14 @@ public sealed class Language(
     string englishName, string localName,
     string primaryFlag, string? secondaryFlag = null)
 {
+    public static readonly string DefaultCultureKey = "en-US";
+
+    public static readonly Language Default =
+        new(DefaultCultureKey, "en", "English", "English", "United_Kingdom", "Canada");
+
     public static readonly Dictionary<string, Language> Languages = new()
     {
-        {  "en-US" , new Language( "en-US", "en", "English", "English", "United_Kingdom", "Canada") },
+        {  DefaultCultureKey , Default },
         {  "fr-FR" , new Language( "fr-FR", "fr", "French", "Français", "France", "Quebec") },
         {  "it-IT" , new Language( "it-IT", "it", "Italian", "Italiano", "Italy", "San_Marino") },
         {  "es-ES" , new Language( "es-ES", "es", "Spanish", "Español", "Spain", "Mexico") },
@@ -45,6 +50,19 @@ public sealed class Language(
     public string PrimaryFlag { get; private set; } = primaryFlag;
 
     public string? SecondaryFlag { get; set; } = secondaryFlag;
+
+    public static Language FromCultureKey(string cultureKey)
+    {
+        if (Languages.TryGetValue(cultureKey, out var language))
+        {
+            if (language is not null)
+            {
+                return language;
+            }
+        }
+
+        throw new ArgumentException("Unsupported Culture");
+    }
 
     #region Google Keys 
 

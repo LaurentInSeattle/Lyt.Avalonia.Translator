@@ -7,8 +7,8 @@ public sealed record class ViewActivationMessage(
     {
         Intro,
         Interactive,
+        CreateNew,
         Language,
-        OpenCreate,
         Project, 
 
         GoBack,

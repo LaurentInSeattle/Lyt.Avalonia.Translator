@@ -67,7 +67,6 @@
 	<ItemGroup>
 	<Folder Include="Workflow\Intro\" />
 	<Folder Include="Workflow\Project\" />
-	<Folder Include="Workflow\OpenCreate\" />
   </ItemGroup>
 
 	<ItemGroup>
@@ -116,5 +115,11 @@
 	  <AvaloniaResource Update="Assets\Theme\Toggles.axaml">
 	    <SubType>Designer</SubType>
 	  </AvaloniaResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Workflow\CreateNew\CreateNewView.axaml.cs">
+	    <DependentUpon>CreateNewView.axaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 </Project>
