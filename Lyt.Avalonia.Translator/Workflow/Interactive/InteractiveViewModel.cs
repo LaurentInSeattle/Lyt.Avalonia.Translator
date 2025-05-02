@@ -27,18 +27,17 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         this.SourceText = string.Empty;
         foreach (Language language in Language.Languages.Values)
         {
-            LanguageInfoViewModel languageInfoViewModel =
-                new(language.CultureKey, language.LocalName, language.PrimaryFlag, language.SecondaryFlag);
+            LanguageInfoViewModel languageInfoViewModel = new(language);
             this.languages.Add(languageInfoViewModel);
         }
 
         this.SourceLanguages = [.. this.languages];
         this.SelectedSourceLanguageIndex = 0;
-        this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[0].Key];
+        this.selectedSourceLanguage = this.SourceLanguages[0].Language;
 
         this.TargetLanguages = [.. this.languages];
         this.SelectedTargetLanguageIndex = 1;
-        this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[1].Key];
+        this.selectedTargetLanguage = this.TargetLanguages[1].Language;
         this.isInitializing = false;
     }
 

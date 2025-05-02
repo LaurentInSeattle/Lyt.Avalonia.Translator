@@ -18,12 +18,12 @@
 			<ColumnDefinition Width="60" />
 		</Grid.ColumnDefinitions>
 		<TextBlock
-			Grid.Column="0"
+			Grid.Column="0" Grid.ColumnSpan="2"
 			Text="{Binding Name}"
 			VerticalAlignment="Center"
 			FontSize="22"
 			FontWeight="DemiBold"
-			Margin="8 4 4 4"
+			Margin="6 4 4 4"
 			Foreground="{StaticResource LightAqua_0_080}"
 			/>
 		<Image

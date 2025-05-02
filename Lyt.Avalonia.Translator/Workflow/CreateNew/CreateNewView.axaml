@@ -142,5 +142,75 @@
 			VerticalAlignment="Center" HorizontalAlignment="Stretch"
 			TextWrapping="Wrap"
 			/>
+		<Border
+			Background="Transparent"
+			BorderBrush="{StaticResource LightAqua_0_080}"
+			BorderThickness="1"			
+			Grid.Column="1" Grid.Row="6"
+			Margin="0 4 0 4"
+			CornerRadius="12"
+			>
+			<ScrollViewer
+				Margin="8"
+				Background="Transparent"
+				VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+				ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+				ScrollViewer.VerticalScrollBarVisibility="Auto"
+				>
+				<ItemsControl
+					x:Name="AvailableLanguagesItemControl"
+					ItemsSource="{Binding AvailableLanguages}"
+					Margin="0 0 24 0"
+					>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<shared:LanguageInfoView 
+								Margin="12 8 12 8"
+								/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</Border>
+		<Border
+			Background="Transparent"
+			BorderBrush="{StaticResource PastelOrchid_0_080}"
+			BorderThickness="1"
+			Grid.Column="3" Grid.Row="6"
+			Margin="0 4 0 4"
+			CornerRadius="12"
+			>
+			<ScrollViewer
+				Margin="8"
+				Background="Transparent"
+				VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+				ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+				ScrollViewer.VerticalScrollBarVisibility="Auto"
+				>
+				<ItemsControl
+					x:Name="SelectedLanguagesItemControl"
+					ItemsSource="{Binding SelectedLanguages}"
+					Margin="0 0 24 0"
+					>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<shared:LanguageInfoView
+								Margin="6"
+								/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</Border>
 	</Grid>
 </UserControl>

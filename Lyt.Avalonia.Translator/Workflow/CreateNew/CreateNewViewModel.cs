@@ -25,14 +25,17 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         {
             foreach (Language language in Language.Languages.Values)
             {
-                LanguageInfoViewModel languageInfoViewModel =
-                    new(language.CultureKey, language.LocalName, language.PrimaryFlag, language.SecondaryFlag);
+                LanguageInfoViewModel languageInfoViewModel = new(language);
                 this.languages.Add(languageInfoViewModel);
             }
 
             this.SourceLanguages = [.. this.languages];
+            this.AvailableLanguages = [.. this.languages];
+            this.SelectedLanguages = [];
             this.SelectedSourceLanguageIndex = 0;
-            this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[0].Key];
+            LanguageInfoViewModel selected = this.SourceLanguages[0];
+            this.selectedSourceLanguage = selected.Language;
+            this.AvailableLanguages.Remove(selected);
 
             this.FileFormats = [.. ResourceFormats.Available()];
             this.SelectedFileFormatIndex = 0;
@@ -48,6 +51,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 #pragma warning disable IDE0051 // Remove unused private members
 #pragma warning disable CA1822 // Mark members as static
 
+    // TODO : Save button 
 
 #pragma warning restore CA1822
 #pragma warning restore IDE0051 // Remove unused private members
@@ -73,8 +77,11 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
             if (changed)
             {
-                this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
-                Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
+                LanguageInfoViewModel selectedVm = this.SourceLanguages[value]; 
+                this.selectedSourceLanguage = selectedVm.Language;
+                this.AvailableLanguages.Remove(selectedVm);
+                this.SelectedLanguages.Remove(selectedVm);
+                Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage.LocalName);
             }
         }
     }
@@ -111,4 +118,18 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         get => this.Get<ObservableCollection<ResourceFormat>?>() ?? throw new ArgumentNullException("Languages");
         set => this.Set(value);
     }
+
+
+    public ObservableCollection<LanguageInfoViewModel> AvailableLanguages
+    {
+        get => this.Get<ObservableCollection<LanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
+        set => this.Set(value);
+    }
+
+    public ObservableCollection<LanguageInfoViewModel> SelectedLanguages
+    {
+        get => this.Get<ObservableCollection<LanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
+        set => this.Set(value);
+    }
+
 }

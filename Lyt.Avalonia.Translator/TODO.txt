@@ -1,4 +1,11 @@
-﻿
-- Show internet status in Interactive 
+﻿MUST DO
+- Show internet status in in the application bar
 - Some space for an error message in Interactive 
-- Flags: Align right if there's only one 
+- Interactive: show text translated from tranlated target back to source.
+- Create: Align labels to the right  
+- Create: Clickable and moveable language view 
+- Create: button to save 
+- Create: button to add all languages 
+
+NTH 
+
