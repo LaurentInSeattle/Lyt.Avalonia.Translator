@@ -204,7 +204,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         set
         {
             // Update the UI...
-            this.Set(value);
+            bool changed = this.Set(value);
 
             // ... But do not change the language when initializing 
             if (this.isInitializing)
@@ -212,8 +212,13 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 return;
             }
 
-            this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
-            Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
+            if (changed)
+            {
+                this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
+                Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
+
+                this.OnClearSource(null);
+            }
         }
     }
 
@@ -229,7 +234,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         set
         {
             // Update the UI...
-            this.Set(value);
+            bool changed = this.Set(value);
 
             // ... But do not change the language when initializing 
             if (this.isInitializing)
@@ -237,8 +242,15 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
                 return;
             }
 
-            this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[value].Key];
-            Debug.WriteLine("Selected Target language: " + this.selectedTargetLanguage);
+            if (changed)
+            {
+                this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[value].Key];
+                Debug.WriteLine("Selected Target language: " + this.selectedTargetLanguage);
+
+                // Force a new translation
+                this.lastTranslatedText = string.Empty;
+                this.OnEnter(null);  
+            }
         }
     }
 

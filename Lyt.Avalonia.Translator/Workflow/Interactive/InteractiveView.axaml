@@ -71,6 +71,7 @@
 			AcceptsReturn="True"
 			FontSize="22"
 			Text="{Binding SourceText}"
+			Padding="8 8 52 8"
 			>
 			<TextBox.KeyBindings>
 				<KeyBinding  Command="{Binding EnterCommand}" Gesture="Enter" />
@@ -131,6 +132,7 @@
 			TextWrapping="Wrap"
 			IsReadOnly="True"
 			FontSize="22"
+			Padding="8 8 52 8"
 			Text="{Binding TargetText}"
 			/>
 		<glyphs:GlyphButton

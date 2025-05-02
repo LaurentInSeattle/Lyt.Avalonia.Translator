@@ -1,0 +1,4 @@
+﻿
+- Show internet status in Interactive 
+- Some space for an error message in Interactive 
+- Flags: Align right if there's only one 
