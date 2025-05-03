@@ -1,0 +1,54 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Workflow.Shared.ClickableLanguageInfoView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
+	x:DataType="vm:ClickableLanguageInfoViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	>
+	<Border
+		x:Name="outerBorder"
+		Height="50"
+		Background="Transparent"
+		BorderBrush="{StaticResource LightAqua_1_100}"
+		BorderThickness="1"
+		CornerRadius="4"
+		>
+
+		<Grid
+			Height="44"
+			Margin="2"
+			>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="180" />
+				<ColumnDefinition Width="60" />
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="60" />
+			</Grid.ColumnDefinitions>
+			<TextBlock
+				Grid.Column="0" Grid.ColumnSpan="2"
+				Text="{Binding Name}"
+				VerticalAlignment="Center"
+				FontSize="22"
+				FontWeight="DemiBold"
+				Margin="6 4 4 4"
+				Foreground="{StaticResource LightAqua_0_080}"
+				/>
+			<Image
+				Grid.Column="1"
+				Stretch="Uniform"
+				Width="52"
+				Source="{Binding FlagOne}"
+				/>
+			<Image
+				Grid.Column="3"
+				Stretch="Uniform"
+				Width="52"
+				Source="{Binding FlagTwo}"
+				/>
+		</Grid>
+	</Border>
+</UserControl>

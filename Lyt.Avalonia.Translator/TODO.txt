@@ -1,11 +1,16 @@
-﻿MUST DO
+﻿BUG
+- Changing source language: need to add back previous selection into available
+
+MUST DO
 - Show internet status in in the application bar
 - Some space for an error message in Interactive 
 - Interactive: show text translated from tranlated target back to source.
 - Create: Align labels to the right  
-- Create: Clickable and moveable language view 
 - Create: button to save 
 - Create: button to add all languages 
+- Create: button to clear all languages 
+- Create: Beautify File Format combo 
 
 NTH 
 
+- GroupBox like border in Create

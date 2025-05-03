@@ -169,7 +169,7 @@
 					</ItemsControl.ItemsPanel>
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<shared:LanguageInfoView 
+							<shared:ClickableLanguageInfoView 
 								Margin="12 8 12 8"
 								/>
 						</DataTemplate>
@@ -204,7 +204,7 @@
 					</ItemsControl.ItemsPanel>
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<shared:LanguageInfoView
+							<shared:ClickableLanguageInfoView
 								Margin="6"
 								/>
 						</DataTemplate>
