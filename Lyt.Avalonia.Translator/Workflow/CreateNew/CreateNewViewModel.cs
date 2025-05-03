@@ -41,11 +41,16 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             if (this.Available(selected) is ClickableLanguageInfoViewModel available)
             {
                 this.AvailableLanguages.Remove(available);
-            } 
+            }
 
-            this.FileFormats = [.. ResourceFormats.Available()];
+            this.FileFormats =[];
+            foreach (ResourceFormat resourceFormat in ResourceFormats.Available())
+            {
+                this.FileFormats.Add(new FileFormatViewModel(resourceFormat));
+            }
+
             this.SelectedFileFormatIndex = 0;
-            this.selectedFileFormat = ResourceFormat.Axaml;
+            this.selectedFileFormat = this.FileFormats[0].ResourceFormat;
 
             this.SourcePath = string.Empty;
         }
@@ -101,6 +106,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         set
         {
             // Update the UI...
+            int oldValue = this.Get<int>();
             bool changed = this.Set(value);
 
             // ... But do not change the language when initializing 
@@ -124,6 +130,11 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
                 {
                     this.SelectedLanguages.Remove(selected);
                 }
+
+                // Old value becomes available 
+                Language language = this.SourceLanguages[oldValue].Language;
+                this.AvailableLanguages.Add(
+                    new ClickableLanguageInfoViewModel(this, language, isAvailable: true));
 
                 Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage.LocalName);
             }
@@ -152,14 +163,14 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
             if (changed)
             {
-                this.selectedFileFormat = this.FileFormats[value]; 
+                this.selectedFileFormat = this.FileFormats[value].ResourceFormat; 
             }
         }
     }
 
-    public ObservableCollection<ResourceFormat> FileFormats
+    public ObservableCollection<FileFormatViewModel> FileFormats
     {
-        get => this.Get<ObservableCollection<ResourceFormat>?>() ?? throw new ArgumentNullException("Languages");
+        get => this.Get<ObservableCollection<FileFormatViewModel>?>() ?? throw new ArgumentNullException("Languages");
         set => this.Set(value);
     }
 

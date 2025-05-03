@@ -1,0 +1,29 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Workflow.Shared.FileFormatView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
+	x:DataType="vm:FileFormatViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	>
+	<Grid
+		Height="44"
+		>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="320" />
+		</Grid.ColumnDefinitions>
+		<TextBlock
+			Grid.Column="0" 
+			Text="{Binding Name}"
+			VerticalAlignment="Center"
+			FontSize="22"
+			FontWeight="DemiBold"
+			Margin="6 4 4 4"
+			Foreground="{StaticResource LightAqua_0_080}"
+			/>
+	</Grid>
+
+</UserControl>

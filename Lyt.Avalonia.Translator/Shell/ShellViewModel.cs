@@ -89,7 +89,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         this.Logger.Debug("OnViewLoaded complete");
     }
 
-    private async void ActivateInitialView()
+    private /* async */ void ActivateInitialView()
     {
         this.Logger.Debug("ActivateInitialView: Internet connected: " + this.translatorModel.IsInternetConnected);
         this.OnViewActivation(ActivatedView.Interactive, parameter: null, isFirstActivation: true);

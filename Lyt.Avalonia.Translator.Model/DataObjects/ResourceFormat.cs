@@ -13,8 +13,8 @@ public static class ResourceFormats
         => resourceFormat switch
         {
             // No need to localize 
-            ResourceFormat.Axaml => "Avalonia axaml",
-            ResourceFormat.Resx => "Microsoft resx",
+            ResourceFormat.Axaml => "Avalonia  .axaml",
+            ResourceFormat.Resx => "Microsoft  .resx",
             _ => throw new ArgumentException(nameof(resourceFormat)),
         };
 

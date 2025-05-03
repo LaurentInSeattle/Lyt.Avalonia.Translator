@@ -17,7 +17,6 @@
 		BorderThickness="1"
 		CornerRadius="4"
 		>
-
 		<Grid
 			Height="44"
 			Margin="2"
@@ -28,6 +27,12 @@
 				<ColumnDefinition Width="20" />
 				<ColumnDefinition Width="60" />
 			</Grid.ColumnDefinitions>
+			<Rectangle
+				Fill="#A0000020"
+				Grid.Column="0" Grid.ColumnSpan="999" 
+				Margin="0"
+				RadiusX="4" RadiusY="4"
+				/>
 			<TextBlock
 				Grid.Column="0" Grid.ColumnSpan="2"
 				Text="{Binding Name}"

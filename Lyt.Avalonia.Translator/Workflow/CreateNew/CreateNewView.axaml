@@ -120,6 +120,11 @@
 					<StackPanel Orientation="Vertical"/>
 				</ItemsPanelTemplate>
 			</ComboBox.ItemsPanel>
+			<ComboBox.ItemTemplate>
+				<DataTemplate>
+					<shared:FileFormatView />
+				</DataTemplate>
+			</ComboBox.ItemTemplate>
 		</ComboBox>
 
 		<TextBlock
