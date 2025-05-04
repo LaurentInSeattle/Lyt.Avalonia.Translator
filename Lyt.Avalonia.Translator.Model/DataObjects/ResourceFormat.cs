@@ -15,9 +15,18 @@ public static class ResourceFormats
             // No need to localize 
             ResourceFormat.Axaml => "Avalonia  .axaml",
             ResourceFormat.Resx => "Microsoft  .resx",
-            _ => throw new ArgumentException(nameof(resourceFormat)),
+            _ => throw new ArgumentException(null, nameof(resourceFormat)),
         };
 
-    public static List<ResourceFormat> Available()
+    public static string ToFileExtension(this ResourceFormat resourceFormat)
+        => resourceFormat switch
+        {
+            // No need to localize 
+            ResourceFormat.Axaml => ".axaml",
+            ResourceFormat.Resx => ".resx",
+            _ => throw new ArgumentException(null, nameof(resourceFormat)),
+        };
+
+    public static List<ResourceFormat> AvailableFormats
         => [ResourceFormat.Axaml, ResourceFormat.Resx]; 
 }

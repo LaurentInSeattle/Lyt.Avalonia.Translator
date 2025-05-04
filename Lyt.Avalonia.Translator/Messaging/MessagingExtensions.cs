@@ -13,6 +13,9 @@ public static class MessagingExtensions
         MessagingExtensions.dialogService = App.GetRequiredService<IDialogService>();
     }
 
+    public static void Publish<T> ( T message ) where T : class
+        => MessagingExtensions.messenger.Publish(message);
+
     public static void ActivateView(
         ViewActivationMessage.ActivatedView view, object? activationParameter = null)
         => MessagingExtensions.messenger.Publish(

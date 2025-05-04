@@ -39,13 +39,30 @@
 	<system:String x:Key="CreateNew.ProjectName">Project Name:</system:String>
 	<system:String x:Key="CreateNew.SourceLanguage">Source Language:</system:String>
 	<system:String x:Key="CreateNew.FileFormat">File Format:</system:String>
+	<system:String x:Key="CreateNew.SourceFile">Source File:</system:String>
 	<system:String x:Key="CreateNew.AvailableLanguages">Available Languages</system:String>
 	<system:String x:Key="CreateNew.TargetLanguages">Target Languages</system:String>
+	<system:String x:Key="CreateNew.FileDoesNotExist">File does not exist</system:String>
+	<system:String x:Key="CreateNew.Exception">Unexpected Error</system:String>
+
+	<system:String x:Key="CreateNew.UnsupportedFileFormat">Unsupported File Format</system:String>
+	<system:String x:Key="CreateNew.UnsupportedCulture">Unsupported Culture</system:String>
 
 	<!-- Create New Project Toolbar-->
 	<system:String x:Key="CreateNew.AddAllLanguages">All Languages</system:String>
 	<system:String x:Key="CreateNew.ClearAllLanguages">Remove All</system:String>
 	<system:String x:Key="CreateNew.SaveProject">Save Project</system:String>
+
+
+
+
+
+
+
+
+
+	<!-- Most likely all below will be deleted -->
+	<!-- Keep for now, maybe there are some recycling opportunities -->
 
 	<system:String x:Key="CreateNew.SetWallpaper">Use as Wallpaper</system:String>
 	<system:String x:Key="CreateNew.Remove">Remove</system:String>

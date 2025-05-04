@@ -1,7 +1,6 @@
 <UserControl
 	x:Class="Lyt.Avalonia.Translator.Workflow.CreateNew.DropView"
 	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.CreateNew"
-	x:DataType="vm:DropViewModel"
 
 	xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

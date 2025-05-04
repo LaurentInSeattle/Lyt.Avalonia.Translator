@@ -1,4 +1,6 @@
-﻿namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
+﻿using Tmds.DBus.Protocol;
+
+namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
 public sealed class CreateNewViewModel : Bindable<CreateNewView>
 {
@@ -10,9 +12,10 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
     private bool isInitializing;
     private Language? selectedSourceLanguage;
     private ResourceFormat selectedFileFormat;
+    private Project? project;
 
     public CreateNewViewModel(
-        TranslatorModel translatorModel, TranslatorService translatorService )
+        TranslatorModel translatorModel, TranslatorService translatorService)
     {
         this.translatorModel = translatorModel;
         this.translatorService = translatorService;
@@ -20,6 +23,19 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         this.clickableLanguages = [];
         this.PopulateLanguageAndFormats();
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+        this.Messenger.Subscribe<DropFileMessage>(this.OnDropFile);
+    }
+
+    private void OnDropFile(DropFileMessage message)
+    {
+        if (message.Success)
+        {
+            this.ProcessSourceLanguageFile(path: message.Data);
+        }
+        else
+        {
+            this.ErrorMessage = this.Localizer.Lookup(message.Data);
+        }
     }
 
     private void OnToolbarCommand(ToolbarCommandMessage message)
@@ -27,7 +43,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         switch (message.Command)
         {
             case ToolbarCommandMessage.ToolbarCommand.CreateNewAddAllLanguages:
-                this.AddAllLanguages(); 
+                this.AddAllLanguages();
                 break;
 
             case ToolbarCommandMessage.ToolbarCommand.CreateNewClearAllLanguages:
@@ -35,7 +51,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
                 break;
 
             case ToolbarCommandMessage.ToolbarCommand.CreateNewSaveProject:
-                this.SaveProject(); 
+                this.SaveProject();
                 break;
 
             // Ignore all other commands 
@@ -46,16 +62,127 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
     private void AddAllLanguages()
     {
+        var available = this.AvailableLanguages.ToList();
+        foreach (var language in available)
+        {
+            language.ToggleAvailability();
+            this.SelectedLanguages.Add(language);
+        }
 
+        this.AvailableLanguages.Clear();
     }
 
     private void ClearAllLanguages()
     {
+        var selected = this.SelectedLanguages.ToList();
+        foreach (var language in selected)
+        {
+            language.ToggleAvailability();
+            this.AvailableLanguages.Add(language);
+        }
 
+        this.SelectedLanguages.Clear();
     }
 
     private void SaveProject()
     {
+
+    }
+
+    private void ProcessSourceLanguageFile(string path)
+    {
+        FileInfo fileInfo = new(path);
+        if (!fileInfo.Exists)
+        {
+            this.ErrorMessage = this.Localizer.Lookup("CreateNew.FileDoesNotExist");
+            return;
+        }
+
+        string? directoryName = fileInfo.DirectoryName;
+        string? fileName = fileInfo.Name;
+        string? extension = fileInfo.Extension;
+
+        Debug.WriteLine(directoryName + "  -   " + fileName + "  -   " + extension);
+
+        if (string.IsNullOrWhiteSpace(directoryName) ||
+            string.IsNullOrWhiteSpace(fileName) ||
+            string.IsNullOrWhiteSpace(extension))
+        {
+            this.ErrorMessage = this.Localizer.Lookup("CreateNew.UnsupportedFileFormat");
+            return;
+        }
+
+        // Check for supported extension 
+        bool hasFoundFormat = false;
+        var foundResourceFormat = default(ResourceFormat);
+        foreach (ResourceFormat resourceFormat in ResourceFormats.AvailableFormats)
+        {
+            if (resourceFormat.ToFileExtension() == extension)
+            {
+                foundResourceFormat = resourceFormat;
+                hasFoundFormat = true;
+                break; 
+            }
+        }
+
+        if (!hasFoundFormat)
+        {
+            this.ErrorMessage = this.Localizer.Lookup("CreateNew.UnsupportedFileFormat");
+            return;
+        }
+
+        // Check if file name contains a supported language key 
+        bool hasFoundKey = false;
+        string foundKey = string.Empty;
+        foreach (string cultureKey in Language.Languages.Keys.ToList())
+        {
+            int indexOfKey = fileName.IndexOf(cultureKey, StringComparison.OrdinalIgnoreCase);
+            if (indexOfKey > 0)
+            {
+                hasFoundKey = true;
+                foundKey = cultureKey;
+                break;
+            }
+        }
+
+        if (!hasFoundKey)
+        {
+            this.ErrorMessage = this.Localizer.Lookup("CreateNew.UnsupportedCulture");
+            return;
+        }
+
+        if ((!Language.Languages.TryGetValue(foundKey, out Language? language)) ||
+            (language is null))
+        {
+            this.ErrorMessage = this.Localizer.Lookup("CreateNew.UnsupportedCulture");
+            return;
+        }
+
+        // Create the target file format 
+        string targetFileFormat = fileName.Replace(foundKey, "{0}");
+
+        string projectName =
+            string.IsNullOrWhiteSpace(this.ProjectName) ? "<Untitled>" : this.ProjectName; 
+        this.project = new Project()
+        {
+            Name = projectName,
+            FolderPath = directoryName,
+            Format = foundResourceFormat,
+            SourceFile = fileName,
+            TargetFileFormat = targetFileFormat,
+            SourceLanguage = language,
+            TargetLanguages = [.. (from item in this.SelectedLanguages select item.Language)],
+        };
+
+        // Update UI: Note that we do NOT set the initializing flag. 
+        this.ProjectName = projectName;
+        this.SourceFile = fileName;
+
+        // Auto Select File format 
+        this.SelectFileFormat(foundResourceFormat);
+
+        // Auto Select Source Language
+        this.SelectSourceLanguage(foundKey); 
 
     }
 
@@ -81,8 +208,8 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
                 this.AvailableLanguages.Remove(available);
             }
 
-            this.FileFormats =[];
-            foreach (ResourceFormat resourceFormat in ResourceFormats.Available())
+            this.FileFormats = [];
+            foreach (ResourceFormat resourceFormat in ResourceFormats.AvailableFormats)
             {
                 this.FileFormats.Add(new FileFormatViewModel(resourceFormat));
             }
@@ -90,17 +217,48 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             this.SelectedFileFormatIndex = 0;
             this.selectedFileFormat = this.FileFormats[0].ResourceFormat;
 
-            this.SourcePath = string.Empty;
+            this.ErrorMessage = string.Empty;
+            this.SourceFile = string.Empty;
         }
 
         this.isInitializing = false;
     }
 
-    private ClickableLanguageInfoViewModel? Available (LanguageInfoViewModel vm )
-        =>  (from item in this.AvailableLanguages
-             where item.Language.LanguageKey == vm.Language.LanguageKey
-             select item)
-             .FirstOrDefault() ;
+    private void SelectFileFormat (ResourceFormat fileFormat)
+    {
+        int index = 0;
+        foreach (var resourceFormat in this.FileFormats)
+        {
+            if ( fileFormat == resourceFormat.ResourceFormat)
+            {
+                this.SelectedFileFormatIndex = index ;
+                return ;
+            }
+
+            ++ index;
+        }
+    }
+
+    private void SelectSourceLanguage(string cultureKey )
+    {
+        int index = 0;
+        foreach (var item  in this.SourceLanguages)
+        {
+            if (cultureKey == item.Language.CultureKey)
+            {
+                this.SelectedSourceLanguageIndex = index;
+                return;
+            }
+
+            ++index;
+        }
+    }
+
+    private ClickableLanguageInfoViewModel? Available(LanguageInfoViewModel vm)
+        => (from item in this.AvailableLanguages
+            where item.Language.LanguageKey == vm.Language.LanguageKey
+            select item)
+             .FirstOrDefault();
 
     private ClickableLanguageInfoViewModel? Selected(LanguageInfoViewModel vm)
         => (from item in this.SelectedLanguages
@@ -124,19 +282,11 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         viewModel.ToggleAvailability();
     }
 
-#pragma warning disable IDE0079
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable CA1822 // Mark members as static
-
-    // TODO : Save, Add All buttons, etc 
-
-#pragma warning restore CA1822
-#pragma warning restore IDE0051 // Remove unused private members
-#pragma warning restore IDE0079
+    public string? ErrorMessage { get => this.Get<string?>(); set => this.Set(value); }
 
     public string? ProjectName { get => this.Get<string?>(); set => this.Set(value); }
 
-    public string? SourcePath { get => this.Get<string?>(); set => this.Set(value); }
+    public string? SourceFile { get => this.Get<string?>(); set => this.Set(value); }
 
     public int SelectedSourceLanguageIndex
     {
@@ -155,7 +305,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
             if (changed)
             {
-                LanguageInfoViewModel selectedVm = this.SourceLanguages[value]; 
+                LanguageInfoViewModel selectedVm = this.SourceLanguages[value];
                 this.selectedSourceLanguage = selectedVm.Language;
                 var available = this.Available(selectedVm);
                 if (available is not null)
@@ -201,7 +351,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
             if (changed)
             {
-                this.selectedFileFormat = this.FileFormats[value].ResourceFormat; 
+                this.selectedFileFormat = this.FileFormats[value].ResourceFormat;
             }
         }
     }

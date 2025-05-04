@@ -35,6 +35,7 @@ public sealed partial class TranslatorModel : ModelBase
         Format = ResourceFormat.Unknown,
         FolderPath = string.Empty,
         SourceFile = string.Empty,
+        TargetFileFormat = string.Empty,
     };
 
     [JsonIgnore]

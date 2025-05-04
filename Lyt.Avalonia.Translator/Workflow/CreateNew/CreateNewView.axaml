@@ -7,7 +7,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="450"
+	mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="850"
 	
 	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
 	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
@@ -27,7 +27,7 @@
 			<RowDefinition Height="72" />
 			<RowDefinition Height="72" />
 			<RowDefinition Height="72" />
-			<RowDefinition Height="12" />
+			<RowDefinition Height="72" />
 			<RowDefinition Height="72" />
 
 			<RowDefinition Height="*" />
@@ -35,17 +35,8 @@
 		</Grid.RowDefinitions>
 
 		<vm:DropView
+			x:Name="dropView"
 			Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
-			/>
-		<TextBlock
-			Grid.Column="1" Grid.Row="1" Grid.RowSpan="3"
-			Margin="0 0 0 0"
-			Text="{Binding SourcePath}"
-			FontSize="24"
-			TextAlignment="Left"
-			Foreground="{StaticResource PastelOrchid_0_080}"
-			VerticalAlignment="Center" HorizontalAlignment="Stretch"
-			TextWrapping="Wrap"
 			/>
 		<TextBlock
 			Grid.Column="3" Grid.Row="1"
@@ -127,6 +118,37 @@
 			</ComboBox.ItemTemplate>
 		</ComboBox>
 
+		<TextBlock
+			Grid.Column="3" Grid.Row="4"
+			Margin="0 0 0 0"
+			Text="{DynamicResource CreateNew.SourceFile}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<TextBlock
+			Grid.Column="3" Grid.Row="4"
+			Margin="0 0 0 0"
+			Text="{Binding SourceFile}"
+			FontSize="24"
+			TextAlignment="Right"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+
+		<TextBlock
+			Grid.Column="1" Grid.Row="4"
+			Margin="0 0 0 0"
+			Text="{Binding ErrorMessage}"
+			FontSize="24"
+			TextAlignment="Center"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
 		<TextBlock
 			Grid.Column="1" Grid.Row="5"
 			Margin="0 0 0 0"

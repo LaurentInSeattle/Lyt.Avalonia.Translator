@@ -1,12 +1,11 @@
 namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
+using static MessagingExtensions; 
 public partial class DropView : UserControl
 {
     public DropView()
     {
         this.InitializeComponent();
-
-        this.DataContextChanged += this.OnDataContextChanged;
         DragDrop.SetAllowDrop(this.DropBorder, true);
         this.AddHandler(DragDrop.DropEvent, this.OnDrop);
     }
@@ -17,35 +16,38 @@ public partial class DropView : UserControl
         this.DropBorder.RemoveHandler(DragDrop.DropEvent, this.OnDrop);
     }
 
-    private void OnDataContextChanged(object? sender, EventArgs e)
-    {
-        if (this.DataContext is DropViewModel dropViewModel)
-        {
-            dropViewModel.BindOnDataContextChanged(this);
-        }
-    }
-
     private void OnDrop(object? sender, DragEventArgs dragEventArgs)
     {
-        IDataObject data = dragEventArgs.Data;
-        var files = data.GetFiles();
-        if (files is not null)
+        try
         {
-            foreach (IStorageItem file in files)
+
+            IDataObject data = dragEventArgs.Data;
+            var files = data.GetFiles();
+            if (files is not null)
             {
-                string path = file.Path.LocalPath;
-                Debug.WriteLine("Dropped: " + path);
-                if (File.Exists(path))
+                bool success = false;
+                foreach (IStorageItem file in files)
                 {
-                    if (this.DataContext is DropViewModel dropViewModel)
+                    string path = file.Path.LocalPath;
+                    Debug.WriteLine("Dropped: " + path);
+                    if (File.Exists(path))
                     {
-                        if (dropViewModel.OnDrop(path))
-                        {
-                            break; 
-                        } 
+                        success = true;
+                        Publish(new DropFileMessage(Success: true, Data: path));
+                        break;
                     }
                 }
+
+                if (!success)
+                {
+                    Publish(new DropFileMessage(Success: false, Data: "CreateNew.FileDoesNotExist"));
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("OnDrop: Exception: " + ex);
+            Publish(new DropFileMessage(Success: false, Data: "CreateNew.Exception"));
         }
 
         dragEventArgs.Handled = true;

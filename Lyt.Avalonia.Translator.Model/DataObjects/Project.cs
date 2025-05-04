@@ -1,4 +1,4 @@
-﻿namespace Lyt.Avalonia.Translator.Model.DataObjects; 
+﻿namespace Lyt.Avalonia.Translator.Model.DataObjects;
 
 public sealed class Project
 {
@@ -14,7 +14,10 @@ public sealed class Project
     public required string FolderPath { get; set; } = string.Empty;
 
     [JsonRequired]
-    public required string SourceFile { get; set; }
+    public required string SourceFile { get; set; } = string.Empty;
+
+    [JsonRequired]
+    public required string TargetFileFormat { get; set; } = string.Empty;
 
     [JsonRequired]
     public Language SourceLanguage { get; set; } = Language.Default;
@@ -22,11 +25,19 @@ public sealed class Project
     [JsonRequired]
     public List<Language> TargetLanguages { get; set; } = [];
 
-    public bool IsInvalid 
+    public bool IsInvalid
         =>
             this.Format == ResourceFormat.Unknown ||
             string.IsNullOrWhiteSpace(this.Name) ||
             string.IsNullOrWhiteSpace(this.FolderPath) ||
             string.IsNullOrWhiteSpace(this.SourceFile) ||
+            string.IsNullOrWhiteSpace(this.TargetFileFormat) ||
             this.TargetLanguages.Count == 0;
+
+    public string TargetFilePath(string cultureKey)
+    {
+        string fileName = string.Format(this.TargetFileFormat, cultureKey);
+        return
+            Path.Combine(this.FolderPath, string.Concat(fileName, this.Format.ToFileExtension()));
+    }
 }
