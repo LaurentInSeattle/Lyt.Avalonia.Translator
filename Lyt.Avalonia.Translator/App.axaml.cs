@@ -24,6 +24,7 @@ public partial class App : ApplicationBase
            typeof(ShellViewModel),
            typeof(InteractiveViewModel),
            typeof(CreateNewViewModel),
+           typeof(CreateNewToolbarViewModel),
 
            //typeof(CollectionViewModel),
            //typeof(CollectionToolbarViewModel),

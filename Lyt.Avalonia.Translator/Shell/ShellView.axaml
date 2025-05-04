@@ -69,7 +69,7 @@
 			IsVisible="{Binding MainToolbarIsVisible}"
 			Orientation="Horizontal"
 			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
-			Margin="460 0 0 0"
+			Margin="300 0 0 0"
 			HorizontalAlignment="Left"
 			>
 			
@@ -177,7 +177,7 @@
 		<ContentControl
 			x:Name="ShellViewToolbar"
 			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
-			Margin="980 0 0 0"
+			Margin="640 0 0 0"
 			VerticalAlignment="Stretch" HorizontalAlignment="Left"
 			/>
 		<!-- Do not add rows and/or columns to the toaster host-->

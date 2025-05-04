@@ -19,6 +19,44 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         this.languages = [];
         this.clickableLanguages = [];
         this.PopulateLanguageAndFormats();
+        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+    }
+
+    private void OnToolbarCommand(ToolbarCommandMessage message)
+    {
+        switch (message.Command)
+        {
+            case ToolbarCommandMessage.ToolbarCommand.CreateNewAddAllLanguages:
+                this.AddAllLanguages(); 
+                break;
+
+            case ToolbarCommandMessage.ToolbarCommand.CreateNewClearAllLanguages:
+                this.ClearAllLanguages();
+                break;
+
+            case ToolbarCommandMessage.ToolbarCommand.CreateNewSaveProject:
+                this.SaveProject(); 
+                break;
+
+            // Ignore all other commands 
+            default:
+                break;
+        }
+    }
+
+    private void AddAllLanguages()
+    {
+
+    }
+
+    private void ClearAllLanguages()
+    {
+
+    }
+
+    private void SaveProject()
+    {
+
     }
 
     private void PopulateLanguageAndFormats()

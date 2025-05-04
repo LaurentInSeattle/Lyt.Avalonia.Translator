@@ -1,0 +1,63 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Workflow.CreateNew.CreateNewToolbarView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.CreateNew"
+	x:DataType="vm:CreateNewToolbarViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="72"
+
+	xmlns:controls="clr-namespace:Lyt.Avalonia.AstroPic.Controls"
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	xmlns:interactions="using:Lyt.Avalonia.Mvvm.Behaviors"
+	>	
+	<!-- View Selector - Main toolbar - Aligned left -->
+	<StackPanel
+		Orientation="Horizontal"
+		Margin="0 0 0 0"
+		HorizontalAlignment="Left"
+		Height="72"
+		>
+		<glyphs:GlyphButton
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="100" Height="56"
+			Margin="8 4 8 4"
+			GlyphSource="add_circle"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource CreateNew.AddAllLanguages}"
+			Command="{Binding AddAllLanguagesCommand}"
+			/>
+		<glyphs:GlyphButton
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="100" Height="56"
+			Margin="8 4 8 4"
+			GlyphSource="subtract_circle"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource CreateNew.ClearAllLanguages}"
+			Command="{Binding ClearAllLanguagesCommand}"
+			/>
+		<glyphs:GlyphButton
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="100" Height="56"
+			Margin="8 4 8 4"
+			GlyphSource="save"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource CreateNew.SaveProject}"
+			Command="{Binding SaveProjectCommand}"
+			/>
+	</StackPanel>
+</UserControl>

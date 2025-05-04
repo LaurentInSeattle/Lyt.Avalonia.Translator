@@ -164,17 +164,34 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
             currentViewModel = CurrentViewModel();
         }
 
+        void NoToolbar() => this.View.ShellViewToolbar.Content = null;
+
+        void SetupToolbar<TViewModel, TControl>()
+            where TViewModel : Bindable<TControl>
+            where TControl : Control, new()
+        {
+            if (this.View is null)
+            {
+                throw new Exception("No view: Failed to startup...");
+            }
+
+            var newViewModel = App.GetRequiredService<TViewModel>();
+            this.View.ShellViewToolbar.Content = newViewModel.View;
+        }
+
         switch (activatedView)
         {
             default:
             case ActivatedView.Interactive:
+                NoToolbar();
                 this.Activate<InteractiveViewModel, InteractiveView>(isFirstActivation, null);
                 hasBeenActivated = ActivatedView.Interactive;
                 break;
 
             case ActivatedView.CreateNew:
+                SetupToolbar<CreateNewToolbarViewModel, CreateNewToolbarView>();
                 this.Activate<CreateNewViewModel, CreateNewView>(isFirstActivation, null);
-                hasBeenActivated = ActivatedView.Interactive;
+                hasBeenActivated = ActivatedView.CreateNew;
                 break;
 
                 //case ActivatedView.Intro:
@@ -219,26 +236,13 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         //    selector.Select(button);
         //}
 
-        this.MainToolbarIsVisible = true; // LATER:  CurrentViewModel() is not IntroViewModel;
+        this.MainToolbarIsVisible = true; // CurrentViewModel() is CreateNewViewModel;
     }
 
     private static async void OnExit()
     {
         var application = App.GetRequiredService<IApplicationBase>();
         await application.Shutdown();
-    }
-
-    private void SetupToolbar<TViewModel, TControl>()
-        where TViewModel : Bindable<TControl>
-        where TControl : Control, new()
-    {
-        if (this.View is null)
-        {
-            throw new Exception("No view: Failed to startup...");
-        }
-
-        var newViewModel = App.GetRequiredService<TViewModel>();
-        this.View.ShellViewToolbar.Content = newViewModel.View;
     }
 
     private void Activate<TViewModel, TControl>(bool isFirstActivation, object? activationParameters)
@@ -273,23 +277,9 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     private static void SetupWorkflow()
     {
-        static void CreateAndBind<TViewModel, TControl>()
-             where TViewModel : Bindable<TControl>
-             where TControl : Control, new()
-        {
-            var vm = App.GetRequiredService<TViewModel>();
-            vm.CreateViewAndBind();
-        }
-
-        CreateAndBind<InteractiveViewModel, InteractiveView>();
-        CreateAndBind<CreateNewViewModel, CreateNewView>();
-
-        //CreateAndBind<CollectionToolbarViewModel, CollectionToolbarView>();
-        //CreateAndBind<IntroViewModel, IntroView>();
-        //CreateAndBind<IntroToolbarViewModel, IntroToolbarView>();
-        //CreateAndBind<LanguageViewModel, LanguageView>();
-        //CreateAndBind<SettingsViewModel, SettingsView>();
-        //CreateAndBind<SettingsToolbarViewModel, SettingsToolbarView>();
+        App.GetRequiredService<InteractiveViewModel>().CreateViewAndBind();
+        App.GetRequiredService<CreateNewToolbarViewModel>().CreateViewAndBind();
+        App.GetRequiredService<CreateNewViewModel>().CreateViewAndBind();
     }
 
 #pragma warning disable IDE0079 

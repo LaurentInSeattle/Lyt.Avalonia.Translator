@@ -6,26 +6,15 @@ public sealed record class ToolbarCommandMessage(
     public enum ToolbarCommand
     {
         // Left - Main toolbar in Shell view 
-        Today,
-        Collection,
-        Settings,
-        About,
 
         // Right - Main toolbar in Shell view  
-        ToTray, 
         Close,
 
-        // Gallery toolbar
-        GallerySetWallpaper,
-        GallerySaveToDesktop,
-        AddToCollection,        // Gallery Only
+        // CreateNew toolbar
+        CreateNewAddAllLanguages,
+        CreateNewClearAllLanguages,
+        CreateNewSaveProject,
 
-        // Collection toolbars 
-        CollectionSetWallpaper,
-        CollectionSaveToDesktop,
-        RemoveFromCollection,   // Collection Only
-
-        // Settings toolbars 
-        Cleanup,
+        // Etc... Settings toolbars 
     }
 }

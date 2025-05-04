@@ -42,6 +42,10 @@
 	<system:String x:Key="CreateNew.AvailableLanguages">Available Languages</system:String>
 	<system:String x:Key="CreateNew.TargetLanguages">Target Languages</system:String>
 
+	<!-- Create New Project Toolbar-->
+	<system:String x:Key="CreateNew.AddAllLanguages">All Languages</system:String>
+	<system:String x:Key="CreateNew.ClearAllLanguages">Remove All</system:String>
+	<system:String x:Key="CreateNew.SaveProject">Save Project</system:String>
 
 	<system:String x:Key="CreateNew.SetWallpaper">Use as Wallpaper</system:String>
 	<system:String x:Key="CreateNew.Remove">Remove</system:String>

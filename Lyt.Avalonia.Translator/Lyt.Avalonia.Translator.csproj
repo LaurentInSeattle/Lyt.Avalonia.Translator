@@ -121,6 +121,9 @@
 	  <Compile Update="Workflow\CreateNew\CreateNewView.axaml.cs">
 	    <DependentUpon>CreateNewView.axaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Workflow\CreateNew\CreateNewToolbarView.axaml.cs">
+	    <DependentUpon>CreateNewToolbarView.axaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Workflow\Shared\ClickableLanguageInfoView.axaml.cs">
 	    <DependentUpon>ClickableLanguageInfoView.axaml</DependentUpon>
 	  </Compile>
