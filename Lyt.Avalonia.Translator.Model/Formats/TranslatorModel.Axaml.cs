@@ -1,4 +1,5 @@
-﻿namespace Lyt.Avalonia.Translator.Model;
+﻿
+namespace Lyt.Avalonia.Translator.Model;
 
 public sealed partial class TranslatorModel : ModelBase
 {

@@ -44,54 +44,47 @@
 	<system:String x:Key="CreateNew.TargetLanguages">Target Languages</system:String>
 	<system:String x:Key="CreateNew.FileDoesNotExist">File does not exist</system:String>
 	<system:String x:Key="CreateNew.Exception">Unexpected Error</system:String>
-
 	<system:String x:Key="CreateNew.UnsupportedFileFormat">Unsupported File Format</system:String>
 	<system:String x:Key="CreateNew.UnsupportedCulture">Unsupported Culture</system:String>
-
+	<system:String x:Key="CreateNew.Untitled">- Untitled -</system:String>
+	<system:String x:Key="CreateNew.CantSaveProjectTitle">Can't Save Project</system:String>
+	<system:String x:Key="CreateNew.CantSaveProjectText">More information is required to save the project.</system:String>
+	<system:String x:Key="CreateNew.ProjectSavedTitle">Saved.</system:String>
+	<system:String x:Key="CreateNew.ProjectSavedText">This project has been successfully saved.</system:String>
+	<system:String x:Key="Model.Project.AlreadyExists">A project with this name already exists.</system:String>
+	
 	<!-- Create New Project Toolbar-->
 	<system:String x:Key="CreateNew.AddAllLanguages">All Languages</system:String>
 	<system:String x:Key="CreateNew.ClearAllLanguages">Remove All</system:String>
 	<system:String x:Key="CreateNew.SaveProject">Save Project</system:String>
 
+	<!-- Model / Service -->
+	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>
+	<system:String x:Key="Model.Project.Name">This project has no name.</system:String>
+	<system:String x:Key="Model.Project.FolderPath">The project directory is invalid.</system:String>
+	<system:String x:Key="Model.Project.SourceFile">The project source file is invalid.</system:String>
+	<system:String x:Key="Model.Project.TargetFileFormat">No target file format string.</system:String>
+	<system:String x:Key="Model.Project.ZeroTargetLanguages">No target languages have been selected.</system:String>
 
 
-
-
-
-
-
-
+	
+	
 	<!-- Most likely all below will be deleted -->
 	<!-- Keep for now, maybe there are some recycling opportunities -->
 
-	<system:String x:Key="CreateNew.SetWallpaper">Use as Wallpaper</system:String>
 	<system:String x:Key="CreateNew.Remove">Remove</system:String>
 
 	<system:String x:Key="Collection.SaveToDesktop">Save to Desktop</system:String>
-	<system:String x:Key="Collection.BadPicture">Can't download this picture!</system:String>
 	<system:String x:Key="Collection.Statistics">Statistics</system:String>
-	<system:String x:Key="Collection.Stats.AlertTextQuota">Too many images in your collection!</system:String>
 	<system:String x:Key="Collection.Stats.AlertTextSpace">Pay attention to the available space on disk!</system:String>
-	<system:String x:Key="Collection.Stats.ImageCountFormat">Images: {0} (All services - Quota: {1})</system:String>
 	<system:String x:Key="Collection.Stats.SizeOnDiskFormat">Estimated disk space usage: {0} MB (Quota: {1} MB)</system:String>
 	<system:String x:Key="Collection.Stats.AvailableDiskSpaceFormat">Available space on disk: {0:F1} GB</system:String>
 
-	<system:String x:Key="Collection.Thumbs.WebService">Web Service:</system:String>
-	<system:String x:Key="Collection.Thumbs.AllServices">All services.</system:String>
 	<system:String x:Key="Collection.Thumbs.All">All</system:String>
 	<system:String x:Key="Collection.Thumbs.Recent">Recent</system:String>
 
 	<!-- Gallery  -->
-	<system:String x:Key="Gallery.SetWallpaper">Use as Wallpaper</system:String>
 	<system:String x:Key="Gallery.Add">Add</system:String>
-	<system:String x:Key="Gallery.SaveToDesktop">Save to Desktop</system:String>
-
-	<system:String x:Key="Gallery.StartingDownloading">Download in progress</system:String>
-	<system:String x:Key="Gallery.CompletedDownloading">Download complete</system:String>
-	<system:String x:Key="Gallery.ImageMetadata">image metadata </system:String>
-	<system:String x:Key="Gallery.Image">image</system:String>
-	<system:String x:Key="Gallery.ForProvider">for service </system:String>
-	<system:String x:Key="Gallery.DownloadsComplete">All downloads complete!</system:String>
 
 	<!-- Intro  -->
 	<system:String x:Key="Intro.AgreeMIT">I accept the terms of the MIT License, Continue.</system:String>
@@ -104,10 +97,6 @@
 
 	<!-- Settings  -->
 	<system:String x:Key="Settings.CleanupNow">Cleanup Now</system:String>
-
-	<system:String x:Key="Settings.Services.Title">Image download services</system:String>
-	<system:String x:Key="Settings.Services.Subtitle">Select the web services from which you want to download images.</system:String>
-	<system:String x:Key="Settings.Services.Downloaded">Download</system:String>
 	<system:String x:Key="Settings.Services.Skip">Ignore and Skip</system:String>
 
 	<system:String x:Key="Settings.Quota.Title">Disc usage settings</system:String>
@@ -123,10 +112,8 @@
 
 	<system:String x:Key="Settings.Os.Title">Operating System Settings</system:String>
 	<system:String x:Key="Settings.Os.Subtitle">Choose some operating system settings to manage your images.</system:String>
-	<system:String x:Key="Settings.Os.Rotate">Rotate desktop screen wallpapers?</system:String>
 	<system:String x:Key="Settings.Os.Rotate.True">Yes, periodically.</system:String>
 	<system:String x:Key="Settings.Os.Rotate.False">Never</system:String>
-	<system:String x:Key="Settings.Os.Rotate.Minutes">Change wallpaper after: (minutes)</system:String>
 
 	<system:String x:Key="Settings.ReminderTitle">Important Reminder</system:String>
 	<system:String x:Key="Settings.ReminderSubtitle">Some important points to remember about downloaded images...</system:String>
@@ -141,12 +128,5 @@
 	<system:String x:Key="Tray.OpenCollection">Open the image collection</system:String>
 	<system:String x:Key="Tray.Settings">Settings</system:String>
 	<system:String x:Key="Tray.ImageInfo">About this image...</system:String>
-
-	<!-- Model / Service -->
-	<system:String x:Key="Model.AlreadyDownloaded">The image has already been downloaded.</system:String>
-	<system:String x:Key="Model.NoUrl">The image has no URL.</system:String>
-	<system:String x:Key="Model.NotAnImage">The image is not valid.</system:String>
-	<system:String x:Key="Model.TodayIsVideo">The photo of the day is actually a video clip.</system:String>
-	<system:String x:Key="Model.Provider.Personal">Personal Image</system:String>
 	
 </ResourceDictionary>

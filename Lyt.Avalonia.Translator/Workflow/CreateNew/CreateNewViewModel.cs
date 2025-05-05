@@ -1,11 +1,10 @@
-﻿using Tmds.DBus.Protocol;
-
-namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
+﻿namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
 public sealed class CreateNewViewModel : Bindable<CreateNewView>
 {
     private readonly TranslatorModel translatorModel;
     private readonly TranslatorService translatorService;
+    private readonly IToaster toaster;
     private readonly List<LanguageInfoViewModel> languages;
     private readonly List<ClickableLanguageInfoViewModel> clickableLanguages;
 
@@ -15,10 +14,13 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
     private Project? project;
 
     public CreateNewViewModel(
-        TranslatorModel translatorModel, TranslatorService translatorService)
+        TranslatorModel translatorModel,
+        TranslatorService translatorService,
+        IToaster toaster)
     {
         this.translatorModel = translatorModel;
         this.translatorService = translatorService;
+        this.toaster = toaster;
         this.languages = [];
         this.clickableLanguages = [];
         this.PopulateLanguageAndFormats();
@@ -86,8 +88,34 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
     private void SaveProject()
     {
+        if ( this.project is null )
+        {
+            this.toaster.Show(
+                this.Localizer.Lookup("CreateNew.CantSaveProjectTitle"),
+                this.Localizer.Lookup("CreateNew.CantSaveProjectText"), 
+                3_000, InformationLevel.Warning);
+            return ;
+        }
 
+        this.ErrorMessage = string.Empty;
+        if (!this.project.Validate( out string errorMessageKey))
+        {
+            this.ErrorMessage = this.Localizer.Lookup(errorMessageKey);
+            return;
+        }
+
+        if (!this.translatorModel.AddNewProject(this.project, out errorMessageKey))
+        {
+            this.ErrorMessage = this.Localizer.Lookup(errorMessageKey);
+            return;
+        }
+
+        this.toaster.Show(
+            this.Localizer.Lookup("CreateNew.ProjectSavedTitle"),
+            this.Localizer.Lookup("CreateNew.ProjectSavedText"), 
+            3_000, InformationLevel.Success);
     }
+
 
     private void ProcessSourceLanguageFile(string path)
     {
@@ -121,7 +149,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             {
                 foundResourceFormat = resourceFormat;
                 hasFoundFormat = true;
-                break; 
+                break;
             }
         }
 
@@ -160,9 +188,9 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
         // Create the target file format 
         string targetFileFormat = fileName.Replace(foundKey, "{0}");
-
+        string untitled = this.Localizer.Lookup("CreateNew.Untitled");
         string projectName =
-            string.IsNullOrWhiteSpace(this.ProjectName) ? "<Untitled>" : this.ProjectName; 
+            string.IsNullOrWhiteSpace(this.ProjectName) ? untitled : this.ProjectName;
         this.project = new Project()
         {
             Name = projectName,
@@ -170,9 +198,14 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             Format = foundResourceFormat,
             SourceFile = fileName,
             TargetFileFormat = targetFileFormat,
-            SourceLanguage = language,
-            TargetLanguages = [.. (from item in this.SelectedLanguages select item.Language)],
+            SourceLanguageCultureKey = language.CultureKey,
+            TargetLanguagesCultureKeys = 
+                [.. (from item in this.SelectedLanguages select item.Language.CultureKey)],
         };
+
+        // Here it's ok to have errors...
+        _ = this.project.Validate(out string errorMessageKey );
+        this.ErrorMessage = this.Localizer.Lookup(errorMessageKey);
 
         // Update UI: Note that we do NOT set the initializing flag. 
         this.ProjectName = projectName;
@@ -182,8 +215,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         this.SelectFileFormat(foundResourceFormat);
 
         // Auto Select Source Language
-        this.SelectSourceLanguage(foundKey); 
-
+        this.SelectSourceLanguage(foundKey);
     }
 
     private void PopulateLanguageAndFormats()
@@ -224,25 +256,25 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         this.isInitializing = false;
     }
 
-    private void SelectFileFormat (ResourceFormat fileFormat)
+    private void SelectFileFormat(ResourceFormat fileFormat)
     {
         int index = 0;
         foreach (var resourceFormat in this.FileFormats)
         {
-            if ( fileFormat == resourceFormat.ResourceFormat)
+            if (fileFormat == resourceFormat.ResourceFormat)
             {
-                this.SelectedFileFormatIndex = index ;
-                return ;
+                this.SelectedFileFormatIndex = index;
+                return;
             }
 
-            ++ index;
+            ++index;
         }
     }
 
-    private void SelectSourceLanguage(string cultureKey )
+    private void SelectSourceLanguage(string cultureKey)
     {
         int index = 0;
-        foreach (var item  in this.SourceLanguages)
+        foreach (var item in this.SourceLanguages)
         {
             if (cultureKey == item.Language.CultureKey)
             {
@@ -280,11 +312,27 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         }
 
         viewModel.ToggleAvailability();
+        if (this.project is not null)
+        {
+            this.project.TargetLanguagesCultureKeys = 
+                [.. from language in this.SelectedLanguages select language.Language.CultureKey];
+        } 
     }
 
     public string? ErrorMessage { get => this.Get<string?>(); set => this.Set(value); }
 
-    public string? ProjectName { get => this.Get<string?>(); set => this.Set(value); }
+    public string? ProjectName
+    {
+        get => this.Get<string?>();
+        set
+        {
+            this.Set(value);
+            if ((this.project is not null) && !string.IsNullOrWhiteSpace(value))
+            {
+                this.project.Name = value.Trim();
+            }
+        }
+    }
 
     public string? SourceFile { get => this.Get<string?>(); set => this.Set(value); }
 
@@ -317,6 +365,11 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
                 if (selected is not null)
                 {
                     this.SelectedLanguages.Remove(selected);
+                }
+
+                if (this.project is not null)
+                {
+                    this.project.SourceLanguageCultureKey = this.selectedSourceLanguage.CultureKey;
                 }
 
                 // Old value becomes available 

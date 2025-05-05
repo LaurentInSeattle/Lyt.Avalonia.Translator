@@ -144,8 +144,8 @@
 			Margin="0 0 0 0"
 			Text="{Binding ErrorMessage}"
 			FontSize="24"
-			TextAlignment="Center"
-			Foreground="{StaticResource PastelOrchid_0_080}"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_1_080}"
 			VerticalAlignment="Center" HorizontalAlignment="Stretch"
 			TextWrapping="Wrap"
 			/>
