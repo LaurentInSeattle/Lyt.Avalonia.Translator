@@ -194,6 +194,12 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
                 // hasBeenActivated = ActivatedView.Projects;
                 break;
 
+            case ActivatedView.RunProject:
+                SetupToolbar<RunProjectToolbarViewModel, RunProjectToolbarView>();
+                this.Activate<RunProjectViewModel, RunProjectView>(isFirstActivation, null);
+                // hasBeenActivated = ActivatedView.Projects;
+                break;
+
             case ActivatedView.CreateNew:
                 SetupToolbar<CreateNewToolbarViewModel, CreateNewToolbarView>();
                 this.Activate<CreateNewViewModel, CreateNewView>(isFirstActivation, null);
@@ -288,6 +294,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         App.GetRequiredService<CreateNewToolbarViewModel>().CreateViewAndBind();
         App.GetRequiredService<CreateNewViewModel>().CreateViewAndBind();
         App.GetRequiredService<ProjectsViewModel>().CreateViewAndBind();
+        App.GetRequiredService<RunProjectViewModel>().CreateViewAndBind();
+        App.GetRequiredService<RunProjectToolbarViewModel>().CreateViewAndBind();
     }
 
 #pragma warning disable IDE0079 
@@ -299,6 +307,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     private void OnCreateNew(object? _) => this.OnViewActivation(ActivatedView.CreateNew);
 
     private void OnProjects(object? _) => this.OnViewActivation(ActivatedView.Projects);
+
+    private void OnRunProject(object? _) => this.OnViewActivation(ActivatedView.RunProject);
 
     //private void OnSettings(object? _) => this.OnViewActivation(ActivatedView.Settings);
 
@@ -317,6 +327,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     public ICommand CreateNewCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     public ICommand ProjectsCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
+    public ICommand RunProjectCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     //public ICommand CollectionCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 

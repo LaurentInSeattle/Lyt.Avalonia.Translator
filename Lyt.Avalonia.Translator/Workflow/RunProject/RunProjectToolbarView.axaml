@@ -1,0 +1,49 @@
+<UserControl 
+	x:Class="Lyt.Avalonia.Translator.Workflow.RunProject.RunProjectToolbarView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.RunProject"
+	x:DataType="vm:RunProjectToolbarViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="72"
+
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	xmlns:interactions="using:Lyt.Avalonia.Mvvm.Behaviors"
+	>	
+	<!-- View Selector - Main toolbar - Aligned left -->
+	<StackPanel
+		Orientation="Horizontal"
+		Margin="0 0 0 0"
+		HorizontalAlignment="Left"
+		Height="72"
+		>
+		<glyphs:GlyphButton
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="100" Height="56"
+			Margin="8 4 8 4"
+			GlyphSource="run"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource RunProject.Run}"
+			Command="{Binding RunCommand}"
+			/>
+		<glyphs:GlyphButton
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="100" Height="56"
+			Margin="8 4 8 4"
+			GlyphSource="presence_offline"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="0"
+			Text="{DynamicResource RunProject.Stop}"
+			Command="{Binding StopCommand}"
+			/>
+	</StackPanel>
+</UserControl>

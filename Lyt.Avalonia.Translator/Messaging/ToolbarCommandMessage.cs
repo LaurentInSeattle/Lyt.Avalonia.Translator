@@ -14,6 +14,8 @@ public sealed record class ToolbarCommandMessage(
         CreateNewAddAllLanguages,
         CreateNewClearAllLanguages,
         CreateNewSaveProject,
+        RunProject,
+        StopProject,
 
         // Etc... Settings toolbars 
     }

@@ -93,6 +93,7 @@ global using Lyt.Avalonia.Translator.Workflow;
 global using Lyt.Avalonia.Translator.Workflow.CreateNew;
 global using Lyt.Avalonia.Translator.Workflow.Interactive;
 global using Lyt.Avalonia.Translator.Workflow.Projects;
+global using Lyt.Avalonia.Translator.Workflow.RunProject;
 global using Lyt.Avalonia.Translator.Workflow.Shared;
 
 

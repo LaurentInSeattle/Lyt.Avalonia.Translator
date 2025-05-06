@@ -16,10 +16,11 @@
 	<system:String x:Key="Shell.AppName">Translator</system:String>
 	<system:String x:Key="Shell.About">About...</system:String>
 	
-	<system:String x:Key="Shell.Translate">Translator</system:String>
+	<system:String x:Key="Shell.Translate">Interactive</system:String>
 	<system:String x:Key="Shell.CreateNew">New Project</system:String>
 	<system:String x:Key="Shell.ProjectList">Project List</system:String>
-
+	<system:String x:Key="Shell.RunProject">Current</system:String>
+	
 	<system:String x:Key="Shell.Settings">Settings</system:String>
 	<system:String x:Key="Shell.Language">Language</system:String>
 	<system:String x:Key="Shell.Exit">Quit</system:String>
@@ -53,7 +54,7 @@
 	<system:String x:Key="CreateNew.ProjectSavedTitle">Saved.</system:String>
 	<system:String x:Key="CreateNew.ProjectSavedText">This project has been successfully saved.</system:String>
 	<system:String x:Key="Model.Project.AlreadyExists">A project with this name already exists.</system:String>
-	
+
 	<!-- Create New Project Toolbar-->
 	<system:String x:Key="CreateNew.AddAllLanguages">All Languages</system:String>
 	<system:String x:Key="CreateNew.ClearAllLanguages">Remove All</system:String>
@@ -62,6 +63,9 @@
 	<!-- Projects  -->
 	<system:String x:Key="Projects.None">No saved projects were found.</system:String>
 
+	<!-- Run Project  -->
+	<system:String x:Key="RunProject.Run">Run</system:String>
+	<system:String x:Key="RunProject.Stop">Abort</system:String>
 
 	<!-- Model / Service -->
 	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>
