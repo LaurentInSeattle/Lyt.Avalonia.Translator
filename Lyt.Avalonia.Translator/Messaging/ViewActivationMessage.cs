@@ -9,7 +9,8 @@ public sealed record class ViewActivationMessage(
         Interactive,
         CreateNew,
         Language,
-        Project, 
+        Projects,
+        RunProject,
 
         GoBack,
         Exit,

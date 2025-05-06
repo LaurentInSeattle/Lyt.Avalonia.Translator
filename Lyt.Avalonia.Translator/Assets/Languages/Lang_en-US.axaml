@@ -18,6 +18,7 @@
 	
 	<system:String x:Key="Shell.Translate">Translator</system:String>
 	<system:String x:Key="Shell.CreateNew">New Project</system:String>
+	<system:String x:Key="Shell.ProjectList">Project List</system:String>
 
 	<system:String x:Key="Shell.Settings">Settings</system:String>
 	<system:String x:Key="Shell.Language">Language</system:String>
@@ -58,6 +59,10 @@
 	<system:String x:Key="CreateNew.ClearAllLanguages">Remove All</system:String>
 	<system:String x:Key="CreateNew.SaveProject">Save Project</system:String>
 
+	<!-- Projects  -->
+	<system:String x:Key="Projects.None">No saved projects were found.</system:String>
+
+
 	<!-- Model / Service -->
 	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>
 	<system:String x:Key="Model.Project.Name">This project has no name.</system:String>
@@ -65,10 +70,10 @@
 	<system:String x:Key="Model.Project.SourceFile">The project source file is invalid.</system:String>
 	<system:String x:Key="Model.Project.TargetFileFormat">No target file format string.</system:String>
 	<system:String x:Key="Model.Project.ZeroTargetLanguages">No target languages have been selected.</system:String>
+	<system:String x:Key="Model.Project.InvalidName">Invalid project name.</system:String>
+	<system:String x:Key="Model.Project.DoesNotExist">No project with such name.</system:String>
 
 
-	
-	
 	<!-- Most likely all below will be deleted -->
 	<!-- Keep for now, maybe there are some recycling opportunities -->
 

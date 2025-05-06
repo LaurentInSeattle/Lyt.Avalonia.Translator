@@ -1,5 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Model;
 
+using Lyt.Avalonia.Translator.Model.DataObjects;
 using static Lyt.Avalonia.Persistence.FileManagerModel;
 
 public sealed partial class TranslatorModel : ModelBase
@@ -205,57 +206,5 @@ public sealed partial class TranslatorModel : ModelBase
     {
         this.Language = languageKey;
         this.localizer.SelectLanguage(languageKey);
-    }
-
-    public bool CheckProjectExistence(Project project, out string errorMessageKey)
-    {
-        string projectName = project.Name;
-        var alreadyExist =
-            (from savedProject in this.Projects
-             where savedProject.Name == projectName
-             select savedProject)
-            .FirstOrDefault();
-        if (alreadyExist is not null)
-        {
-            errorMessageKey = "Model.Project.AlreadyExists";
-            return true;
-        }
-        else
-        {
-            errorMessageKey = string.Empty;
-            return true;
-        }
-    }
-
-
-    public bool AddNewProject(Project project, out string errorMessageKey)
-    {
-        errorMessageKey = string.Empty;
-        if (!project.Validate(out errorMessageKey))
-        {
-            return false;
-        }
-
-        if (this.CheckProjectExistence(project, out errorMessageKey))
-        {
-            return false;
-        }
-
-        this.Projects.Add(project);
-        this.Save();
-        return true;
-    }
-
-    public bool SaveExistingProject(Project project, out string errorMessageKey)
-    {
-        errorMessageKey = string.Empty;
-        if (!project.Validate(out errorMessageKey))
-        {
-            return false;
-        }
-
-        this.Projects.Add(project);
-        this.Save();
-        return true;
     }
 }

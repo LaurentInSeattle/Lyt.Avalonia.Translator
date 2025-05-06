@@ -3,11 +3,10 @@
 public sealed class CreateNewViewModel : Bindable<CreateNewView>
 {
     private readonly TranslatorModel translatorModel;
-    private readonly TranslatorService translatorService;
     private readonly IToaster toaster;
-    private readonly List<LanguageInfoViewModel> languages;
-    private readonly List<ClickableLanguageInfoViewModel> clickableLanguages;
 
+    private List<LanguageInfoViewModel> languages;
+    private List<ClickableLanguageInfoViewModel> clickableLanguages;
     private bool isInitializing;
     private Language? selectedSourceLanguage;
     private ResourceFormat selectedFileFormat;
@@ -15,17 +14,21 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
     public CreateNewViewModel(
         TranslatorModel translatorModel,
-        TranslatorService translatorService,
         IToaster toaster)
     {
         this.translatorModel = translatorModel;
-        this.translatorService = translatorService;
         this.toaster = toaster;
         this.languages = [];
         this.clickableLanguages = [];
         this.PopulateLanguageAndFormats();
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
         this.Messenger.Subscribe<DropFileMessage>(this.OnDropFile);
+    }
+
+    public override void Activate(object? activationParameters)
+    {
+        base.Activate(activationParameters);
+        this.PopulateLanguageAndFormats();
     }
 
     private void OnDropFile(DropFileMessage message)
@@ -114,6 +117,9 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             this.Localizer.Lookup("CreateNew.ProjectSavedTitle"),
             this.Localizer.Lookup("CreateNew.ProjectSavedText"), 
             3_000, InformationLevel.Success);
+
+        // Navigate to load projects 
+
     }
 
 
@@ -201,6 +207,8 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             SourceLanguageCultureKey = language.CultureKey,
             TargetLanguagesCultureKeys = 
                 [.. (from item in this.SelectedLanguages select item.Language.CultureKey)],
+            Created = DateTime.Now,
+            LastUpdated = DateTime.Now,
         };
 
         // Here it's ok to have errors...
@@ -222,6 +230,9 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
     {
         this.isInitializing = true;
         {
+            this.languages = [];
+            this.clickableLanguages = [];
+
             foreach (Language language in Language.Languages.Values)
             {
                 this.languages.Add(new LanguageInfoViewModel(language));

@@ -36,6 +36,8 @@ public sealed partial class TranslatorModel : ModelBase
         FolderPath = string.Empty,
         SourceFile = string.Empty,
         TargetFileFormat = string.Empty,
+        Created = DateTime.Now,
+        LastUpdated = DateTime.Now,
     };
 
     [JsonIgnore]

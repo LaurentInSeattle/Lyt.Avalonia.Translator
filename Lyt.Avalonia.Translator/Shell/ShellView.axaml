@@ -91,6 +91,21 @@
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
 			<glyphs:GlyphButton
+				x:Name="ProjectsButton"
+				Style="{StaticResource ToolbarIconButton}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="82" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="form_multiple"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				GlyphAngle="0"
+				Text="{DynamicResource Shell.ProjectList}"
+				Command="{Binding ProjectsCommand}"
+				Group="{Binding ElementName=SelectionGroup}"
+				/>
+			<glyphs:GlyphButton
 				x:Name="CreateNewButton"
 				Style="{StaticResource ToolbarIconButton}"
 				Behaviour="Tap"

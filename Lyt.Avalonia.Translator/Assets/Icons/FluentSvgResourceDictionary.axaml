@@ -1,4 +1,72 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary 
+	xmlns="https://github.com/avaloniaui" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	>
+
+	<!--  delete  -->
+	<DrawingGroup x:Key = "deleteDrawingGroup">
+		<DrawingGroup>
+			<DrawingGroup.ClipGeometry>
+				<RectangleGeometry Rect="0,0,24,24" />
+			</DrawingGroup.ClipGeometry>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M10,5L14,5C14,3.8954 13.1046,3 12,3 10.8954,3 10,3.8954 10,5z M8.5,5C8.5,3.067 10.067,1.5 12,1.5 13.933,1.5 15.5,3.067 15.5,5L21.25,5C21.6642,5 22,5.3358 22,5.75 22,6.1642 21.6642,6.5 21.25,6.5L19.9309,6.5 18.7589,18.6112C18.5729,20.5334,16.9575,22,15.0263,22L8.9737,22C7.0425,22,5.4272,20.5334,5.2411,18.6112L4.0691,6.5 2.75,6.5C2.3358,6.5 2,6.1642 2,5.75 2,5.3358 2.3358,5 2.75,5L8.5,5z M10.5,9.75C10.5,9.3358 10.1642,9 9.75,9 9.3358,9 9,9.3358 9,9.75L9,17.25C9,17.6642 9.3358,18 9.75,18 10.1642,18 10.5,17.6642 10.5,17.25L10.5,9.75z M14.25,9C14.6642,9,15,9.3358,15,9.75L15,17.25C15,17.6642 14.6642,18 14.25,18 13.8358,18 13.5,17.6642 13.5,17.25L13.5,9.75C13.5,9.3358,13.8358,9,14.25,9z M6.7342,18.4667C6.8458,19.62,7.815,20.5,8.9737,20.5L15.0263,20.5C16.185,20.5,17.1542,19.62,17.2658,18.4667L18.4239,6.5 5.5761,6.5 6.7342,18.4667z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingGroup>
+	<DrawingImage x:Key="delete" Drawing="{StaticResource deleteDrawingGroup}" />
+
+	<!--  window_new  -->
+	<DrawingGroup x:Key = "window_newDrawingGroup">
+		<DrawingGroup>
+			<DrawingGroup.ClipGeometry>
+				<RectangleGeometry Rect="0,0,24,24" />
+			</DrawingGroup.ClipGeometry>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M11.2716,7.25C11.2716,6.8358,11.6073,6.5,12.0216,6.5L16.75,6.5C17.1642,6.5,17.5,6.8358,17.5,7.25L17.5,11.9785C17.5,12.3927 17.1642,12.7285 16.75,12.7285 16.3358,12.7285 16,12.3927 16,11.9785L16,9.0607 10.7803,14.2803C10.4874,14.5732 10.0126,14.5732 9.7197,14.2803 9.4268,13.9874 9.4268,13.5126 9.7197,13.2197L14.9393,8 12.0216,8C11.6073,8,11.2716,7.6642,11.2716,7.25z M6.1568,5.25C6.5785,3.9444,7.804,3,9.25,3L17.75,3C19.5449,3,21,4.4551,21,6.25L21,14.8382C21,16.1902,20.1745,17.3494,19,17.8392L19,17.9751C19,19.0247 18.4705,19.82 17.6913,20.3191 16.9414,20.7995 15.9737,21.0045 14.9977,20.9999L14.9963,20.9999 10.9191,20.9952 7,20.9951C5.8433,20.9951 4.8356,20.6327 4.1107,19.9496 3.3829,19.2639 3,18.3103 3,17.25L3,8.5C3,7.6348 3.2157,6.8173 3.734,6.2036 4.2679,5.5714 5.0435,5.25 5.9559,5.25L6.1568,5.25z M6,6.75L5.9559,6.75C5.4124,6.75 5.085,6.9287 4.88,7.1714 4.6593,7.4328 4.5,7.8652 4.5,8.5L4.5,17.25C4.5,17.9397 4.7421,18.4837 5.1393,18.8579 5.5394,19.2349 6.1567,19.4951 7,19.4951L10.9191,19.4952 15.0009,19.4999 15.0037,19.4999C15.7919,19.5038 16.4486,19.3338 16.8822,19.0561 17.254,18.8179 17.4641,18.5061 17.4958,18.0882L9.25,18.0882C7.4551,18.0882,6,16.6332,6,14.8382L6,6.75z M9.25,4.5C8.2835,4.5,7.5,5.2835,7.5,6.25L7.5,14.8382C7.5,15.8047,8.2835,16.5882,9.25,16.5882L17.75,16.5882C18.7165,16.5882,19.5,15.8047,19.5,14.8382L19.5,6.25C19.5,5.2835,18.7165,4.5,17.75,4.5L9.25,4.5z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingGroup>
+	<DrawingImage x:Key="window_new" Drawing="{StaticResource window_newDrawingGroup}" />
+
+	<!--  form_multiple  -->
+	<DrawingGroup x:Key = "form_multipleDrawingGroup">
+		<DrawingGroup>
+			<DrawingGroup.ClipGeometry>
+				<RectangleGeometry Rect="0,0,24,24" />
+			</DrawingGroup.ClipGeometry>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M6,12.25C6,11.0074 7.0074,10 8.25,10 9.4926,10 10.5,11.0074 10.5,12.25 10.5,13.4926 9.4926,14.5 8.25,14.5 7.0074,14.5 6,13.4926 6,12.25z M8.25,11.5C7.8358,11.5 7.5,11.8358 7.5,12.25 7.5,12.6642 7.8358,13 8.25,13 8.6642,13 9,12.6642 9,12.25 9,11.8358 8.6642,11.5 8.25,11.5z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M11.5,12.25C11.5,11.8358,11.8358,11.5,12.25,11.5L14.75,11.5C15.1642,11.5 15.5,11.8358 15.5,12.25 15.5,12.6642 15.1642,13 14.75,13L12.25,13C11.8358,13,11.5,12.6642,11.5,12.25z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M6,7.75C6,7.3358,6.3358,7,6.75,7L14.75,7C15.1642,7 15.5,7.3358 15.5,7.75 15.5,8.1642 15.1642,8.5 14.75,8.5L6.75,8.5C6.3358,8.5,6,8.1642,6,7.75z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M6.25,3C4.4551,3,3,4.4551,3,6.25L3,15.25C3,17.0449,4.4551,18.5,6.25,18.5L15.25,18.5C17.0449,18.5,18.5,17.0449,18.5,15.25L18.5,6.25C18.5,4.4551,17.0449,3,15.25,3L6.25,3z M4.5,6.25C4.5,5.2835,5.2835,4.5,6.25,4.5L15.25,4.5C16.2165,4.5,17,5.2835,17,6.25L17,15.25C17,15.4812 16.9552,15.7018 16.8738,15.9038 16.6781,16.3892 16.2712,16.7667 15.7669,16.9224 15.6035,16.9728 15.4299,17 15.25,17L6.25,17C6.0699,17 5.8961,16.9728 5.7325,16.9222 5.2283,16.7664 4.8215,16.3888 4.626,15.9033 4.5447,15.7015 4.5,15.481 4.5,15.25L4.5,6.25z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+			<GeometryDrawing Brush="#FF212121" >
+				<GeometryDrawing.Geometry>
+					<PathGeometry FillRule="NonZero" Figures="M8.75,21.0002C7.5993,21.0002,6.5883,20.4022,6.0107,19.5L8.7244,19.5 8.75,19.5002 15.7499,19.5002C17.821,19.5002,19.5,17.8212,19.5,15.7502L19.5,6.0111C20.402,6.5886,21,7.5996,21,8.7502L21,15.7502C21,18.6497,18.6494,21.0002,15.7499,21.0002L8.75,21.0002z" />
+				</GeometryDrawing.Geometry>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingGroup>
+	<DrawingImage x:Key="form_multiple" Drawing="{StaticResource form_multipleDrawingGroup}" />
 
 	<!--  form_new  -->
 	<DrawingGroup x:Key = "form_newDrawingGroup">

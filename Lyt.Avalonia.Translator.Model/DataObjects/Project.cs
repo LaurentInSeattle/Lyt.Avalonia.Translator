@@ -8,6 +8,12 @@ public sealed class Project
     public required string Name { get; set; } = string.Empty;
 
     [JsonRequired]
+    public required DateTime Created { get; set; } = DateTime.Now;
+
+    [JsonRequired]
+    public required DateTime LastUpdated { get; set; } = DateTime.Now;
+
+    [JsonRequired]
     public required ResourceFormat Format { get; set; } = ResourceFormat.Unknown;
 
     [JsonRequired]

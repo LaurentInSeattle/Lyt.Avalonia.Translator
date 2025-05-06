@@ -1,0 +1,51 @@
+<UserControl
+	x:Class="Lyt.Avalonia.Translator.Workflow.Projects.ProjectsView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Projects"
+	x:DataType="vm:ProjectsViewModel" 
+
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	
+	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	>
+	<Grid
+		Width="660"
+		>
+		<TextBlock
+			VerticalAlignment="Top" HorizontalAlignment="Center"
+			Foreground="{StaticResource PastelOrchid_1_100}"
+			FontSize="18"
+			Margin="4 32 4 4"
+			Text="{Binding NoData}"
+			/>
+		<ScrollViewer
+			Background="Transparent"
+			VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+			ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+			ScrollViewer.VerticalScrollBarVisibility="Auto"
+			>
+			<ItemsControl
+				ItemsSource="{Binding ProjectTileViews}"
+				Margin="8 0 28 0"
+				>
+				<!-- 
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<panels:MultiColumnStackPanel ColumnMaxWidth="380"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				-->
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<vm:ProjectTileView Margin="4" Height="92" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+	</Grid>
+
+</UserControl>

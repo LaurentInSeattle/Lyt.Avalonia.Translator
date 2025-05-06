@@ -156,7 +156,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         }
 
         bool programmaticNavigation = false;
-        ActivatedView hasBeenActivated = ActivatedView.Exit;
+        // ActivatedView hasBeenActivated = ActivatedView.Exit;
         Bindable? currentViewModel = null;
         if (parameter is bool navigationType)
         {
@@ -185,13 +185,19 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
             case ActivatedView.Interactive:
                 NoToolbar();
                 this.Activate<InteractiveViewModel, InteractiveView>(isFirstActivation, null);
-                hasBeenActivated = ActivatedView.Interactive;
+                // hasBeenActivated = ActivatedView.Interactive;
+                break;
+
+            case ActivatedView.Projects:
+                NoToolbar();
+                this.Activate<ProjectsViewModel, ProjectsView>(isFirstActivation, null);
+                // hasBeenActivated = ActivatedView.Projects;
                 break;
 
             case ActivatedView.CreateNew:
                 SetupToolbar<CreateNewToolbarViewModel, CreateNewToolbarView>();
                 this.Activate<CreateNewViewModel, CreateNewView>(isFirstActivation, null);
-                hasBeenActivated = ActivatedView.CreateNew;
+                // hasBeenActivated = ActivatedView.CreateNew;
                 break;
 
                 //case ActivatedView.Intro:
@@ -200,6 +206,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
                 //    break;
 
 
+                // Keep this example for now 
                 //case ActivatedView.Collection:
                 //    if (!(programmaticNavigation && currentViewModel is CollectionViewModel))
                 //    {
@@ -280,6 +287,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         App.GetRequiredService<InteractiveViewModel>().CreateViewAndBind();
         App.GetRequiredService<CreateNewToolbarViewModel>().CreateViewAndBind();
         App.GetRequiredService<CreateNewViewModel>().CreateViewAndBind();
+        App.GetRequiredService<ProjectsViewModel>().CreateViewAndBind();
     }
 
 #pragma warning disable IDE0079 
@@ -289,6 +297,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     private void OnTranslate(object? _) => this.OnViewActivation(ActivatedView.Interactive);
 
     private void OnCreateNew(object? _) => this.OnViewActivation(ActivatedView.CreateNew);
+
+    private void OnProjects(object? _) => this.OnViewActivation(ActivatedView.Projects);
 
     //private void OnSettings(object? _) => this.OnViewActivation(ActivatedView.Settings);
 
@@ -305,6 +315,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     public ICommand TranslateCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     public ICommand CreateNewCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
+    public ICommand ProjectsCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     //public ICommand CollectionCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
