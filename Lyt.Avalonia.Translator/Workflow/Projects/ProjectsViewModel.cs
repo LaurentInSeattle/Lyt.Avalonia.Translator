@@ -69,7 +69,8 @@ public sealed class ProjectsViewModel : Bindable<ProjectsView>
             return;
         }
 
-        // Navigate to RunProject 
+        // Make it the active project and then navigate to RunProject 
+        this.translatorModel.ActiveProject = project;   
         NavigateTo(ViewActivationMessage.ActivatedView.RunProject); 
     }
 

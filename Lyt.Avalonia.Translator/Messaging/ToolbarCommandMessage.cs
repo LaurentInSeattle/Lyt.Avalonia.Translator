@@ -6,6 +6,7 @@ public sealed record class ToolbarCommandMessage(
     public enum ToolbarCommand
     {
         // Left - Main toolbar in Shell view 
+        RunProject,
 
         // Right - Main toolbar in Shell view  
         Close,
@@ -14,9 +15,13 @@ public sealed record class ToolbarCommandMessage(
         CreateNewAddAllLanguages,
         CreateNewClearAllLanguages,
         CreateNewSaveProject,
-        RunProject,
-        StopProject,
+
+        // Projects (Tile) 
         DeleteProject,
+
+        // RunProject toolbar
+        StopProject,
+        StartProject,
 
         // Etc... Settings toolbars 
     }

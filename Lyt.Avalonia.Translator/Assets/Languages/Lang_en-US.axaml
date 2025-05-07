@@ -66,8 +66,11 @@
 	<system:String x:Key="Projects.ProjectDeleted">Project was successfully deleted.</system:String>
 
 	<!-- Run Project  -->
+	<system:String x:Key="RunProject.NoActiveProject">No Active Project.</system:String>
 	<system:String x:Key="RunProject.Run">Run</system:String>
 	<system:String x:Key="RunProject.Stop">Abort</system:String>
+	<system:String x:Key="RunProject.Idle">Idle. Not Translating.</system:String>
+	<system:String x:Key="RunProject.InProgress">Translation in progress...</system:String>
 
 	<!-- Model / Service -->
 	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>

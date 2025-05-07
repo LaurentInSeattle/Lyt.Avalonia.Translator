@@ -30,7 +30,8 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource RunProject.Run}"
-			Command="{Binding RunCommand}"
+			Command="{Binding StartCommand}"
+			IsDisabled="{Binding IsRunning}"
 			/>
 		<glyphs:GlyphButton
 			Style="{StaticResource ToolbarIconButton}"
@@ -44,6 +45,7 @@
 			GlyphAngle="0"
 			Text="{DynamicResource RunProject.Stop}"
 			Command="{Binding StopCommand}"
+			IsDisabled="{Binding !IsRunning}"
 			/>
 	</StackPanel>
 </UserControl>

@@ -25,7 +25,7 @@
 			FontSize="22"
 			FontWeight="DemiBold"
 			Margin="6 4 4 4"
-			Foreground="{StaticResource LightAqua_0_080}"
+			Foreground="{StaticResource LightAqua_0_100}"
 			/>
 		<Image
 			Grid.Column="1"
