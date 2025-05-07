@@ -16,6 +16,7 @@ public sealed record class ToolbarCommandMessage(
         CreateNewSaveProject,
         RunProject,
         StopProject,
+        DeleteProject,
 
         // Etc... Settings toolbars 
     }

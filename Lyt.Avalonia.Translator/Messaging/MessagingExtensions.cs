@@ -1,5 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Messaging;
 
+using static Lyt.Avalonia.Translator.Messaging.ViewActivationMessage;
 using static ToolbarCommandMessage;
 
 public static class MessagingExtensions
@@ -31,5 +32,11 @@ public static class MessagingExtensions
         }
 
         MessagingExtensions.messenger.Publish(new ToolbarCommandMessage(command, parameter));
+    }
+
+    public static void NavigateTo(ActivatedView view)
+    {
+        bool programmaticNavigation = true;
+        MessagingExtensions.messenger.Publish(new ViewActivationMessage(view, programmaticNavigation));
     }
 }

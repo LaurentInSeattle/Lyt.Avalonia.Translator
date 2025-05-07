@@ -1,15 +1,12 @@
 ﻿BUG
-
+	- Error message not alsways cleared in Create view
+	- Enable / Disable some buttons in Toolbars 
 
 MUST DO
-- Show internet status in in the application bar
-- Some space for an error message in Interactive 
-- Interactive: show text translated from tranlated target back to source.
-- Create: Align labels to the right  
-- Create: button to save 
-- Create: button to add all languages 
-- Create: button to clear all languages 
+	- Show internet status in in the application bar
+	- Interactive: show text translated from translated target back to source.
+	- Create: Align labels to the right  
 
 NTH 
-
-- GroupBox like border in Create
+	- GroupBox like border in Create
+	- Make Toolbar a framework control

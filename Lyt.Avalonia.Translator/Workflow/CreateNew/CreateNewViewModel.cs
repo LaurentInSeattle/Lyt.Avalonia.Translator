@@ -1,5 +1,9 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
+using static MessagingExtensions;
+using static ToolbarCommandMessage;
+using static ViewActivationMessage;
+
 public sealed class CreateNewViewModel : Bindable<CreateNewView>
 {
     private readonly TranslatorModel translatorModel;
@@ -47,15 +51,15 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
     {
         switch (message.Command)
         {
-            case ToolbarCommandMessage.ToolbarCommand.CreateNewAddAllLanguages:
+            case ToolbarCommand.CreateNewAddAllLanguages:
                 this.AddAllLanguages();
                 break;
 
-            case ToolbarCommandMessage.ToolbarCommand.CreateNewClearAllLanguages:
+            case ToolbarCommand.CreateNewClearAllLanguages:
                 this.ClearAllLanguages();
                 break;
 
-            case ToolbarCommandMessage.ToolbarCommand.CreateNewSaveProject:
+            case ToolbarCommand.CreateNewSaveProject:
                 this.SaveProject();
                 break;
 
@@ -119,7 +123,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             3_000, InformationLevel.Success);
 
         // Navigate to load projects 
-
+        NavigateTo(ActivatedView.Projects);
     }
 
 

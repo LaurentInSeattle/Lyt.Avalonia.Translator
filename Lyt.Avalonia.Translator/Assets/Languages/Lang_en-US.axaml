@@ -15,7 +15,8 @@
 	<!-- Shell -->
 	<system:String x:Key="Shell.AppName">Translator</system:String>
 	<system:String x:Key="Shell.About">About...</system:String>
-	
+	<system:String x:Key="Shell.Error">Error!</system:String>
+	<system:String x:Key="Shell.Success">Success!</system:String>
 	<system:String x:Key="Shell.Translate">Interactive</system:String>
 	<system:String x:Key="Shell.CreateNew">New Project</system:String>
 	<system:String x:Key="Shell.ProjectList">Project List</system:String>
@@ -62,6 +63,7 @@
 
 	<!-- Projects  -->
 	<system:String x:Key="Projects.None">No saved projects were found.</system:String>
+	<system:String x:Key="Projects.ProjectDeleted">Project was successfully deleted.</system:String>
 
 	<!-- Run Project  -->
 	<system:String x:Key="RunProject.Run">Run</system:String>
@@ -76,7 +78,6 @@
 	<system:String x:Key="Model.Project.ZeroTargetLanguages">No target languages have been selected.</system:String>
 	<system:String x:Key="Model.Project.InvalidName">Invalid project name.</system:String>
 	<system:String x:Key="Model.Project.DoesNotExist">No project with such name.</system:String>
-
 
 	<!-- Most likely all below will be deleted -->
 	<!-- Keep for now, maybe there are some recycling opportunities -->

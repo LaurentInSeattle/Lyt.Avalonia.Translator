@@ -11,9 +11,11 @@
 	
 	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
 	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	xmlns:panels="clr-namespace:Lyt.Avalonia.Controls.Panels;assembly=Lyt.Avalonia.Controls"
 	>
 	<Grid
-		Width="660"
+		Margin="12"
+		HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 		>
 		<TextBlock
 			VerticalAlignment="Top" HorizontalAlignment="Center"
@@ -32,16 +34,14 @@
 				ItemsSource="{Binding ProjectTileViews}"
 				Margin="8 0 28 0"
 				>
-				<!-- 
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
-						<panels:MultiColumnStackPanel ColumnMaxWidth="380"/>
+						<panels:MultiColumnStackPanel ColumnMaxWidth="800"/>
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
-				-->
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
-						<vm:ProjectTileView Margin="4" Height="92" />
+						<vm:ProjectTileView Margin="4" Height="100" />
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>

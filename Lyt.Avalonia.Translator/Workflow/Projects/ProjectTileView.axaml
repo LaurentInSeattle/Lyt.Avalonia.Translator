@@ -1,17 +1,17 @@
 <UserControl 
-	x:Class="Lyt.Avalonia.Translator.Workflow.Projects.ProjectTileView"
-	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Projects"
-	x:DataType="vm:ProjectTileViewModel" 
-	
-	xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-	
-	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
-	>
-	<Border
+    x:Class="Lyt.Avalonia.Translator.Workflow.Projects.ProjectTileView"
+    xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Workflow.Projects"
+    x:DataType="vm:ProjectTileViewModel" 
+    
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    
+    xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+    >
+    <Border
         x:Name="outerBorder"
         Height="92" MaxHeight="92"
         HorizontalAlignment="Stretch"
@@ -20,56 +20,54 @@
         BorderThickness="1"
         CornerRadius="4"
         >
-		<Grid
+        <Grid
             Background="Transparent"
             Height="92" MaxHeight="92"
             VerticalAlignment="Center" HorizontalAlignment="Stretch"
             >
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*" />
-				<RowDefinition Height="2*" />
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions >
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="84" />
-				<ColumnDefinition Width="4" />
-				<ColumnDefinition Width="72" />
-				<ColumnDefinition Width="36" />
-				<ColumnDefinition Width="4" />
-			</Grid.ColumnDefinitions>
-			<Rectangle
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="2*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="84" />
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="72" />
+                <ColumnDefinition Width="36" />
+                <ColumnDefinition Width="4" />
+            </Grid.ColumnDefinitions>
+            <Rectangle
                 Grid.Column="0" Grid.Row="0"
                 Grid.ColumnSpan="999" Grid.RowSpan="999"
                 Fill="#80101020"
                 Height="90" MaxHeight="90"
                 RadiusX="4" RadiusY="4"
                 />
-			<TextBlock
+            <TextBlock
                 Grid.Column="0" Grid.Row="0"
                 VerticalAlignment="Center" HorizontalAlignment="Stretch"
                 TextAlignment="Left"
                 Text="{Binding Name}"
                 Foreground="{StaticResource LightAqua_0_120}"
-                FontStyle="Italic"
-                FontSize="18"
-				FontWeight="DemiBold"
-                Margin="6 0 0 0"
+                FontSize="20"
+                FontWeight="DemiBold"
+                Margin="12 4 4 4"
                 IsHitTestVisible="False"
                 />
-			<!--    
-			<TextBlock
-                Grid.Column="1" Grid.Row="0"
+            <TextBlock
+                Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
                 VerticalAlignment="Center" HorizontalAlignment="Right"
                 TextAlignment="Right"
                 Text="{Binding Opened}"
                 Foreground="{StaticResource LightAqua_0_100}"
                 FontStyle="Normal"
-                FontSize="10"
-				FontWeight="Regular"
+                FontSize="16"
+                FontWeight="Regular"
                 Margin="0"
                 IsHitTestVisible="False"
                 />
-			<TextBlock
+            <TextBlock
                 Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
                 VerticalAlignment="Center" HorizontalAlignment="Stretch"
                 TextAlignment="Left"
@@ -79,10 +77,9 @@
                 Margin="12 0 0 0"
                 IsHitTestVisible="False"
                 TextWrapping="WrapWithOverflow"
-				TextTrimming="WordEllipsis"
+                TextTrimming="WordEllipsis"
                 />
-				-->
-			<glyphs:GlyphButton
+            <glyphs:GlyphButton
                 x:Name="openButton"
                 Grid.Column="3" Grid.Row="0" Grid.RowSpan="2"
                 Style="{StaticResource ToolbarIconButton}"
@@ -98,9 +95,9 @@
                 GlyphAngle="0"
                 Command="{Binding OpenCommand}"
                 />
-			<glyphs:GlyphButton
+            <glyphs:GlyphButton
                 x:Name="deleteButton"
-				IsVisible="False"
+                IsVisible="False"
                 Grid.Column="4" Grid.Row="1" Grid.RowSpan="1"
                 Style="{StaticResource ToolbarIconButton}"
                 Layout="IconOnly"
@@ -114,6 +111,6 @@
                 GlyphAngle="0"
                 Command="{Binding DeleteCommand}"
                 />
-		</Grid>
-	</Border>
+        </Grid>
+    </Border>
 </UserControl>

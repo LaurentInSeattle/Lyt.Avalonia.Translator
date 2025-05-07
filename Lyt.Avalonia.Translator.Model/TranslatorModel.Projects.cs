@@ -97,4 +97,20 @@ public sealed partial class TranslatorModel : ModelBase
         this.Save();
         return true;
     }
+
+    /// <summary> Deletes an existing project with the same name as the provided project name.</summary>
+    /// <returns> True is project has been deleted, otherwise false. </returns>
+    public bool DeleteProject(string projectName, out string errorMessageKey)
+    {
+        Project? project = this.GetProjectByName(projectName, out errorMessageKey);
+        if (project is not Project existingProject)
+        {
+            errorMessageKey = "Model.Project.DoesNotExist";
+            return false;
+        }
+
+        this.Projects.Remove(existingProject);
+        this.Save();
+        return true;
+    }
 }

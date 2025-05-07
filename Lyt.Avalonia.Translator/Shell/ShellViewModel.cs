@@ -156,7 +156,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         }
 
         bool programmaticNavigation = false;
-        // ActivatedView hasBeenActivated = ActivatedView.Exit;
+        ActivatedView hasBeenActivated = ActivatedView.Exit;
         Bindable? currentViewModel = null;
         if (parameter is bool navigationType)
         {
@@ -185,41 +185,36 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
             case ActivatedView.Interactive:
                 NoToolbar();
                 this.Activate<InteractiveViewModel, InteractiveView>(isFirstActivation, null);
-                // hasBeenActivated = ActivatedView.Interactive;
+                hasBeenActivated = ActivatedView.Interactive;
                 break;
 
             case ActivatedView.Projects:
-                NoToolbar();
-                this.Activate<ProjectsViewModel, ProjectsView>(isFirstActivation, null);
-                // hasBeenActivated = ActivatedView.Projects;
+                if (!(programmaticNavigation && currentViewModel is ProjectsViewModel))
+                {
+                    NoToolbar();
+                    this.Activate<ProjectsViewModel, ProjectsView>(isFirstActivation, null);
+                    hasBeenActivated = ActivatedView.Projects;
+                }
                 break;
 
             case ActivatedView.RunProject:
-                SetupToolbar<RunProjectToolbarViewModel, RunProjectToolbarView>();
-                this.Activate<RunProjectViewModel, RunProjectView>(isFirstActivation, null);
-                // hasBeenActivated = ActivatedView.Projects;
+                if (!(programmaticNavigation && currentViewModel is RunProjectViewModel))
+                {
+                    SetupToolbar<RunProjectToolbarViewModel, RunProjectToolbarView>();
+                    this.Activate<RunProjectViewModel, RunProjectView>(isFirstActivation, null);
+                    hasBeenActivated = ActivatedView.RunProject;
+                }
                 break;
 
             case ActivatedView.CreateNew:
                 SetupToolbar<CreateNewToolbarViewModel, CreateNewToolbarView>();
                 this.Activate<CreateNewViewModel, CreateNewView>(isFirstActivation, null);
-                // hasBeenActivated = ActivatedView.CreateNew;
+                hasBeenActivated = ActivatedView.CreateNew;
                 break;
 
                 //case ActivatedView.Intro:
                 //    this.SetupToolbar<IntroToolbarViewModel, IntroToolbarView>();
                 //    this.Activate<IntroViewModel, IntroView>(isFirstActivation, null);
-                //    break;
-
-
-                // Keep this example for now 
-                //case ActivatedView.Collection:
-                //    if (!(programmaticNavigation && currentViewModel is CollectionViewModel))
-                //    {
-                //        this.SetupToolbar<CollectionToolbarViewModel, CollectionToolbarView>();
-                //        this.Activate<CollectionViewModel, CollectionView>(isFirstActivation, null);
-                //        hasBeenActivated = ActivatedView.Collection;
-                //    }
                 //    break;
 
                 //case ActivatedView.Language:
@@ -230,24 +225,25 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
         }
 
-        // Reflect in the navigation toolbar the programmatic change 
-        //if (programmaticNavigation && (hasBeenActivated != ActivatedView.Exit))
-        //{
-        //    if (this.View is not ShellView view)
-        //    {
-        //        throw new Exception("No view: Failed to startup...");
-        //    }
+        // Reflect in the navigation toolbar the programmatic change
+        if (programmaticNavigation && (hasBeenActivated != ActivatedView.Exit))
+        {
+            if (this.View is not ShellView view)
+            {
+                throw new Exception("No view: Failed to startup...");
+            }
 
-        //    var selector = view.SelectionGroup;
-        //    var button = hasBeenActivated switch
-        //    {
-        //        ActivatedView.Intro => view.IntroButton,
-        //        ActivatedView.Collection => view.CollectionButton,
-        //        ActivatedView.Settings => view.SettingsButton,
-        //        _ => view.TodayButton,
-        //    };
-        //    selector.Select(button);
-        //}
+            var selector = view.SelectionGroup;
+            var button = hasBeenActivated switch
+            {
+                // ActivatedView.Intro => view.IntroButton,
+                ActivatedView.Projects => view.ProjectsButton,
+                ActivatedView.RunProject => view.RunProjectButton,
+                // ActivatedView.Settings => view.SettingsButton,
+                _ => view.ProjectsButton,
+            };
+            selector.Select(button);
+        }
 
         this.MainToolbarIsVisible = true; // CurrentViewModel() is CreateNewViewModel;
     }

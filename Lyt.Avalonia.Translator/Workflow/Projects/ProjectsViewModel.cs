@@ -1,13 +1,19 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Projects;
 
+using static MessagingExtensions;
+using static ToolbarCommandMessage;
+
 public sealed class ProjectsViewModel : Bindable<ProjectsView>
 {
     private readonly TranslatorModel translatorModel;
+    private readonly IToaster toaster; 
 
-    public ProjectsViewModel(TranslatorModel translatorModel)
+    public ProjectsViewModel(TranslatorModel translatorModel, IToaster toaster)
     {
         this.translatorModel = translatorModel;
+        this.toaster = toaster;
         this.ProjectTileViews = [];
+        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
     }
 
     public override void Activate(object? activationParameters)
@@ -20,6 +26,69 @@ public sealed class ProjectsViewModel : Bindable<ProjectsView>
     {
         base.OnViewLoaded();
         this.Populate();
+    }
+
+    private void OnToolbarCommand(ToolbarCommandMessage message)
+    {
+        if (message.CommandParameter is not Project project)
+        {
+            if ((message.Command == ToolbarCommand.RunProject) ||
+                (message.Command == ToolbarCommand.DeleteProject))
+            {
+                throw new ArgumentException(null, nameof(message));
+            }
+
+            // Ignore all other commands 
+            return;
+        }
+
+        switch (message.Command)
+        {
+            case ToolbarCommand.RunProject:
+                this.RunProject(project);
+                break;
+
+            case ToolbarCommand.DeleteProject:
+                this.DeleteProject(project);
+                break;
+
+            // Ignore all other commands 
+            default:
+                break;
+        }
+    }
+
+    private void RunProject(Project project)
+    {
+        if (!this.translatorModel.CheckProjectExistence(project, out string errorMessageKey))
+        {
+            this.toaster.Show(
+                this.Localizer.Lookup("Shell.Error"),
+                this.Localizer.Lookup(errorMessageKey),
+                3_000, InformationLevel.Error);
+            return;
+        }
+
+        // Navigate to RunProject 
+        NavigateTo(ViewActivationMessage.ActivatedView.RunProject); 
+    }
+
+    private void DeleteProject(Project project)
+    {
+        if (!this.translatorModel.DeleteProject(project.Name, out string errorMessageKey))
+        {
+            this.toaster.Show(
+                this.Localizer.Lookup("Shell.Error"),
+                this.Localizer.Lookup(errorMessageKey),
+                3_000, InformationLevel.Error);
+            return;
+        }
+
+        this.Populate();
+        this.toaster.Show(
+            this.Localizer.Lookup("Shell.Success"),
+            this.Localizer.Lookup("Projects.ProjectDeleted"),
+            3_000, InformationLevel.Success);
     }
 
     private void Populate()
