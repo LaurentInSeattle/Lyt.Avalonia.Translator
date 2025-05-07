@@ -6,7 +6,9 @@ MUST DO
 	- Show internet status in in the application bar
 	- Interactive: show text translated from translated target back to source.
 	- Create: Align labels to the right  
+	- Ability to add  / remove languages to a project 
 
 NTH 
 	- GroupBox like border in Create
+	- Add some flags to project tiles? 
 	- Make Toolbar a framework control

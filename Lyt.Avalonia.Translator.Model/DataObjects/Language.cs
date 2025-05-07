@@ -16,9 +16,9 @@ public sealed class Language(
         {  "fr-FR" , new Language( "fr-FR", "fr", "French", "Français", "France", "Quebec") },
         {  "it-IT" , new Language( "it-IT", "it", "Italian", "Italiano", "Italy", "San_Marino") },
         {  "es-ES" , new Language( "es-ES", "es", "Spanish", "Español", "Spain", "Mexico") },
-        {  "uk-UK" , new Language( "uk-UK", "uk", "Ukrainian", "українська мова", "Ukraine") },
+        {  "uk-UK" , new Language( "uk-UK", "uk", "Ukrainian", "Українська мова", "Ukraine") },
         {  "ja-JA" , new Language( "ja-JA", "ja", "Japanese", "日本語", "Japan") },
-        {  "bg-BG" , new Language( "bg-BG", "bg", "Bulgarian", "български език", "Bulgaria") },
+        {  "bg-BG" , new Language( "bg-BG", "bg", "Bulgarian", "Български език", "Bulgaria") },
         {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體 中文", "China") },
         {  "zh-TW" , new Language( "zh-TW", "zh-TW", "Chinese (Traditional)", "繁體 中文", "Taiwan") },
         {  "el-EL" , new Language( "el-EL", "el", "Greek", "Ελληνικά", "Greece", "Cyprus") },
@@ -75,11 +75,8 @@ public sealed class Language(
     {
             {"af", "Afrikaans"},
             {"sq", "Albanian"},
-            {"ar", "Arabic"},
             {"hy", "Armenian"},
-            {"az", "Azerbaijani"},
             {"eu", "Basque"},
-            {"be", "Belarusian"},
             {"ca", "Catalan"},
             {"hr", "Croatian"},
             {"cs", "Czech"},
@@ -90,7 +87,6 @@ public sealed class Language(
             {"gl", "Galician"},
             {"gu", "Gujarati"},
             {"ht", "Haitian Creole"},
-            {"iw", "Hebrew"},
             {"is", "Icelandic"},
             {"id", "Indonesian"},
             {"ga", "Irish"},
@@ -105,7 +101,6 @@ public sealed class Language(
             {"mt", "Maltese"},
             {"no", "Norwegian"},
             {"fa", "Persian"},
-            {"ru", "Russian"},
             {"sr", "Serbian"},
             {"sk", "Slovak"},
             {"sl", "Slovenian"},
@@ -113,11 +108,20 @@ public sealed class Language(
             {"sv", "Swedish"},
             {"ta", "Tamil"},
             {"te", "Telugu"},
-            {"tr", "Turkish"},
             {"ur", "Urdu"},
             {"cy", "Welsh"},
-            {"yi", "Yiddish"}
     };
+
+    Right to Left
+            {"yi", "Yiddish"}  ( ??? ) 
+            {"iw", "Hebrew"},
+            {"ar", "Arabic"},
+
+    Banned
+            {"az", "Azerbaijani"},
+            {"be", "Belarusian"},
+            {"ru", "Russian"},
+            {"tr", "Turkish"},
     
     */
     #endregion Google Keys 
