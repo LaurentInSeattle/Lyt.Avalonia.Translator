@@ -49,6 +49,7 @@ public sealed partial class TranslatorModel : ModelBase
     #region NOT serialized - WITH model changed event
 
     [JsonIgnore]
+
     // Asynchronous: Must raise Model Updated events 
     public bool IsInternetConnected { get => this.Get<bool>(); set => this.Set(value); }
 

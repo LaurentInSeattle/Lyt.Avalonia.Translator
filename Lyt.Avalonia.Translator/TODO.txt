@@ -3,7 +3,6 @@
 	- Enable / Disable some buttons in Toolbars 
 
 MUST DO
-	- Show internet status in in the application bar
 	- Interactive: show text translated from translated target back to source.
 	- Create: Align labels to the right  
 	- Ability to add  / remove languages to a project 

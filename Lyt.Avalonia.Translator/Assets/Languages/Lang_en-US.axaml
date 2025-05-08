@@ -17,6 +17,7 @@
 	<system:String x:Key="Shell.About">About...</system:String>
 	<system:String x:Key="Shell.Error">Error!</system:String>
 	<system:String x:Key="Shell.Success">Success!</system:String>
+	<system:String x:Key="Shell.Connected">Internet</system:String>
 	<system:String x:Key="Shell.Translate">Interactive</system:String>
 	<system:String x:Key="Shell.CreateNew">New Project</system:String>
 	<system:String x:Key="Shell.ProjectList">Project List</system:String>

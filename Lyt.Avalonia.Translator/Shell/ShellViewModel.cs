@@ -38,9 +38,19 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
         this.Messenger.Subscribe<ViewActivationMessage>(this.OnViewActivation);
         this.Messenger.Subscribe<LanguageChangedMessage>(this.OnLanguageChanged);
+        this.Messenger.Subscribe<ModelUpdateMessage>(this.OnModelUpdate);
+        
     }
 
-    private void OnLanguageChanged(LanguageChangedMessage message)
+    private void OnModelUpdate(ModelUpdateMessage message) 
+    {
+        if (message.PropertyName == nameof(this.translatorModel.IsInternetConnected))
+        {
+            this.IsInternetConnected = this.translatorModel.IsInternetConnected; 
+        }
+    }
+
+    private void OnLanguageChanged(LanguageChangedMessage _)
     {
     }
 
@@ -317,6 +327,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 #pragma warning restore CA1822
 #pragma warning restore IDE0051 // Remove unused private members
 #pragma warning restore IDE0079
+
+    public bool IsInternetConnected { get => this.Get<bool>(); set => this.Set(value); }
 
     public ICommand TranslateCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 

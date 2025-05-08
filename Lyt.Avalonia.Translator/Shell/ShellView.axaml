@@ -69,10 +69,9 @@
 			IsVisible="{Binding MainToolbarIsVisible}"
 			Orientation="Horizontal"
 			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
-			Margin="300 0 0 0"
+			Margin="280 0 0 0"
 			HorizontalAlignment="Left"
-			>
-			
+			>			
 			<glyphs:SelectionGroup x:Name="SelectionGroup" />
 			<glyphs:GlyphButton
 				x:Name="TranslateButton"
@@ -186,15 +185,39 @@
 		<StackPanel
 			Orientation="Horizontal"
 			Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="999" Grid.RowSpan="1"
-			Margin="0 0 16 0"
+			Margin="0 0 12 0"
 			HorizontalAlignment="Right"
 			>
+			<glyphs:GlyphButton
+				IsVisible="{Binding !IsInternetConnected}"
+				Style="{StaticResource ToolbarIndicatorError}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="72" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="plug_disconnected"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				Text="{DynamicResource Shell.Connected}"
+				/>
+			<glyphs:GlyphButton
+				IsVisible="{Binding IsInternetConnected}"
+				Style="{StaticResource ToolbarIndicatorValid}"
+				Behaviour="Tap"
+				HorizontalAlignment="Left" VerticalAlignment="Center"
+				Width="72" Height="56"
+				Margin="8 4 8 4"
+				GlyphSource="plug_connected"
+				ButtonBackground="BorderlessRectangle"
+				GlyphStrokeThickness="0"
+				Text="{DynamicResource Shell.Connected}"
+				/>
 			<glyphs:GlyphButton
 				Style="{StaticResource ToolbarIconButton}"
 				Behaviour="Tap"
 				HorizontalAlignment="Left" VerticalAlignment="Center"
-				Width="82" Height="56"
-				Margin="4 12 4 12"
+				Width="72" Height="56"
+				Margin="8 4 8 4"
 				GlyphSource="dismiss"
 				ButtonBackground="BorderlessRectangle"
 				GlyphStrokeThickness="0"

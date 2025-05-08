@@ -1,4 +1,6 @@
-﻿namespace Lyt.Avalonia.Translator.Workflow.Interactive;
+﻿using System.Reflection;
+
+namespace Lyt.Avalonia.Translator.Workflow.Interactive;
 
 public sealed class InteractiveViewModel : Bindable<InteractiveView>
 {
@@ -182,9 +184,10 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
     }
 
     private void UpdateInternetConnectionStatus()
-    {
-        // TODO ! 
-    }
+        // Could be redundant... but better twice than never.
+        => this.Messenger.Publish(
+            new ModelUpdateMessage(
+                this.translatorModel, nameof(this.translatorModel.IsInternetConnected)));
 
     public string? SourceText { get => this.Get<string?>(); set => this.Set(value); }
 
