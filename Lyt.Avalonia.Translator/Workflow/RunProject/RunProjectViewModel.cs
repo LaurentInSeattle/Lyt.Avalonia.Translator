@@ -150,7 +150,17 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
         void PopulateTargetLanguages ()
         {
+            this.targetLanguageViewModels.Clear();
+            // Loop through target languages 
+            // Create a VM for each save in UI and in class data 
+            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+            {
+                ExtLanguageInfoViewModel vm = new (Language.Languages[cultureKey]);
+                vm.SetComplete(missing: 1);
+                this.targetLanguageViewModels.Add(cultureKey, vm);
+            }
 
+            this.SelectedLanguages = [.. this.targetLanguageViewModels.Values];
         }
 
         try
@@ -187,6 +197,12 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     public string? ProjectDetails { get => this.Get<string?>(); set => this.Set(value); }
 
     public string? TranslationStatus { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? SourceText { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? TargetLanguage { get => this.Get<string?>(); set => this.Set(value); }
 
     public ObservableCollection<ExtLanguageInfoViewModel> SelectedLanguages
     {

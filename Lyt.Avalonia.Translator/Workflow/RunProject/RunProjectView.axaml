@@ -67,6 +67,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="64" />
 				<RowDefinition Height="*" />
+				<RowDefinition Height="8" />
 			</Grid.RowDefinitions>
 			<TextBlock
 				Grid.Column="0" Grid.Row="0"
@@ -83,11 +84,11 @@
 				BorderBrush="{StaticResource LightAqua_0_080}"
 				BorderThickness="1"
 				Grid.Column="0" Grid.Row="1"
-				Margin="0 4 0 4"
+				Margin="0 4 8 4"
 				CornerRadius="12"
 				>
 				<ScrollViewer
-					Margin="8"
+					Margin="4"
 					Background="Transparent"
 					VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
 					ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -106,7 +107,7 @@
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<vm:ExtLanguageInfoView
-									Margin="12 8 12 8"
+									Margin="12 8 4 8"
 									/>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
@@ -124,6 +125,43 @@
 				VerticalAlignment="Center" HorizontalAlignment="Stretch"
 				TextWrapping="Wrap"
 				/>
+			<Grid
+				Grid.Column="1" Grid.Row="1"
+				Margin="8"
+				>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="120" />
+					<RowDefinition Height="64" />
+					<RowDefinition Height="120" />
+					<RowDefinition Height="*" />
+				</Grid.RowDefinitions>
+				<TextBox
+					Grid.Row="0"
+					VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+					TextWrapping="Wrap"
+					IsReadOnly="True"
+					FontSize="22"
+					Text="{Binding SourceText}"
+					/>
+				<TextBlock
+					Grid.Column="1" Grid.Row="0"
+					Margin="0 0 0 0"
+					FontSize="24"
+					Text="{Binding TargetLanguage}"
+					TextAlignment="Center"
+					Foreground="{StaticResource PastelOrchid_0_080}"
+					VerticalAlignment="Center" HorizontalAlignment="Stretch"
+					TextWrapping="Wrap"
+				/>
+				<TextBox
+					Grid.Row="2"
+					VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+					TextWrapping="Wrap"
+					IsReadOnly="True"
+					FontSize="22"
+					Text="{Binding TargetText}"
+					/>
+			</Grid>
 		</Grid>
 	</Grid>
 </UserControl>

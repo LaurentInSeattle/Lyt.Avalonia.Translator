@@ -8,15 +8,20 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+	
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
 	>
 	<Grid
 		Height="44"
+		Background="#A0000020"
 		>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="180" />
 			<ColumnDefinition Width="60" />
 			<ColumnDefinition Width="20" />
 			<ColumnDefinition Width="60" />
+			<ColumnDefinition Width="260" />
+			<ColumnDefinition Width="40" />
 		</Grid.ColumnDefinitions>
 		<TextBlock
 			Grid.Column="0" Grid.ColumnSpan="2"
@@ -38,6 +43,56 @@
 			Stretch="Uniform"
 			Width="52"
 			Source="{Binding FlagTwo}"
+			/>
+		<TextBlock
+			Grid.Column="4"
+			Text="{Binding Status}"
+			VerticalAlignment="Center" HorizontalAlignment="Center"
+			FontSize="20"
+			FontWeight="Normal"
+			Margin="4"
+			Foreground="{StaticResource LightAqua_0_100}"
+			/>
+		<glyphs:GlyphButton
+			Grid.Column="5"
+			IsVisible="{Binding !IsComplete}"
+			Style="{StaticResource ToolbarIndicatorError}"
+			Layout="IconOnly"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="30" Height="30"
+			GlyphSource="dismiss"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			Text="{DynamicResource RunProject.Incomplete}"
+			/>
+		<glyphs:GlyphButton
+			Grid.Column="5"
+			IsVisible="{Binding IsComplete}"
+			Style="{StaticResource ToolbarIndicatorValid}"
+			Layout="IconOnly"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="30" Height="30"
+			Margin="4 0 4 0"
+			GlyphSource="checkmark"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			Text="{DynamicResource RunProject.Complete}"
+			/>
+		<!-- more_circle_regular scan_regular arrow_counterclockwise_regular star_regular -->
+		<glyphs:GlyphButton
+			Grid.Column="5"
+			IsVisible="{Binding IsInProgress}"
+			Style="{StaticResource ToolbarIndicatorValid}"
+			Behaviour="Tap"
+			HorizontalAlignment="Left" VerticalAlignment="Center"
+			Width="30" Height="30"
+			Margin="4 0 4 0"
+			GlyphSource="location_live"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			Text="{DynamicResource RunProject.InProgress}"
 			/>
 	</Grid>
 

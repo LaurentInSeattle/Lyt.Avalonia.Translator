@@ -1,13 +1,16 @@
 <UserControl 
 	x:Class="Lyt.Avalonia.Translator.Shell.ShellView"
+	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Shell"
+	x:DataType="vm:ShellViewModel" 
+
 	xmlns="https://github.com/avaloniaui"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-	xmlns:vm="clr-namespace:Lyt.Avalonia.Translator.Shell"
-	x:DataType="vm:ShellViewModel" 
+
+	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+
 	Background="Transparent"
 	>
 	<Design.DataContext>
@@ -25,9 +28,15 @@
 			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="72"/>
+			<RowDefinition Height="74"/>
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
+		<Rectangle
+			Grid.ColumnSpan="999" 
+			VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+			Fill="{StaticResource PastelOrchid_0_080}"
+			Height="2"
+			/>
 		<Image
 			Stretch="UniformToFill"
 			Source="\Assets\Images\dark.jpg"
@@ -44,6 +53,12 @@
 		<Rectangle
 			Fill="#70000020"
 			Grid.ColumnSpan="1" Grid.RowSpan="999"
+			/>
+		<Rectangle
+			Grid.ColumnSpan="999"
+			VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+			Fill="{StaticResource PastelOrchid_2_040}"
+			Height="1"
 			/>
 		<Image
 			Stretch="UniformToFill"

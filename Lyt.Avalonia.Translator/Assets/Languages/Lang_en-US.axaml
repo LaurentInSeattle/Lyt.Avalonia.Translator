@@ -71,7 +71,10 @@
 	<system:String x:Key="RunProject.Run">Run</system:String>
 	<system:String x:Key="RunProject.Stop">Abort</system:String>
 	<system:String x:Key="RunProject.Idle">Idle. Not Translating.</system:String>
-	<system:String x:Key="RunProject.InProgress">Translation in progress...</system:String>
+	<system:String x:Key="RunProject.ProjectInProgress">Translation in progress...</system:String>
+	<system:String x:Key="RunProject.Complete">Complete</system:String>
+	<system:String x:Key="RunProject.Incomplete">Incomplete, missing: {0}</system:String>
+	<system:String x:Key="RunProject.LanguageInProgress">In Progress</system:String>
 
 	<!-- Model / Service -->
 	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>
