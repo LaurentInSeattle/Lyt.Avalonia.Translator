@@ -123,6 +123,9 @@
 	  <Compile Update="Workflow\CreateNew\CreateNewToolbarView.axaml.cs">
 	    <DependentUpon>CreateNewToolbarView.axaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Workflow\RunProject\ExtLanguageInfoView.axaml.cs">
+	    <DependentUpon>ExtLanguageInfoView.axaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Workflow\RunProject\RunProjectToolbarView.axaml.cs">
 	    <DependentUpon>RunProjectToolbarView.axaml</DependentUpon>
 	  </Compile>

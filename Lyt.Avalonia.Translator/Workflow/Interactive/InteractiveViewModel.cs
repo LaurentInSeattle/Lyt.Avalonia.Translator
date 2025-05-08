@@ -14,6 +14,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
     public InteractiveViewModel(
         TranslatorModel translatorModel, TranslatorService translatorService )
     {
+        this.DisablePropertyChangedLogging = true; 
         this.translatorModel = translatorModel;
         this.translatorService = translatorService;
         this.languages = [];
