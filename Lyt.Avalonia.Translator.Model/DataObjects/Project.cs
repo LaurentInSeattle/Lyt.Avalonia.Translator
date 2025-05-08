@@ -41,13 +41,11 @@ public sealed class Project
             string.IsNullOrWhiteSpace(this.TargetFileFormat) ||
             this.TargetLanguagesCultureKeys.Count == 0;
 
-    public string TargetFilePath(string cultureKey)
-    {
-        string fileName = string.Format(this.TargetFileFormat, cultureKey);
-        return
-            Path.Combine(this.FolderPath, string.Concat(fileName, this.Format.ToFileExtension()));
-    }
+    public string SourceFilePath() => Path.Combine(this.FolderPath, this.SourceFile);
 
+    public string TargetFilePath(string cultureKey)
+        => Path.Combine(this.FolderPath, string.Format(this.TargetFileFormat, cultureKey));
+    
     public bool Validate(out string errorMessageKey)
     {
         errorMessageKey = string.Empty;

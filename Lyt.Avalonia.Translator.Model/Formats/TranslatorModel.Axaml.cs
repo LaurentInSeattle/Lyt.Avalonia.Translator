@@ -45,7 +45,8 @@ public sealed partial class TranslatorModel : ModelBase
             return false;
         }
 
-        Tuple<bool, Dictionary<string, string>> parseResult = this.ParseAxamlResourceFile(sourcePath);
+        Tuple<bool, Dictionary<string, string>> parseResult = 
+            TranslatorModel.ParseAxamlResourceFile(sourcePath);
         if (!parseResult.Item1)
         {
             return false;
@@ -66,11 +67,11 @@ public sealed partial class TranslatorModel : ModelBase
         string extension = fileInfo.Extension;
         string destinationPath = sourcePath[..^extension.Length];
         destinationPath = string.Concat(destinationPath, "_", destinationLanguageKey, extension);
-        this.CreateAxamlResourceFile(destinationPath, translatedDictionary); 
+        TranslatorModel.CreateAxamlResourceFile(destinationPath, translatedDictionary); 
         return true;
     }
 
-    public Tuple<bool, Dictionary<string, string>> ParseAxamlResourceFile(string sourcePath)
+    public static Tuple<bool, Dictionary<string, string>> ParseAxamlResourceFile(string sourcePath)
     {
         Dictionary<string, string> dictionary = [];
         string lineStartsWith = ResourceDictionaryEntryTokens[0];
@@ -109,7 +110,7 @@ public sealed partial class TranslatorModel : ModelBase
         return Tuple.Create(true, dictionary);
     }
 
-    public bool CreateAxamlResourceFile(string destinationPath, Dictionary<string, string> dictionary)
+    public static bool CreateAxamlResourceFile(string destinationPath, Dictionary<string, string> dictionary)
     {
         try
         {

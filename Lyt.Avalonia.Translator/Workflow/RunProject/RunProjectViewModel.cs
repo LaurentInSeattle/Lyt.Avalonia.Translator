@@ -7,25 +7,30 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     private readonly TranslatorModel translatorModel;
     private readonly IToaster toaster;
 
+    private bool isPopulated;
+    private Dictionary<string, string> sourceDictionary;
+    private readonly Dictionary<string, Dictionary<string, string>> targetDictionaries;
+    private readonly Dictionary<string, Dictionary<string, string>> needTranslationDictionaries;
+    private readonly Dictionary<string, ExtLanguageInfoViewModel> targetLanguageViewModels;
+
     public RunProjectViewModel(TranslatorModel translatorModel, IToaster toaster)
     {
         this.translatorModel = translatorModel;
         this.toaster = toaster;
 
+        this.sourceDictionary = [];
+        this.targetDictionaries = [];
+        this.needTranslationDictionaries = [];
+
         this.SelectedLanguages = [];
+        this.targetLanguageViewModels = []; 
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
     }
 
     public override void Activate(object? activationParameters)
     {
         base.Activate(activationParameters);
-        this.Populate();
-    }
-
-    protected override void OnViewLoaded()
-    {
-        base.OnViewLoaded();
-        this.Populate();
+        Dispatch.OnUiThread(this.Populate);
     }
 
     private void OnToolbarCommand(ToolbarCommandMessage message)
@@ -46,17 +51,17 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         }
     }
 
-    private void Populate() 
+    private void Populate()
     {
         var currentProject = this.translatorModel.ActiveProject;
-        if ((currentProject is null) || currentProject.IsInvalid) 
+        if ((currentProject is null) || currentProject.IsInvalid)
         {
             // Error: no active project 
             this.ProjectName = string.Empty;
             this.ProjectDetails = string.Empty;
-            this.TranslationStatus = string.Empty; 
+            this.TranslationStatus = string.Empty;
             this.ErrorMessage = this.Localizer.Lookup("RunProject.NoActiveProject");
-            return; 
+            return;
         }
 
         this.TranslationStatus = this.Localizer.Lookup("RunProject.Idle");
@@ -68,12 +73,110 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 currentProject.SourceFile,
                 currentProject.LastUpdated.ToShortDateString(),
                 currentProject.LastUpdated.ToShortTimeString());
-        this.SourceLanguage = 
+        this.SourceLanguage =
             new LanguageInfoViewModel(Language.Languages[currentProject.SourceLanguageCultureKey]);
         this.SelectedLanguages = [];
+
+        void LoadDictionaries()
+        {
+            string sourcePath = currentProject.SourceFilePath();
+            var sourceResult = TranslatorModel.ParseAxamlResourceFile(sourcePath);
+            bool sourceLoaded = sourceResult.Item1;
+            if (!sourceLoaded)
+            {
+                this.ErrorMessage = this.Localizer.Lookup("RunProject.FailedLoadingSource");
+                return;
+            }
+
+            this.sourceDictionary = sourceResult.Item2;
+            this.targetDictionaries.Clear();
+
+            // Loop through target languages 
+            // Check whether of not we have existing translations, if we do load them 
+            // if the file is not there create an empty dictionary 
+            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+            {
+                string targetPath = currentProject.TargetFilePath(cultureKey);
+                Dictionary<string, string> targetDictionary = [];
+                if (File.Exists(targetPath))
+                {
+                    var targetResult = TranslatorModel.ParseAxamlResourceFile(targetPath);
+                    if (targetResult.Item1)
+                    {
+                        targetDictionary = targetResult.Item2;
+                    }
+                }
+
+                this.targetDictionaries.Add(cultureKey, targetDictionary);
+            }
+        }
+
+        void FindMissingTranslations()
+        {
+            this.needTranslationDictionaries.Clear();
+
+            // Loop through the list of target languages to initialize the nested dictionary 
+            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+            {
+                this.needTranslationDictionaries.Add(cultureKey, []);
+            }
+
+            // Loop again through the keys of the source language to populate 
+            foreach (string languageKey in this.sourceDictionary.Keys)
+            {
+                // Loop through target languages 
+                foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+                {
+                    var dictionary = this.targetDictionaries[cultureKey];
+                    var needed = this.needTranslationDictionaries[cultureKey];
+                    if (dictionary.TryGetValue(languageKey, out string? value))
+                    {
+                        if (string.IsNullOrWhiteSpace(value))
+                        {
+                            // Empty translation: Add key and empty string
+                            needed.Add(languageKey, string.Empty);
+                        }
+
+                        // We have a translation: dont change it
+                    }
+                    else
+                    {
+                        // Missing translation: Add key and empty string
+                        needed.Add(languageKey, string.Empty);
+                    }
+                }
+            }
+        }
+
+        void PopulateTargetLanguages ()
+        {
+
+        }
+
+        try
+        {
+            LoadDictionaries();
+            FindMissingTranslations();
+            PopulateTargetLanguages(); 
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            this.ErrorMessage = this.Localizer.Lookup("RunProject.FileSystemError");
+            return;
+        }
+
+        this.isPopulated = true;
     }
 
-    private void StartProject() { }
+
+    private void StartProject()
+    {
+        if (!this.isPopulated)
+        {
+            return;
+        }
+    }
 
     private void StopProject() { }
 
@@ -85,9 +188,9 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
     public string? TranslationStatus { get => this.Get<string?>(); set => this.Set(value); }
 
-    public ObservableCollection<ClickableLanguageInfoViewModel> SelectedLanguages
+    public ObservableCollection<ExtLanguageInfoViewModel> SelectedLanguages
     {
-        get => this.Get<ObservableCollection<ClickableLanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
+        get => this.Get<ObservableCollection<ExtLanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
         set => this.Set(value);
     }
 
