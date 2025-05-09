@@ -10,6 +10,7 @@ public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
 
     public ExtLanguageInfoViewModel(Language language)
     {
+        this.DisablePropertyChangedLogging = true; 
         this.language = language;
         string key = language.CultureKey;
         string name = language.LocalName;

@@ -35,6 +35,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         this.toaster = toaster;
         this.messenger = messenger;
 
+        this.toaster.BreakOnError = false; 
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
         this.Messenger.Subscribe<ViewActivationMessage>(this.OnViewActivation);
         this.Messenger.Subscribe<LanguageChangedMessage>(this.OnLanguageChanged);

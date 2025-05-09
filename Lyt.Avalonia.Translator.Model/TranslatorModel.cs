@@ -1,7 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Model;
 
-using Lyt.Avalonia.Translator.Model.DataObjects;
-using static Lyt.Avalonia.Persistence.FileManagerModel;
+using static FileManagerModel;
 
 public sealed partial class TranslatorModel : ModelBase
 {
@@ -206,5 +205,27 @@ public sealed partial class TranslatorModel : ModelBase
     {
         this.Language = languageKey;
         this.localizer.SelectLanguage(languageKey);
+    }
+
+    public static bool CreateResourceFile(
+        ResourceFormat resourceFormat, string destinationPath, Dictionary<string, string> dictionary)
+    {
+        return resourceFormat switch
+        {
+            ResourceFormat.Axaml => AxamlParserWriter.CreateAxamlResourceFile(destinationPath, dictionary),
+            ResourceFormat.Resx => throw new NotImplementedException(nameof(resourceFormat)),
+            _ => throw new ArgumentException(null, nameof(resourceFormat)),
+        };
+    }
+
+    public static Tuple<bool, Dictionary<string, string>> ParseResourceFile(
+        ResourceFormat resourceFormat, string sourcePath)
+    {
+        return resourceFormat switch
+        {
+            ResourceFormat.Axaml => AxamlParserWriter.ParseAxamlResourceFile(sourcePath),
+            ResourceFormat.Resx => throw new NotImplementedException(nameof(resourceFormat)),
+            _ => throw new ArgumentException(null, nameof(resourceFormat)),
+        };
     }
 }

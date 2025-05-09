@@ -29,6 +29,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.runProjectToolbarViewModel = runProjectToolbarViewModel;
         this.toaster = toaster;
 
+        this.DisablePropertyChangedLogging = true;
         this.sourceDictionary = [];
         this.targetDictionaries = [];
         this.needTranslationDictionaries = [];
@@ -80,25 +81,29 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             return;
         }
 
+        ResourceFormat resourceFormat = currentProject.Format;
         this.TranslationStatus = this.Localizer.Lookup("RunProject.Idle");
         this.ErrorMessage = string.Empty;
         this.ProjectName = currentProject.Name;
         this.ProjectDetails =
             string.Format(
-                "Source file: {0} - Last updated: {1} {2}",
+                "Source: {0}  -  Updated: {1} {2}",
                 currentProject.SourceFile,
                 currentProject.LastUpdated.ToShortDateString(),
                 currentProject.LastUpdated.ToShortTimeString());
         this.SourceLanguage =
             new LanguageInfoViewModel(Language.Languages[currentProject.SourceLanguageCultureKey]);
+        this.FileFormat = new FileFormatViewModel(currentProject.Format); 
         this.SelectedLanguages = [];
+        this.IsInProgress = false;
+        this.SourceLanguageLabel = string.Empty;
+        this.SourceLanguageKey = string.Empty;
+        this.TargetLanguageLabel = string.Empty;
 
         void LoadDictionaries()
         {
             string sourcePath = currentProject.SourceFilePath();
-
-            // TODO: Abstract the storage format 
-            var sourceResult = TranslatorModel.ParseAxamlResourceFile(sourcePath);
+            var sourceResult = TranslatorModel.ParseResourceFile(resourceFormat, sourcePath);
             bool sourceLoaded = sourceResult.Item1;
             if (!sourceLoaded)
             {
@@ -118,8 +123,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 Dictionary<string, string> targetDictionary = [];
                 if (File.Exists(targetPath))
                 {
-                    // TODO: Abstract the storage format 
-                    var targetResult = TranslatorModel.ParseAxamlResourceFile(targetPath);
+                    var targetResult = TranslatorModel.ParseResourceFile(resourceFormat, targetPath);
                     if (targetResult.Item1)
                     {
                         targetDictionary = targetResult.Item2;
@@ -234,6 +238,10 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
     private void EndProject(bool aborted)
     {
+        this.IsInProgress = false;
+        this.SourceLanguageLabel = string.Empty;
+        this.SourceLanguageKey = string.Empty;
+        this.TargetLanguageLabel = string.Empty;
         this.runProjectToolbarViewModel.IsRunning = false;
         this.TranslationStatus = 
             this.Localizer.Lookup(aborted ? "RunProject.Aborted" : "RunProject.Idle"); 
@@ -242,14 +250,13 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         {
             // May need to try to save if some translations completed 
 
-            // May need to reload better than that 
-            var currentProject = this.translatorModel.ActiveProject;
-            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-            {
-                ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[cultureKey];
-                int missingEntries = this.needTranslationDictionaries.Keys.Count;
-                vm.SetComplete(missingEntries);
-            }
+            this.toaster.Show(
+                this.Localizer.Lookup("Shell.Error"), 
+                this.Localizer.Lookup("RunProject.Aborted"),
+                3_000, InformationLevel.Error);
+
+            // Reload 
+            this.Populate(); 
         } 
     }
 
@@ -263,9 +270,16 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             return false;
         }
 
+        this.IsInProgress = true;
+        this.SourceLanguageLabel = string.Empty;
+        this.SourceLanguageKey = string.Empty;
+        this.TargetLanguageLabel = string.Empty;
+
         // Loop through target languages 
-        string sourceLanguageKey =
-            Language.Languages[currentProject.SourceLanguageCultureKey].LanguageKey;
+        Language sourceLanguage = Language.Languages[currentProject.SourceLanguageCultureKey];
+        string sourceLanguageKey = sourceLanguage.LanguageKey;
+        this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  " , sourceLanguage.LocalName); 
+
         foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
         {
             ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[cultureKey];
@@ -278,7 +292,9 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             }
 
             // Loop through missing target language strings 
-            string targetLanguageKey = Language.Languages[cultureKey].LanguageKey;
+            Language targetLanguage = Language.Languages[cultureKey];
+            this.TargetLanguageLabel = string.Concat(targetLanguage.EnglishName, "  ~  ", targetLanguage.LocalName);
+            string targetLanguageKey = targetLanguage.LanguageKey;
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
             foreach (string targetKey in missingTranslations.Keys)
             {
@@ -299,7 +315,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 //      sourceText, sourceLanguageKey, targetLanguageKey);
                 //bool success = result.Item1;
 
-
                 Debug.WriteLine(targetLanguageKey + " - " + sourceText);
                 await Task.Delay(999);
                 bool success = true;
@@ -308,6 +323,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                     Dispatch.OnUiThread(() => 
                     { 
                         this.SourceText = sourceText;
+                        this.SourceLanguageKey = targetKey;
                         this.TargetText = translatedText;
                     });
 
@@ -350,10 +366,10 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     private bool MergeAndSaveTranslations (
         string cultureKey, Dictionary<string, string> missingTranslations )
     {
-        // TODO: Abstract the storage format 
         try
         {
-
+            var currentProject = this.translatorModel.ActiveProject;
+            ResourceFormat resourceFormat = currentProject.Format;
             return true;
         }
         catch (Exception ex)
@@ -383,7 +399,13 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
     public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
 
-    public string? TargetLanguage { get => this.Get<string?>(); set => this.Set(value); }
+    public string? SourceLanguageLabel { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? SourceLanguageKey { get => this.Get<string?>(); set => this.Set(value); }
+
+    public string? TargetLanguageLabel { get => this.Get<string?>(); set => this.Set(value); }
+
+    public bool IsInProgress { get => this.Get<bool>(); set => this.Set(value); }
 
     public ObservableCollection<ExtLanguageInfoViewModel> SelectedLanguages
     {
@@ -397,4 +419,9 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         set => this.Set(value);
     }
 
+    public FileFormatViewModel? FileFormat
+    {
+        get => this.Get<FileFormatViewModel?>();
+        set => this.Set(value);
+    }
 }

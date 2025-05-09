@@ -1,7 +1,6 @@
-﻿
-namespace Lyt.Avalonia.Translator.Model;
+﻿namespace Lyt.Avalonia.Translator.Model.Formats;
 
-public sealed partial class TranslatorModel : ModelBase
+public static class AxamlParserWriter  
 {
     private const string ResourceDictionaryHeader =
 @"
@@ -22,54 +21,17 @@ public sealed partial class TranslatorModel : ModelBase
 \t<system:String x:Key=""{0}"">{1}</system:String>
 ";
 
-    private static List<string> ResourceDictionaryEntryTokens =
+    private static readonly List<string> ResourceDictionaryEntryTokens =
         [
             "<system:String x:Key=\"",
             "\">",
             "</system:String>"
         ];
 
-    private static int ResourceDictionaryMinimumLength = 
+    private static readonly int ResourceDictionaryMinimumLength = 
         ResourceDictionaryHeader.Length + 
         ResourceDictionaryFooter.Length + 
         ResourceDictionaryEntryFormat.Length;
-
-    public async Task<bool> TranslateAxamlResourceFile(
-        ProviderKey provider,
-        string sourcePath,
-        string sourceLanguageKey, string destinationLanguageKey)
-    {
-        FileInfo fileInfo = new(sourcePath);
-        if (!fileInfo.Exists || (fileInfo.Length < ResourceDictionaryMinimumLength))
-        {
-            return false;
-        }
-
-        Tuple<bool, Dictionary<string, string>> parseResult = 
-            TranslatorModel.ParseAxamlResourceFile(sourcePath);
-        if (!parseResult.Item1)
-        {
-            return false;
-        }
-
-        Dictionary<string, string> sourceDictionary = parseResult.Item2;
-        var result = await this.translatorService.BatchTranslate(
-             ProviderKey.Google,
-             sourceDictionary,
-             sourceLanguageKey, destinationLanguageKey,
-             throttleDelayMillisecs: 2_000);
-        if (result is null || !result.Item1)
-        {
-            return false;
-        }
-
-        var translatedDictionary = result.Item2;
-        string extension = fileInfo.Extension;
-        string destinationPath = sourcePath[..^extension.Length];
-        destinationPath = string.Concat(destinationPath, "_", destinationLanguageKey, extension);
-        TranslatorModel.CreateAxamlResourceFile(destinationPath, translatedDictionary); 
-        return true;
-    }
 
     public static Tuple<bool, Dictionary<string, string>> ParseAxamlResourceFile(string sourcePath)
     {
@@ -133,3 +95,42 @@ public sealed partial class TranslatorModel : ModelBase
         } 
     }
 }
+
+
+//public async Task<bool> TranslateAxamlResourceFile(
+//    ProviderKey provider,
+//    string sourcePath,
+//    string sourceLanguageKey, string destinationLanguageKey)
+//{
+//    FileInfo fileInfo = new(sourcePath);
+//    if (!fileInfo.Exists || (fileInfo.Length < ResourceDictionaryMinimumLength))
+//    {
+//        return false;
+//    }
+
+//    Tuple<bool, Dictionary<string, string>> parseResult = 
+//        TranslatorModel.ParseAxamlResourceFile(sourcePath);
+//    if (!parseResult.Item1)
+//    {
+//        return false;
+//    }
+
+//    Dictionary<string, string> sourceDictionary = parseResult.Item2;
+//    var result = await this.translatorService.BatchTranslate(
+//         ProviderKey.Google,
+//         sourceDictionary,
+//         sourceLanguageKey, destinationLanguageKey,
+//         throttleDelayMillisecs: 2_000);
+//    if (result is null || !result.Item1)
+//    {
+//        return false;
+//    }
+
+//    var translatedDictionary = result.Item2;
+//    string extension = fileInfo.Extension;
+//    string destinationPath = sourcePath[..^extension.Length];
+//    destinationPath = string.Concat(destinationPath, "_", destinationLanguageKey, extension);
+//    TranslatorModel.CreateAxamlResourceFile(destinationPath, translatedDictionary); 
+//    return true;
+//}
+

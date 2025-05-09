@@ -28,24 +28,32 @@
 			VerticalAlignment="Center" HorizontalAlignment="Stretch"
 			TextWrapping="Wrap"
 			/>
-		<TextBlock
+		<StackPanel
+			Orientation="Horizontal"
 			Grid.Row="0"
-			Margin="4"
-			Text="{Binding ProjectName}"
-			FontSize="26" FontWeight="DemiBold"
-			TextAlignment="Left"
-			Foreground="{StaticResource LightAqua_0_120}"
-			VerticalAlignment="Center" HorizontalAlignment="Stretch"
-			TextWrapping="Wrap"
-			/>
-		<!-- TODO - Fix: Do not use margins !-->
-		<shared:LanguageInfoView
-			Grid.Row="0"
-			Margin="240 0 0 0"			
-			VerticalAlignment="Center" HorizontalAlignment="Left"
-			DataContext="{Binding SourceLanguage}"
-			>
-		</shared:LanguageInfoView>
+			>			
+			<TextBlock
+				Margin="4"
+				Text="{Binding ProjectName}"
+				FontSize="26" FontWeight="DemiBold"
+				TextAlignment="Left"
+				Foreground="{StaticResource LightAqua_0_120}"
+				VerticalAlignment="Center" HorizontalAlignment="Stretch"
+				TextWrapping="Wrap"
+				/>
+			<shared:LanguageInfoView
+				Margin="8 0 0 0"			
+				VerticalAlignment="Center" HorizontalAlignment="Left"
+				DataContext="{Binding SourceLanguage}"
+				>
+			</shared:LanguageInfoView>
+			<shared:FileFormatView
+				Margin="8 0 0 0"			
+				VerticalAlignment="Center" HorizontalAlignment="Left"
+				DataContext="{Binding FileFormat}"
+				>
+			</shared:FileFormatView>
+		</StackPanel>
 		<TextBlock
 			Grid.Row="0"
 			Margin="0 0 12 0"
@@ -128,15 +136,37 @@
 			<Grid
 				Grid.Column="1" Grid.Row="1"
 				Margin="8"
+				IsVisible="{Binding IsInProgress}"
 				>
 				<Grid.RowDefinitions>
-					<RowDefinition Height="120" />
 					<RowDefinition Height="64" />
-					<RowDefinition Height="120" />
+					<RowDefinition Height="160" />
+					<RowDefinition Height="64" />
+					<RowDefinition Height="160" />
 					<RowDefinition Height="*" />
 				</Grid.RowDefinitions>
-				<TextBox
+				<TextBlock
 					Grid.Row="0"
+					Margin="0 0 0 0"
+					FontSize="22"
+					Text="{Binding SourceLanguageLabel}"
+					TextAlignment="Left"
+					Foreground="{StaticResource PastelOrchid_0_080}"
+					VerticalAlignment="Center" HorizontalAlignment="Left"
+					TextWrapping="Wrap"
+					/>
+				<TextBlock
+					Grid.Row="0"
+					Margin="0 0 0 0"
+					FontSize="22"
+					Text="{Binding SourceLanguageKey}"
+					TextAlignment="Right"
+					Foreground="{StaticResource PastelOrchid_0_080}"
+					VerticalAlignment="Center" HorizontalAlignment="Right"
+					TextWrapping="Wrap"
+					/>
+				<TextBox
+					Grid.Row="1"
 					VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
 					TextWrapping="Wrap"
 					IsReadOnly="True"
@@ -144,17 +174,17 @@
 					Text="{Binding SourceText}"
 					/>
 				<TextBlock
-					Grid.Column="1" Grid.Row="0"
-					Margin="0 0 0 0"
-					FontSize="24"
-					Text="{Binding TargetLanguage}"
-					TextAlignment="Center"
-					Foreground="{StaticResource PastelOrchid_0_080}"
-					VerticalAlignment="Center" HorizontalAlignment="Stretch"
-					TextWrapping="Wrap"
-				/>
-				<TextBox
 					Grid.Row="2"
+					Margin="0 0 0 0"
+					FontSize="22"
+					Text="{Binding TargetLanguageLabel}"
+					TextAlignment="Left"
+					Foreground="{StaticResource PastelOrchid_0_080}"
+					VerticalAlignment="Center" HorizontalAlignment="Left"
+					TextWrapping="Wrap"
+					/>
+				<TextBox
+					Grid.Row="3"
 					VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
 					TextWrapping="Wrap"
 					IsReadOnly="True"

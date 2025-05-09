@@ -10,6 +10,8 @@ public sealed class ProjectTileViewModel : Bindable<ProjectTileView>
     public ProjectTileViewModel(Project project)
     {
         this.project = project;
+
+        this.DisablePropertyChangedLogging = true;
         this.Name = project.Name;
         this.Opened =
             string.Format(

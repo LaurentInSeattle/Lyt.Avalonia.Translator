@@ -24,4 +24,5 @@ global using Lyt.Avalonia.Model;
 global using Lyt.Avalonia.Persistence;
 
 global using Lyt.Avalonia.Translator.Model.DataObjects;
+global using Lyt.Avalonia.Translator.Model.Formats;
 global using Lyt.Avalonia.Translator.Service;

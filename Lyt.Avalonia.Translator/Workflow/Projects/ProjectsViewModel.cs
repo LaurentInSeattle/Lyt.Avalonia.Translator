@@ -10,6 +10,7 @@ public sealed class ProjectsViewModel : Bindable<ProjectsView>
 
     public ProjectsViewModel(TranslatorModel translatorModel, IToaster toaster)
     {
+        this.DisablePropertyChangedLogging = true;
         this.translatorModel = translatorModel;
         this.toaster = toaster;
         this.ProjectTileViews = [];
@@ -19,12 +20,6 @@ public sealed class ProjectsViewModel : Bindable<ProjectsView>
     public override void Activate(object? activationParameters)
     {
         base.Activate(activationParameters);
-        this.Populate();
-    }
-
-    protected override void OnViewLoaded()
-    {
-        base.OnViewLoaded();
         this.Populate();
     }
 
