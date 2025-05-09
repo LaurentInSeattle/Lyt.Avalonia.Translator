@@ -11,6 +11,7 @@
 	
 	xmlns:shared="clr-namespace:Lyt.Avalonia.Translator.Workflow.Shared"
 	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	xmlns:progress="clr-namespace:Lyt.Avalonia.Controls.Progress;assembly=Lyt.Avalonia.Controls"
 	>
 	<Grid
 		Margin="12"
@@ -153,7 +154,7 @@
 
 		<TextBlock
 			Grid.Column="3" Grid.Row="3"
-			Margin="0 0 0 0"
+			Margin="0 50 0 0"
 			Text="Translating..."
 			IsVisible="{Binding ProgressRingIsActive}"
 			FontSize="16"
@@ -161,6 +162,15 @@
 			Foreground="{StaticResource PastelOrchid_0_080}"
 			VerticalAlignment="Center" HorizontalAlignment="Center"
 			TextWrapping="Wrap"
+			/>
+		<progress:ProgressRing
+			Grid.Column="3" Grid.Row="3"
+			Margin="0 -50 0 0"
+			Width="44" Height="44"
+			IsActive="{Binding ProgressRingIsActive}"
+			IsVisible="{Binding ProgressRingIsActive}"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Center"
 			/>
 	</Grid>
 </UserControl>
