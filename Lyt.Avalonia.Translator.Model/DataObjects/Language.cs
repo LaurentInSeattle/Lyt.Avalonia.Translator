@@ -12,27 +12,32 @@ public sealed class Language(
 
     public static readonly Dictionary<string, Language> Languages = new()
     {
+        // TODO: Some culture keys possibly incorrect, verify 
+
+        // Verified 
         {  DefaultCultureKey , Default },
         {  "fr-FR" , new Language( "fr-FR", "fr", "French", "Français", "France", "Quebec") },
         {  "it-IT" , new Language( "it-IT", "it", "Italian", "Italiano", "Italy", "San_Marino") },
         {  "es-ES" , new Language( "es-ES", "es", "Spanish", "Español", "Spain", "Mexico") },
-        {  "uk-UK" , new Language( "uk-UK", "uk", "Ukrainian", "Українська мова", "Ukraine") },
-        {  "ja-JA" , new Language( "ja-JA", "ja", "Japanese", "日本語", "Japan") },
+        {  "uk-UA" , new Language( "uk-UA", "uk", "Ukrainian", "Українська мова", "Ukraine") },
+        {  "jp-JP" , new Language( "jp-JP", "ja", "Japanese", "日本語", "Japan") },
         {  "bg-BG" , new Language( "bg-BG", "bg", "Bulgarian", "Български език", "Bulgaria") },
-        {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體 中文", "China") },
-        {  "zh-TW" , new Language( "zh-TW", "zh-TW", "Chinese (Traditional)", "繁體 中文", "Taiwan") },
-        {  "el-EL" , new Language( "el-EL", "el", "Greek", "Ελληνικά", "Greece", "Cyprus") },
+        {  "el-GR" , new Language( "el-GR", "el", "Greek", "Ελληνικά", "Greece", "Cyprus") },
         {  "da-DA" , new Language( "da-DA", "da", "Danish", "Dansk", "Denmark") },
         {  "nl-NL" , new Language( "nl-NL", "nl", "Dutch", "Hollands", "Netherlands") },
         {  "de-DE" , new Language( "de-DE", "de", "German", "Deutsch", "Germany", "Austria") },
-        {  "ka-KA" , new Language( "ka-KA", "ka", "Georgian", "ქართული ენა", "Georgia") },
-        {  "hi-HI" , new Language( "hi-HI", "hi", "Hindi", "हिन्दी", "India") },
-        {  "bn-BN" , new Language( "bn-BN", "bn", "Bengali", "বাঙ্গালী", "Bangladesh", "India" ) },
-        {  "hu-HU" , new Language( "hu-HU", "hu", "Hungarian", "Magyar", "Hungary") },
-        {  "ko-KO" , new Language( "ko-KO", "ko", "Korean", "한국인 - 조선어", "South_Korea", "North_Korea") },
+        {  "ka-GE" , new Language( "ka-GE", "ka", "Georgian", "ქართული ენა", "Georgia") },
+        {  "hi-IN" , new Language( "hi-IN", "hi", "Hindi", "हिन्दी", "India") },
         {  "pl-PL" , new Language( "pl-PL", "pl", "Polish", "Polski", "Poland") },
         {  "pt-PT" , new Language( "pt-PT", "pt-PT", "Portuguese", "Português", "Portugal", "Brazil") },
         {  "ro-RO" , new Language( "ro-RO", "ro", "Romanian", "Românesc", "Romania", "Moldova") },
+
+        // To Verify 
+        {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體 中文", "China") },
+        {  "zh-TW" , new Language( "zh-TW", "zh-TW", "Chinese (Traditional)", "繁體 中文", "Taiwan") },
+        {  "bn-BN" , new Language( "bn-BN", "bn", "Bengali", "বাঙ্গালী", "Bangladesh", "India" ) },
+        {  "hu-HU" , new Language( "hu-HU", "hu", "Hungarian", "Magyar", "Hungary") },
+        {  "ko-KO" , new Language( "ko-KO", "ko", "Korean", "한국인 - 조선어", "South_Korea", "North_Korea") },
         {  "th-TH" , new Language( "th-TH", "th", "Thai", "ภาษาไทย", "Thailand") },
 
         // TODO: Add more definitions here and provide flags 

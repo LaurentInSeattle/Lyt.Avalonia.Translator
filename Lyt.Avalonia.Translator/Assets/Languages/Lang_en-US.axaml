@@ -72,6 +72,7 @@
 	<system:String x:Key="RunProject.Stop">Abort</system:String>
 	<system:String x:Key="RunProject.Idle">Idle. Not Translating.</system:String>
 	<system:String x:Key="RunProject.ProjectInProgress">Translation in progress...</system:String>
+	<system:String x:Key="RunProject.Aborted">Aborted...</system:String>
 	<system:String x:Key="RunProject.Complete">Complete</system:String>
 	<system:String x:Key="RunProject.Incomplete">Incomplete, missing: {0}</system:String>
 	<system:String x:Key="RunProject.LanguageInProgress">In Progress</system:String>

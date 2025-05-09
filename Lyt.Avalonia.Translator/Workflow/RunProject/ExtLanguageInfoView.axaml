@@ -10,6 +10,7 @@
 	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 	
 	xmlns:glyphs="clr-namespace:Lyt.Avalonia.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+	xmlns:progress="clr-namespace:Lyt.Avalonia.Controls.Progress;assembly=Lyt.Avalonia.Controls"
 	>
 	<Grid
 		Height="44"
@@ -21,6 +22,7 @@
 			<ColumnDefinition Width="20" />
 			<ColumnDefinition Width="60" />
 			<ColumnDefinition Width="260" />
+			<ColumnDefinition Width="40" />
 			<ColumnDefinition Width="40" />
 			<ColumnDefinition Width="8" />
 		</Grid.ColumnDefinitions>
@@ -60,7 +62,7 @@
 			Style="{StaticResource ToolbarIndicatorError}"
 			Layout="IconOnly"
 			Behaviour="Tap"
-			HorizontalAlignment="Left" VerticalAlignment="Center"
+			HorizontalAlignment="Center" VerticalAlignment="Center"
 			Width="30" Height="30"
 			GlyphSource="dismiss"
 			ButtonBackground="BorderlessRectangle"
@@ -73,7 +75,7 @@
 			Style="{StaticResource ToolbarIndicatorValid}"
 			Layout="IconOnly"
 			Behaviour="Tap"
-			HorizontalAlignment="Left" VerticalAlignment="Center"
+			HorizontalAlignment="Center" VerticalAlignment="Center"
 			Width="30" Height="30"
 			Margin="4 0 4 0"
 			GlyphSource="checkmark"
@@ -81,20 +83,14 @@
 			GlyphStrokeThickness="0"
 			Text="{DynamicResource RunProject.Complete}"
 			/>
-		<!-- more_circle_regular scan_regular arrow_counterclockwise_regular star_regular -->
-		<glyphs:GlyphButton
-			Grid.Column="5"
+		<progress:ProgressRing
+			Grid.Column="6"
 			IsVisible="{Binding IsInProgress}"
-			Style="{StaticResource ToolbarIndicatorValid}"
-			Behaviour="Tap"
-			HorizontalAlignment="Left" VerticalAlignment="Center"
+			IsActive="{Binding IsInProgress}"
+			Foreground="{StaticResource PastelOrchid_0_080}"
 			Width="30" Height="30"
 			Margin="4 0 4 0"
-			GlyphSource="location_live"
-			ButtonBackground="BorderlessRectangle"
-			GlyphStrokeThickness="0"
-			Text="{DynamicResource RunProject.InProgress}"
+			VerticalAlignment="Center" HorizontalAlignment="Center"
 			/>
 	</Grid>
-
 </UserControl>

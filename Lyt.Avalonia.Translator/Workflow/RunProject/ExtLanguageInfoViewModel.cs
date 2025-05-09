@@ -41,13 +41,15 @@ public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
     public void SetComplete(int missing)
     {
         this.missing = missing;
+        this.IsInProgress = false;
         this.UpdateComplete();
     }
 
     public void InProgress()
     {
         this.IsComplete = false;
-        this.Status = this.Localizer.Lookup("RunProject.InProgress");
+        this.IsInProgress = true; 
+        this.Status = this.Localizer.Lookup("RunProject.LanguageInProgress");
     }
 
     public void TranslationAdded ()
@@ -59,16 +61,17 @@ public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
 
         --this.missing;
         this.UpdateComplete();
-        if( this.missing > 0 )
-        {
-            Schedule.OnUiThread(999, this.InProgress, DispatcherPriority.Normal); 
-        }
     }
 
     private void UpdateComplete()
     {
         bool complete = this.missing == 0;
         this.IsComplete = complete;
+        if (complete)
+        {
+            this.IsInProgress = false;
+        } 
+
         string missingFormat = this.Localizer.Lookup("RunProject.Incomplete");
         this.Status =
             complete ?
