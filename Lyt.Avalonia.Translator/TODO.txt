@@ -4,6 +4,8 @@
 
 MUST DO
 	- Interactive: show text translated from translated target back to source.
+	- Interactive: Add a translate button.
+	- Interactive: Add a Swap languages button.
 	- Create: Align labels to the right  
 	- Ability to add  / remove languages to a project 
 

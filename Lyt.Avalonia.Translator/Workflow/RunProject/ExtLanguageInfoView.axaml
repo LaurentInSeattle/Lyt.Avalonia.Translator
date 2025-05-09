@@ -22,6 +22,7 @@
 			<ColumnDefinition Width="60" />
 			<ColumnDefinition Width="260" />
 			<ColumnDefinition Width="40" />
+			<ColumnDefinition Width="8" />
 		</Grid.ColumnDefinitions>
 		<TextBlock
 			Grid.Column="0" Grid.ColumnSpan="2"
