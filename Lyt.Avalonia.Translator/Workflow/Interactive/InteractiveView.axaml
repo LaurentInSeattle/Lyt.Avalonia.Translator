@@ -28,6 +28,8 @@
 			<RowDefinition Height="52" />
 			<RowDefinition Height="12" />
 			<RowDefinition Height="*" />
+			<RowDefinition Height="52" />
+			<RowDefinition Height="*" />
 			<RowDefinition Height="8" />
 		</Grid.RowDefinitions>
 
@@ -39,6 +41,16 @@
 			Grid.Column="1" Grid.Row="1"
 			Margin="0 0 0 0"
 			Text="{DynamicResource Interactive.SourceLanguage}"
+			FontSize="24"
+			TextAlignment="Left"
+			Foreground="{StaticResource PastelOrchid_0_080}"
+			VerticalAlignment="Center" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			/>
+		<TextBlock
+			Grid.Column="1" Grid.Row="4"
+			Margin="0 0 0 0"
+			Text="{DynamicResource Interactive.ReverseTranslation}"
 			FontSize="24"
 			TextAlignment="Left"
 			Foreground="{StaticResource PastelOrchid_0_080}"
@@ -80,7 +92,7 @@
 		</TextBox>
 		<glyphs:GlyphButton
 			Grid.Column="1" Grid.Row="3"
-			Margin="8"
+			Margin="8 68 8 8"
 			Width="44" Height="44"
 			x:Name="ClearSourceButton"
 			Style="{StaticResource ToolbarIconButton}"
@@ -92,6 +104,34 @@
 			GlyphAngle="0"
 			Text="{DynamicResource Interactive.ClearSource}"
 			Command="{Binding ClearSourceCommand}"
+			/>
+		<glyphs:GlyphButton
+			Grid.Column="1" Grid.Row="3"
+			Margin="8 8 8 8"
+			Width="44" Height="44"
+			x:Name="GoButton"
+			Style="{StaticResource ToolbarIconButton}"
+			Behaviour="Tap"
+			HorizontalAlignment="Right" VerticalAlignment="Top"
+			GlyphSource="arrow_up"
+			ButtonBackground="BorderlessRectangle"
+			GlyphStrokeThickness="0"
+			GlyphAngle="90"
+			Text="{DynamicResource Interactive.Go}"
+			Command="{Binding GoCommand}"
+			/>
+		<Rectangle
+			Fill="#30000018"
+			Grid.Column="1" Grid.Row="5" 
+			/>
+		<TextBox
+			Grid.Column="1" Grid.Row="5" 
+			VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+			TextWrapping="Wrap"
+			IsReadOnly="True"
+			FontSize="22"
+			Padding="8 8 52 8"
+			Text="{Binding TranslatedBackText}"
 			/>
 
 		<TextBlock
@@ -125,10 +165,10 @@
 		</ComboBox>
 		<Rectangle
 			Fill="#30000018"
-			Grid.Column="3" Grid.Row="3"
+			Grid.Column="3" Grid.Row="3" Grid.RowSpan="3"
 			/>
 		<TextBox
-			Grid.Column="3" Grid.Row="3"
+			Grid.Column="3" Grid.Row="3" Grid.RowSpan="3"
 			VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
 			TextWrapping="Wrap"
 			IsReadOnly="True"

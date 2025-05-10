@@ -1,22 +1,20 @@
-﻿using System.Reflection;
-
-namespace Lyt.Avalonia.Translator.Workflow.Interactive;
+﻿namespace Lyt.Avalonia.Translator.Workflow.Interactive;
 
 public sealed class InteractiveViewModel : Bindable<InteractiveView>
 {
     private readonly TranslatorModel translatorModel;
-    private readonly TranslatorService translatorService; 
+    private readonly TranslatorService translatorService;
     private readonly List<LanguageInfoViewModel> languages;
 
     private bool isInitializing;
     private Language? selectedSourceLanguage;
     private Language? selectedTargetLanguage;
-    private string? lastTranslatedText ; 
+    private string? lastTranslatedText;
 
     public InteractiveViewModel(
-        TranslatorModel translatorModel, TranslatorService translatorService )
+        TranslatorModel translatorModel, TranslatorService translatorService)
     {
-        this.DisablePropertyChangedLogging = true; 
+        this.DisablePropertyChangedLogging = true;
         this.translatorModel = translatorModel;
         this.translatorService = translatorService;
         this.languages = [];
@@ -26,7 +24,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
     private void PopulateLanguages()
     {
         this.isInitializing = true;
-        this.ProgressRingIsActive = false; 
+        this.ProgressRingIsActive = false;
         this.SourceText = string.Empty;
         foreach (Language language in Language.Languages.Values)
         {
@@ -54,12 +52,12 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         this.TargetText = string.Empty;
     }
 
-    private async void OnCopyTarget(object? _) 
-    { 
+    private async void OnCopyTarget(object? _)
+    {
         string? maybeTranslation = this.TargetText;
         if (string.IsNullOrWhiteSpace(maybeTranslation))
         {
-            return ;
+            return;
         }
 
         maybeTranslation = maybeTranslation.Trim();
@@ -69,7 +67,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         }
 
         var clipboard = App.MainWindow.Clipboard;
-        if ( clipboard is null)
+        if (clipboard is null)
         {
             return;
         }
@@ -77,7 +75,9 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         await clipboard.SetTextAsync(maybeTranslation);
     }
 
-    private void OnEnter(object? _) 
+    private void OnGo(object? discard) => this.OnEnter(discard);
+
+    private void OnEnter(object? _)
     {
         // Nothing to translate
         string? maybeSourceText = this.SourceText;
@@ -93,7 +93,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         }
 
         // Dont translate again same text 
-        if ( this.lastTranslatedText is not null && (this.lastTranslatedText == maybeSourceText))
+        if (this.lastTranslatedText is not null && (this.lastTranslatedText == maybeSourceText))
         {
             return;
         }
@@ -102,10 +102,10 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         {
             if ((this.selectedSourceLanguage is null) || (this.selectedTargetLanguage is null))
             {
-                return false ;
+                return false;
             }
 
-            this.lastTranslatedText = maybeSourceText; 
+            this.lastTranslatedText = maybeSourceText;
             var result = await this.translatorService.Translate(
                 this.translatorModel.ActiveProvider,
                 maybeSourceText,
@@ -115,19 +115,29 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
             await Task.Delay(50);
             Dispatch.OnUiThread(() =>
             {
-                if (success)
-                {
-                    this.TargetText = result.Item2;
-                }
-                else
-                {
-                    this.TargetText = string.Empty;
-                }
-
-                this.CompleteOnlineOperation(); 
+                this.TargetText = success ? result.Item2 : string.Empty;
             });
+            await Task.Delay(200);
 
-            return success; 
+            // If successful translation, try to translate back 
+            if (success)
+            {
+                var secondResult = await this.translatorService.Translate(
+                    this.translatorModel.ActiveProvider,
+                    result.Item2,
+                    this.selectedTargetLanguage.LanguageKey,
+                    this.selectedSourceLanguage.LanguageKey);
+                bool secondSuccess = secondResult.Item1;
+                Dispatch.OnUiThread(() =>
+                {
+                    this.TranslatedBackText = secondSuccess ? secondResult.Item2 : string.Empty;
+                });
+            }
+
+            // Regarless of success, complete operation 
+            Dispatch.OnUiThread(this.CompleteOnlineOperation);
+
+            return success;
         }
 
         this.TryOnlineOperation(TryTranslate);
@@ -193,14 +203,18 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
 
     public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
 
+    public string? TranslatedBackText { get => this.Get<string?>(); set => this.Set(value); }
+
     public bool ProgressRingIsActive { get => this.Get<bool>(); set => this.Set(value); }
 
     public ICommand EnterCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
+    public ICommand GoCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+
     public ICommand ClearSourceCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
 
     public ICommand CopyTargetCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-    
+
     public int SelectedSourceLanguageIndex
     {
         get => this.Get<int>();
@@ -252,7 +266,7 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
 
                 // Force a new translation
                 this.lastTranslatedText = string.Empty;
-                this.OnEnter(null);  
+                this.OnEnter(null);
             }
         }
     }

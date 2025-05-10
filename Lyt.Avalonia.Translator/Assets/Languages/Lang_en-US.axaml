@@ -32,7 +32,9 @@
 
 	<!-- Interactive -->
 	<system:String x:Key="Interactive.SourceLanguage">Source Language:</system:String>
+	<system:String x:Key="Interactive.ReverseTranslation">Reverse Translation:</system:String>
 	<system:String x:Key="Interactive.ClearSource">Clear</system:String>
+	<system:String x:Key="Interactive.Go">Go!</system:String>
 	<system:String x:Key="Interactive.TargetLanguage">Target Language:</system:String>
 	<system:String x:Key="Interactive.CopyTarget">Copy</system:String>
 
