@@ -319,7 +319,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
                 string sourceText = this.sourceDictionary[targetKey];
 
-                // DONT Call the service until the UI is complete 
+                // DONT Call the translation service until the UI is complete 
                 //
                 var result =
                     await this.translatorService.Translate(
@@ -328,13 +328,18 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 bool success = result.Item1;
                 string translatedText = result.Item2;
 
+                // Use these lines below to debug the UI, if needed
                 //bool success = true;
                 //string translatedText = "Yolo - " + targetKey;
 
-                Debug.WriteLine(targetLanguageKey + " - " + sourceText);
-                await Task.Delay(999);
+                // Throttle to avoid overwhelming the service 
+                await Task.Delay(666);
+
                 if (success)
                 {
+                    missingTranslations[targetKey] = translatedText;
+
+                    // Update the right side of the view 
                     Dispatch.OnUiThread(() =>
                     {
                         this.SourceText = sourceText;
@@ -342,11 +347,13 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                         this.TargetText = translatedText;
                     });
 
-                    missingTranslations[targetKey] = translatedText;
+                    // Delay so that the UI has a chance to update before the next service call
+                    await Task.Delay(66);
 
-                    await Task.Delay(50);
+                    // Update the counts and status in the View on the left.
+                    // Delay again, same reason 
                     Dispatch.OnUiThread(() => { vm.TranslationAdded(); });
-                    await Task.Delay(50);
+                    await Task.Delay(66);
                 }
                 else
                 {
