@@ -6,7 +6,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 {
     private readonly TranslatorModel translatorModel;
     private readonly TranslatorService translatorService;
-    private readonly RunProjectToolbarViewModel runProjectToolbarViewModel; 
+    private readonly RunProjectToolbarViewModel runProjectToolbarViewModel;
     private readonly IToaster toaster;
 
     private readonly Dictionary<string, Dictionary<string, string>> targetDictionaries;
@@ -19,9 +19,9 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     private bool abortRequested;
 
     public RunProjectViewModel(
-        TranslatorModel translatorModel, 
+        TranslatorModel translatorModel,
         TranslatorService translatorService,
-        RunProjectToolbarViewModel runProjectToolbarViewModel, 
+        RunProjectToolbarViewModel runProjectToolbarViewModel,
         IToaster toaster)
     {
         this.translatorModel = translatorModel;
@@ -93,7 +93,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 currentProject.LastUpdated.ToShortTimeString());
         this.SourceLanguage =
             new LanguageInfoViewModel(Language.Languages[currentProject.SourceLanguageCultureKey]);
-        this.FileFormat = new FileFormatViewModel(currentProject.Format); 
+        this.FileFormat = new FileFormatViewModel(currentProject.Format);
         this.SelectedLanguages = [];
         this.IsInProgress = false;
         this.SourceLanguageLabel = string.Empty;
@@ -243,21 +243,21 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.SourceLanguageKey = string.Empty;
         this.TargetLanguageLabel = string.Empty;
         this.runProjectToolbarViewModel.IsRunning = false;
-        this.TranslationStatus = 
-            this.Localizer.Lookup(aborted ? "RunProject.Aborted" : "RunProject.Idle"); 
+        this.TranslationStatus =
+            this.Localizer.Lookup(aborted ? "RunProject.Aborted" : "RunProject.Idle");
 
         if (aborted)
         {
             // May need to try to save if some translations completed 
 
             this.toaster.Show(
-                this.Localizer.Lookup("Shell.Error"), 
+                this.Localizer.Lookup("Shell.Error"),
                 this.Localizer.Lookup("RunProject.Aborted"),
                 3_000, InformationLevel.Error);
 
             // Reload 
-            this.Populate(); 
-        } 
+            this.Populate();
+        }
     }
 
     private async Task<bool> RunTranslation()
@@ -278,7 +278,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         // Loop through target languages 
         Language sourceLanguage = Language.Languages[currentProject.SourceLanguageCultureKey];
         string sourceLanguageKey = sourceLanguage.LanguageKey;
-        this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  " , sourceLanguage.LocalName); 
+        this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  ", sourceLanguage.LocalName);
 
         foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
         {
@@ -296,32 +296,47 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             this.TargetLanguageLabel = string.Concat(targetLanguage.EnglishName, "  ~  ", targetLanguage.LocalName);
             string targetLanguageKey = targetLanguage.LanguageKey;
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
+
+            void SaveAlreadyTranslated()
+            {
+                if (missingTranslations.Count > 0)
+                {
+                    _ = this.MergeAndSaveTranslations(cultureKey, missingTranslations);
+                }
+            }
+
             foreach (string targetKey in missingTranslations.Keys)
             {
                 if (this.abortRequested)
                 {
-                    Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
+                    Dispatch.OnUiThread(() =>
+                    {
+                        SaveAlreadyTranslated();
+                        this.EndProject(aborted: true);
+                    });
                     return false;
                 }
 
                 string sourceText = this.sourceDictionary[targetKey];
-                string translatedText = "Yolo - " + targetKey;
 
                 // DONT Call the service until the UI is complete 
                 //
-                //var result = 
-                //    await this.translatorService.Translate(
-                //      this.translatorModel.ActiveProvider,
-                //      sourceText, sourceLanguageKey, targetLanguageKey);
-                //bool success = result.Item1;
+                var result =
+                    await this.translatorService.Translate(
+                      this.translatorModel.ActiveProvider,
+                      sourceText, sourceLanguageKey, targetLanguageKey);
+                bool success = result.Item1;
+                string translatedText = result.Item2;
+
+                //bool success = true;
+                //string translatedText = "Yolo - " + targetKey;
 
                 Debug.WriteLine(targetLanguageKey + " - " + sourceText);
                 await Task.Delay(999);
-                bool success = true;
                 if (success)
                 {
-                    Dispatch.OnUiThread(() => 
-                    { 
+                    Dispatch.OnUiThread(() =>
+                    {
                         this.SourceText = sourceText;
                         this.SourceLanguageKey = targetKey;
                         this.TargetText = translatedText;
@@ -336,8 +351,12 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
                 else
                 {
                     this.abortRequested = true;
-                    Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
-                    return false; 
+                    Dispatch.OnUiThread(() =>
+                    {
+                        SaveAlreadyTranslated();
+                        this.EndProject(aborted: true);
+                    });
+                    return false;
                 }
             }
 
@@ -360,23 +379,64 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             return true;
         }
 
-        return false; 
+        return false;
     }
 
-    private bool MergeAndSaveTranslations (
-        string cultureKey, Dictionary<string, string> missingTranslations )
+    private bool MergeAndSaveTranslations(
+        string cultureKey, Dictionary<string, string> missingTranslations)
     {
         try
         {
-            var currentProject = this.translatorModel.ActiveProject;
-            ResourceFormat resourceFormat = currentProject.Format;
-            return true;
+            // Loop through the keys of the source language 
+            Dictionary<string, string> mergedDictionary = [];
+            var targetDictionary = this.targetDictionaries[cultureKey];
+            foreach (string key in this.sourceDictionary.Keys)
+            {
+                // if we already have a translation keep it 
+                bool done = false;
+                if (targetDictionary.TryGetValue(key, out string? maybeTranslated))
+                {
+                    if (!string.IsNullOrEmpty(maybeTranslated))
+                    {
+                        mergedDictionary.Add(key, maybeTranslated);
+                        done = true;
+                    }
+                }
+
+                if (!done)
+                {
+                    // Check if we have it in the provided translations
+                    if (missingTranslations.TryGetValue(key, out string? translated))
+                    {
+                        if (!string.IsNullOrEmpty(translated))
+                        {
+                            mergedDictionary.Add(key, translated);
+                            done = true;
+                        }
+                    }
+                }
+            }
+
+            if (mergedDictionary.Count > 0)
+            {
+
+                var currentProject = this.translatorModel.ActiveProject;
+                ResourceFormat resourceFormat = currentProject.Format;
+                string destinationPath = currentProject.TargetFilePath(cultureKey);
+                TranslatorModel.CreateResourceFile(resourceFormat, destinationPath, mergedDictionary);
+                return true;
+            }
+
+            // Empty ? Should never happen 
+            if (Debugger.IsAttached) { Debugger.Break(); }
+            return false;
         }
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
+            if (Debugger.IsAttached) { Debugger.Break(); }
             return false;
-        } 
+        }
     }
 
     private void NoProject()

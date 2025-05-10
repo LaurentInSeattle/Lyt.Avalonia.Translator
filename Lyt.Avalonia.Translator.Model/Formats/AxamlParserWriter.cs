@@ -1,6 +1,8 @@
-﻿namespace Lyt.Avalonia.Translator.Model.Formats;
+﻿using System.Collections.Generic;
 
-public static class AxamlParserWriter  
+namespace Lyt.Avalonia.Translator.Model.Formats;
+
+public static class AxamlParserWriter
 {
     private const string ResourceDictionaryHeader =
 @"
@@ -18,7 +20,7 @@ public static class AxamlParserWriter
 
     private const string ResourceDictionaryEntryFormat =
 @"
-\t<system:String x:Key=""{0}"">{1}</system:String>
+    <system:String x:Key=""{0}"">{1}</system:String>
 ";
 
     private static readonly List<string> ResourceDictionaryEntryTokens =
@@ -28,48 +30,58 @@ public static class AxamlParserWriter
             "</system:String>"
         ];
 
-    private static readonly int ResourceDictionaryMinimumLength = 
-        ResourceDictionaryHeader.Length + 
-        ResourceDictionaryFooter.Length + 
+    private static readonly int ResourceDictionaryMinimumLength =
+        ResourceDictionaryHeader.Length +
+        ResourceDictionaryFooter.Length +
         ResourceDictionaryEntryFormat.Length;
 
     public static Tuple<bool, Dictionary<string, string>> ParseAxamlResourceFile(string sourcePath)
     {
-        Dictionary<string, string> dictionary = [];
-        string lineStartsWith = ResourceDictionaryEntryTokens[0];
-        string lineSpliter = ResourceDictionaryEntryTokens[1];
-        string lineEndsWith = ResourceDictionaryEntryTokens[2];
-        string[] lines = File.ReadAllLines(sourcePath);
-        foreach (string line in lines)
+        try
         {
-            string trimmedLine = line.Trim();
-            if ((trimmedLine.Length == 0) ||
-                (!trimmedLine.StartsWith(lineStartsWith)) ||
-                (!trimmedLine.EndsWith(lineEndsWith)))
+
+            Dictionary<string, string> dictionary = [];
+            string lineStartsWith = ResourceDictionaryEntryTokens[0];
+            string lineSpliter = ResourceDictionaryEntryTokens[1];
+            string lineEndsWith = ResourceDictionaryEntryTokens[2];
+            string[] lines = File.ReadAllLines(sourcePath);
+            foreach (string line in lines)
             {
-                continue;
+                string trimmedLine = line.Trim();
+                if ((trimmedLine.Length == 0) ||
+                    (!trimmedLine.StartsWith(lineStartsWith)) ||
+                    (!trimmedLine.EndsWith(lineEndsWith)))
+                {
+                    continue;
+                }
+
+                trimmedLine = trimmedLine.Replace(lineStartsWith, string.Empty);
+                trimmedLine = trimmedLine.Replace(lineEndsWith, string.Empty);
+                string[] tokens =
+                    trimmedLine.Split(lineSpliter, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                if (tokens.Length != 2)
+                {
+                    continue;
+                }
+
+                string key = tokens[0];
+                string value = tokens[1];
+                if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
+                {
+                    continue;
+                }
+
+                dictionary.Add(key, value);
             }
 
-            trimmedLine = trimmedLine.Replace(lineStartsWith, string.Empty);
-            trimmedLine = trimmedLine.Replace(lineEndsWith, string.Empty);
-            string[] tokens =
-                trimmedLine.Split(lineSpliter, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            if (tokens.Length != 2)
-            {
-                continue;
-            }
-
-            string key = tokens[0];
-            string value = tokens[1];
-            if (string.IsNullOrWhiteSpace(key) || string.IsNullOrWhiteSpace(value))
-            {
-                continue;
-            }
-
-            dictionary.Add(key, value);
+            return Tuple.Create(true, dictionary);
         }
-
-        return Tuple.Create(true, dictionary);
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            if (Debugger.IsAttached) { Debugger.Break(); }
+            return Tuple.Create(false, new Dictionary<string, string>());
+        }
     }
 
     public static bool CreateAxamlResourceFile(string destinationPath, Dictionary<string, string> dictionary)
@@ -77,6 +89,7 @@ public static class AxamlParserWriter
         try
         {
             StringBuilder stringBuilder = new();
+            stringBuilder.Append(ResourceDictionaryHeader);
             foreach (var item in dictionary)
             {
                 string key = item.Key;
@@ -85,14 +98,17 @@ public static class AxamlParserWriter
                 stringBuilder.Append(line);
             }
 
+            stringBuilder.Append(ResourceDictionaryFooter);
             File.WriteAllText(destinationPath, stringBuilder.ToString());
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            Debug.WriteLine(ex);
+            if (Debugger.IsAttached) { Debugger.Break(); }
             return false;
-        } 
+        }
     }
 }
 
