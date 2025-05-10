@@ -14,4 +14,6 @@ aXaml format for Avalonia applications using Google Translate Web Service.
 
 # In progress: 
 
-- Creating project files 
+- UI Fit and finish 
+- Some minor improvements... 
+- Localization 
