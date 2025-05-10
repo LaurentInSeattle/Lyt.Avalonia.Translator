@@ -31,6 +31,8 @@ public sealed class Language(
         {  "pl-PL" , new Language( "pl-PL", "pl", "Polish", "Polski", "Poland") },
         {  "pt-PT" , new Language( "pt-PT", "pt-PT", "Portuguese", "Português", "Portugal", "Brazil") },
         {  "ro-RO" , new Language( "ro-RO", "ro", "Romanian", "Românesc", "Romania", "Moldova") },
+        {  "hy-AM" , new Language( "hy-AM", "hy-AR", "Armenian", "Հայերէն", "Armenia") },
+        {  "cs-CS" , new Language( "cs-CS", "cs-CS", "Czech", "Čeština", "Czech") },
 
         // To Verify 
         {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體 中文", "China") },
