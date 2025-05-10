@@ -1,6 +1,16 @@
-﻿using System.Collections.Generic;
+﻿namespace Lyt.Avalonia.Translator.Model.Formats;
 
-namespace Lyt.Avalonia.Translator.Model.Formats;
+/*
+
+
+You can define static methods in C# 8 but you must declare a default body for it.
+
+public interface IMyInterface
+{
+      static string GetHello() =>  "Default Hello from interface" ;
+      static void WriteWorld() => Console.WriteLine("Writing World from interface");
+}
+*/
 
 public static class AxamlParserWriter
 {
@@ -35,7 +45,7 @@ public static class AxamlParserWriter
         ResourceDictionaryFooter.Length +
         ResourceDictionaryEntryFormat.Length;
 
-    public static Tuple<bool, Dictionary<string, string>> ParseAxamlResourceFile(string sourcePath)
+    public static Tuple<bool, Dictionary<string, string>> ParseResourceFile(string sourcePath)
     {
         try
         {
@@ -84,7 +94,7 @@ public static class AxamlParserWriter
         }
     }
 
-    public static bool CreateAxamlResourceFile(string destinationPath, Dictionary<string, string> dictionary)
+    public static bool CreateResourceFile(string destinationPath, Dictionary<string, string> dictionary)
     {
         try
         {

@@ -212,8 +212,8 @@ public sealed partial class TranslatorModel : ModelBase
     {
         return resourceFormat switch
         {
-            ResourceFormat.Axaml => AxamlParserWriter.CreateAxamlResourceFile(destinationPath, dictionary),
-            ResourceFormat.Resx => throw new NotImplementedException(nameof(resourceFormat)),
+            ResourceFormat.Axaml => AxamlParserWriter.CreateResourceFile(destinationPath, dictionary),
+            ResourceFormat.Resx => ResxParserWriter.CreateResourceFile(destinationPath, dictionary),
             _ => throw new ArgumentException(null, nameof(resourceFormat)),
         };
     }
@@ -223,8 +223,8 @@ public sealed partial class TranslatorModel : ModelBase
     {
         return resourceFormat switch
         {
-            ResourceFormat.Axaml => AxamlParserWriter.ParseAxamlResourceFile(sourcePath),
-            ResourceFormat.Resx => throw new NotImplementedException(nameof(resourceFormat)),
+            ResourceFormat.Axaml => AxamlParserWriter.ParseResourceFile(sourcePath),
+            ResourceFormat.Resx => ResxParserWriter.ParseResourceFile(sourcePath),
             _ => throw new ArgumentException(null, nameof(resourceFormat)),
         };
     }

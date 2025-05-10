@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:element name="data">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="xsd:string"/>
+        <xsd:attribute name="type" type="xsd:string"/>
+        <xsd:attribute name="mimetype" type="xsd:string"/>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="boolean_key">
+    <value>--- true
+</value>
+  </data>
+  <data name="empty_string_translation">
+    <value/>
+  </data>
+  <data name="key_with_description">
+    <value>Now that's a decsription! (For some formats at least)</value>
+    <comment>This is the superb description for this key!</comment>
+  </data>
+  <data name="key_with_line-break">
+    <value>This translations contains
+a line-break.</value>
+  </data>
+  <data name="nested.deeply.key">
+    <value>I'm a deeply nested key.</value>
+  </data>
+  <data name="nested.key">
+    <value>This key is nested inside a namespace.</value>
+  </data>
+  <data name="null_translation">
+    <value/>
+  </data>
+  <data name="pluralized_key">
+    <value>This could be pluralized.</value>
+  </data>
+  <data name="sample_collection">
+    <value>---
+- first item
+- second item
+- third item
+</value>
+  </data>
+  <data name="simple_key">
+    <value>simple key, simple message, everything so simple.</value>
+  </data>
+  <data name="unverified_key">
+    <value>This translation is not yet verified and is waiting for it. (In some formats we export this status as well)</value>
+  </data>
+</root>

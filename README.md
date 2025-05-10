@@ -1,11 +1,14 @@
-# Work in Progress
+# Still Work in Progress, nearing completion 
 
 # Lyt.Avalonia.Translator
-Automatically generates language resource files for Avalonia applications using Google Translate Web Service 
+Automatically generates language resource files in either ResX format for Microsoft applications or 
+aXaml format for Avalonia applications using Google Translate Web Service. 
 
 # Just in...
 
-- Interactive Translator
+- Projects
+- Translations 
+- Support for ResX format 
 
 <p align="left"><img src="Screenshots\InteractiveTranslator.png" height="500"/>
 
