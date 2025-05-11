@@ -15,6 +15,9 @@ global using System.Net.Sockets;
 global using System.Text;
 global using System.Text.Json.Serialization;
 global using System.Threading.Tasks;
+global using System.Xml;
+global using System.Xml.Linq;
+global using System.Xml.Serialization;
 
 global using Lyt.Avalonia.Interfaces.Localization;
 global using Lyt.Avalonia.Interfaces.Logger;

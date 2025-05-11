@@ -1,8 +1,5 @@
 ﻿namespace Lyt.Avalonia.Translator.Model.Formats;
 
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 
 public static class ResxParserWriter
 {

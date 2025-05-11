@@ -1,69 +1,214 @@
+
 <ResourceDictionary 
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    >
 
-    <!-- é è ê à ò ç -->
-
-    <!-- Toast-->
     <system:String x:Key="Toast.Dismiss">Fermer</system:String>
 
-    <!-- Shell -->
     <system:String x:Key="Shell.AppName">Traducteur</system:String>
+
     <system:String x:Key="Shell.About">A propos...</system:String>
-    <system:String x:Key="Shell.Today">Aujourd'hui</system:String>
-    <system:String x:Key="Shell.Collection">Collection</system:String>
+
+    <system:String x:Key="Shell.Error">Erreur!</system:String>
+
+    <system:String x:Key="Shell.Success">Succès!</system:String>
+
+    <system:String x:Key="Shell.Connected">Internet</system:String>
+
+    <system:String x:Key="Shell.Translate">Interactif</system:String>
+
+    <system:String x:Key="Shell.CreateNew">Nouveau projet</system:String>
+
+    <system:String x:Key="Shell.ProjectList">Liste de projets</system:String>
+
+    <system:String x:Key="Shell.RunProject">Actuel</system:String>
+
     <system:String x:Key="Shell.Settings">Réglages</system:String>
+
     <system:String x:Key="Shell.Language">Langue</system:String>
-    <system:String x:Key="Shell.ToTray">Icone Système</system:String>
+
     <system:String x:Key="Shell.Exit">Quitter</system:String>
+
     <system:String x:Key="Shell.Close">Fermer</system:String>
+
     <system:String x:Key="Shell.Ready">Prêt.</system:String>
+
     <system:String x:Key="Shell.Greetings">Bienvenue dans Traducteur!</system:String>
 
-    <!-- Collection -->
-    <system:String x:Key="Collection.Remove">Supprimer</system:String>
-    <system:String x:Key="Collection.DropZone">Zone de Glisser-déposer</system:String>
-    <system:String x:Key="Collection.DropZoneHelp">Faites glisser et déposez des fichiers ici pour les ajouter à votre collection.</system:String>
+    <system:String x:Key="Interactive.SourceLanguage">Langue source:</system:String>
+
+    <system:String x:Key="Interactive.ReverseTranslation">Traduction inversée:</system:String>
+
+    <system:String x:Key="Interactive.ClearSource">Clair</system:String>
+
+    <system:String x:Key="Interactive.Go">Aller!</system:String>
+
+    <system:String x:Key="Interactive.TargetLanguage">Langue cible:</system:String>
+
+    <system:String x:Key="Interactive.CopyTarget">Copie</system:String>
+
+    <system:String x:Key="CreateNew.DropZone">Zone de traînée et de chute</system:String>
+
+    <system:String x:Key="CreateNew.DropZoneHelp">Faites glisser et déposez ici le fichier contenant les définitions de ressources texte dans la langue source.</system:String>
+
+    <system:String x:Key="CreateNew.ProjectName">Nom du projet:</system:String>
+
+    <system:String x:Key="CreateNew.SourceLanguage">Langue source:</system:String>
+
+    <system:String x:Key="CreateNew.FileFormat">Format de fichier:</system:String>
+
+    <system:String x:Key="CreateNew.SourceFile">Fichier source:</system:String>
+
+    <system:String x:Key="CreateNew.AvailableLanguages">Langues disponibles</system:String>
+
+    <system:String x:Key="CreateNew.TargetLanguages">Langues cibles</system:String>
+
+    <system:String x:Key="CreateNew.FileDoesNotExist">Le fichier n'existe pas</system:String>
+
+    <system:String x:Key="CreateNew.Exception">Erreur inattendue</system:String>
+
+    <system:String x:Key="CreateNew.UnsupportedFileFormat">Format de fichier non pris en charge</system:String>
+
+    <system:String x:Key="CreateNew.UnsupportedCulture">Culture non prise en charge</system:String>
+
+    <system:String x:Key="CreateNew.Untitled">- sans titre -</system:String>
+
+    <system:String x:Key="CreateNew.CantSaveProjectTitle">Impossible de sauvegarder le projet</system:String>
+
+    <system:String x:Key="CreateNew.CantSaveProjectText">Plus d'informations sont nécessaires pour enregistrer le projet.</system:String>
+
+    <system:String x:Key="CreateNew.ProjectSavedTitle">Sauvé.</system:String>
+
+    <system:String x:Key="CreateNew.ProjectSavedText">Ce projet a été sauvé avec succès.</system:String>
+
+    <system:String x:Key="Model.Project.AlreadyExists">Un projet avec ce nom existe déjà.</system:String>
+
+    <system:String x:Key="CreateNew.AddAllLanguages">Toutes les langues</system:String>
+
+    <system:String x:Key="CreateNew.ClearAllLanguages">Supprimer tout</system:String>
+
+    <system:String x:Key="CreateNew.SaveProject">SAVER PROJET</system:String>
+
+    <system:String x:Key="Projects.None">Aucun projet économisé n'a été trouvé.</system:String>
+
+    <system:String x:Key="Projects.ProjectDeleted">Le projet a été supprimé avec succès.</system:String>
+
+    <system:String x:Key="RunProject.NoActiveProject">Aucun projet actif.</system:String>
+
+    <system:String x:Key="RunProject.Run">Courir</system:String>
+
+    <system:String x:Key="RunProject.Stop">Avorter</system:String>
+
+    <system:String x:Key="RunProject.Idle">Inactif.  Ne pas traduire.</system:String>
+
+    <system:String x:Key="RunProject.ProjectInProgress">Traduction en cours ...</system:String>
+
+    <system:String x:Key="RunProject.Aborted">Avorté...</system:String>
+
+    <system:String x:Key="RunProject.Complete">Complet</system:String>
+
+    <system:String x:Key="RunProject.Incomplete">Incomplet, manquant: {0}</system:String>
+
+    <system:String x:Key="RunProject.LanguageInProgress">En cours</system:String>
+
+    <system:String x:Key="Model.Project.Format">Le format de fichier de ressources n'est pas valide ou non pris en charge.</system:String>
+
+    <system:String x:Key="Model.Project.Name">Ce projet n'a pas de nom.</system:String>
+
+    <system:String x:Key="Model.Project.FolderPath">Le répertoire du projet n'est pas valide.</system:String>
+
+    <system:String x:Key="Model.Project.SourceFile">Le fichier source du projet n'est pas valide.</system:String>
+
+    <system:String x:Key="Model.Project.TargetFileFormat">Aucune chaîne de format de fichier cible.</system:String>
+
+    <system:String x:Key="Model.Project.ZeroTargetLanguages">Aucune langue cible n'a été sélectionnée.</system:String>
+
+    <system:String x:Key="Model.Project.InvalidName">Nom du projet non valide.</system:String>
+
+    <system:String x:Key="Model.Project.DoesNotExist">Aucun projet avec un tel nom.</system:String>
+
+    <system:String x:Key="CreateNew.Remove">Retirer</system:String>
+
+    <system:String x:Key="Collection.SaveToDesktop">Enregistrer sur le bureau</system:String>
 
     <system:String x:Key="Collection.Statistics">Statistiques</system:String>
-    <system:String x:Key="Collection.Stats.SizeOnDiskFormat">Espace utilise estime sur le disque: {0} MB (Quota: {1} MB)</system:String>
-    <system:String x:Key="Collection.Stats.AvailableDiskSpaceFormat">Espace disponible sur le disque: {0:F1} GB</system:String>
 
+    <system:String x:Key="Collection.Stats.AlertTextSpace">Faites attention à l'espace disponible sur disque!</system:String>
 
-    <!-- Gallery  -->
-    <system:String x:Key="Gallery.SetWallpaper">En Fond d'Ecran</system:String>
+    <system:String x:Key="Collection.Stats.SizeOnDiskFormat">Utilisation estimée de l'espace disque: {0} MB (quota: {1} MB)</system:String>
+
+    <system:String x:Key="Collection.Stats.AvailableDiskSpaceFormat">Espace disponible sur le disque: {0: f1} gb</system:String>
+
+    <system:String x:Key="Collection.Thumbs.All">Tous</system:String>
+
+    <system:String x:Key="Collection.Thumbs.Recent">Récent</system:String>
+
     <system:String x:Key="Gallery.Add">Ajouter</system:String>
 
-    <!-- Intro  -->
     <system:String x:Key="Intro.AgreeMIT">J'accepte les termes de la licence MIT, Continuer.</system:String>
+
     <system:String x:Key="Intro.LicenseTitle">Termes de la licence.</system:String>
+
     <system:String x:Key="Intro.LicenseSubtitle">Cette application vous est fournie selon les termes de la licence MIT.</system:String>
+
     <system:String x:Key="Intro.LicenseTerms">Cette application vous est fournie gratuitement selon les termes de la licence MIT et, conjointement avec d'autres conditions, n'implique aucune garantie d'aucune sorte. En utilisant ce logiciel, vous acceptez pleinement les termes et conditions de la licence MIT.</system:String>
+
     <system:String x:Key="Intro.ReminderTitle">Un rappel important...</system:String>
+
     <system:String x:Key="Intro.ReminderSubtitle">Quelques points importants à retenir concernant les images téléchargées...</system:String>
+
     <system:String x:Key="Intro.ReminderText">Il vous est recommandé d'utiliser les images téléchargées uniquement comme fond d'écran. Pour toute autre utilisation, commerciale ou non, veuillez contacter le détenteur des droits d'auteur.</system:String>
 
-    <!-- Settings  -->
-    <system:String x:Key="Settings.CleanupNow">Nettoyez Maintenant</system:String>
+    <system:String x:Key="Settings.CleanupNow">Nettoyage maintenant</system:String>
 
-    <system:String x:Key="Settings.Services.Title">Services de téléchargement d'images.</system:String>
-    <system:String x:Key="Settings.Services.Subtitle">Sélectionnez les services Web à partir desquels vous souhaitez télécharger des images.</system:String>
-    <system:String x:Key="Settings.Services.Downloaded">Télécharger</system:String>
     <system:String x:Key="Settings.Services.Skip">Ignorer</system:String>
 
+    <system:String x:Key="Settings.Quota.Title">Paramètres d'utilisation du disque</system:String>
+
+    <system:String x:Key="Settings.Quota.Subtitle">Utilisez ce paramètre pour limiter (ou non) l'utilisation de l'espace sur votre disque pour l'image de votre collection.</system:String>
+
+    <system:String x:Key="Settings.Quota.ImageCount">Compte maximal d'images:</system:String>
+
+    <system:String x:Key="Settings.Quota.DiskSpace">Quota d'espace (MB) sur le disque pour les images:</system:String>
+
+    <system:String x:Key="Settings.Quota.ImageSize">Dimensions de l'archivage de l'image:</system:String>
+
+    <system:String x:Key="Settings.Quota.ImageSize.True">Haute définition (HD)</system:String>
+
+    <system:String x:Key="Settings.Quota.ImageSize.False">Ultra haute définition (UHD / 4K)</system:String>
+
+    <system:String x:Key="Settings.Quota.Exceeded">Ce qui doit être fait lorsque les quotas sont dépassés:</system:String>
+
+    <system:String x:Key="Settings.Quota.Exceeded.True">Supprimer les vieilles images.</system:String>
+
+    <system:String x:Key="Settings.Quota.Exceeded.False">Affichez seulement un message d'avertissement.</system:String>
+
+    <system:String x:Key="Settings.Os.Title">Paramètres du système d'exploitation</system:String>
+
+    <system:String x:Key="Settings.Os.Subtitle">Choisissez certains paramètres du système d'exploitation pour gérer vos images.</system:String>
+
+    <system:String x:Key="Settings.Os.Rotate.True">Oui, périodiquement.</system:String>
+
+    <system:String x:Key="Settings.Os.Rotate.False">Jamais</system:String>
+
     <system:String x:Key="Settings.ReminderTitle">Un rappel important...</system:String>
+
     <system:String x:Key="Settings.ReminderSubtitle">Quelques points importants à retenir concernant les images téléchargées...</system:String>
+
     <system:String x:Key="Settings.ReminderText">Il vous est recommandé d'utiliser les images téléchargées uniquement comme fond d'écran. Pour toute autre utilisation, commerciale ou non, veuillez contacter le détenteur des droits d'auteur.</system:String>
 
-    <!-- Shared  -->
+    <system:String x:Key="Shared.NoImage">Pas d'image</system:String>
+
     <system:String x:Key="Shared.FileErrorTitle">Erreur du systeme de fichiers.</system:String>
+
     <system:String x:Key="Shared.FileErrorText">Impossible de sauvegarder le ficher de cette image.</system:String>
 
-    <!-- Tray  -->
-    <system:String x:Key="Tray.Settings">Réglages</system:String>
-    <system:String x:Key="Tray.ImageInfo">A propos de cette image.</system:String>
+    <system:String x:Key="Tray.OpenCollection">Ouvrez la collection d'images</system:String>
 
-    <!-- Model / Service -->
+    <system:String x:Key="Tray.Settings">Paramètres</system:String>
+
+    <system:String x:Key="Tray.ImageInfo">À propos de cette image ...</system:String>
 
 </ResourceDictionary>

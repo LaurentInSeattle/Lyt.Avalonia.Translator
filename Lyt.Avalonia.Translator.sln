@@ -7,7 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Screenshots\InteractiveTranslator.png = Screenshots\InteractiveTranslator.png
 		LICENSE = LICENSE
+		Screenshots\OpenProject.png = Screenshots\OpenProject.png
+		Screenshots\ProjectSetup.png = Screenshots\ProjectSetup.png
 		README.md = README.md
+		Screenshots\Translating.png = Screenshots\Translating.png
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Translator.Service", "Lyt.Avalonia.Translator.Service\Lyt.Avalonia.Translator.Service.csproj", "{ABC0C2CC-6545-4A83-8AD0-32ACEBE39114}"
