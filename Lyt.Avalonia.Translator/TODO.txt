@@ -1,15 +1,13 @@
 ﻿BUG
-	- Error message not alsways cleared in Create view
+	- Error message not always cleared in Create view
 	- Enable / Disable some buttons in Toolbars 
 
 MUST DO
-	- Interactive: show text translated from translated target back to source.
-	- Interactive: Add a translate button.
 	- Interactive: Add a Swap languages button.
 	- Create: Align labels to the right  
 	- Ability to add  / remove languages to a project 
 
 NTH 
 	- GroupBox like border in Create
-	- Add some flags to project tiles? 
+	- Project List: Add some flags to project tiles? 
 	- Make Toolbar a framework control
