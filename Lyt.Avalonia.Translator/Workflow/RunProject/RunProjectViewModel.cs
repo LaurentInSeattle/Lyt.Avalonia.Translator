@@ -212,7 +212,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.isPopulated = true;
     }
 
-
     private void StartProject()
     {
         if (!this.isPopulated)

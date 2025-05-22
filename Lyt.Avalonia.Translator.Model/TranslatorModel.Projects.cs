@@ -95,6 +95,7 @@ public sealed partial class TranslatorModel : ModelBase
         project.LastUpdated = DateTime.Now;
         this.Projects.Add(project);
         this.Save();
+        this.SaveProjectFile(project);
         return true;
     }
 
@@ -112,5 +113,19 @@ public sealed partial class TranslatorModel : ModelBase
         this.Projects.Remove(existingProject);
         this.Save();
         return true;
+    }
+
+    public void SaveProjectFile(Project project)
+    {
+        try
+        {
+            var projectFileId =
+                new FileId(FileManagerModel.Area.User, FileManagerModel.Kind.Json, project.Name);
+            this.fileManager.Save(projectFileId, project);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);    
+        }
     }
 }

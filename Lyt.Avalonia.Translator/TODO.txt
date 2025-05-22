@@ -3,9 +3,10 @@
 	- Enable / Disable some buttons in Toolbars 
 
 MUST DO
+	- Must move translation operations to Model 
 	- Interactive: Add a Swap languages button.
 	- Create: Align labels to the right  
-	- Ability to add  / remove languages to a project 
+	- Ability to edit (add  / remove languages to)  a project 
 
 NTH 
 	- GroupBox like border in Create

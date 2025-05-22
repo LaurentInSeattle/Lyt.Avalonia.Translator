@@ -35,6 +35,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Translator.Service", "..\Lyt.Avalonia.Framework\Lyt.Avalonia.Translator.Service\Lyt.Avalonia.Translator.Service.csproj", "{07D25B58-C933-1781-7022-C8D8010E7A81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Translator.Cli", "Lyt.Translator.Cli\Lyt.Translator.Cli.csproj", "{91244C02-36CE-479E-9052-FB0EECEA0614}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Console", "..\Lyt.Avalonia.Framework\Lyt.Console\Lyt.Console.csproj", "{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Messenger", "..\Lyt.Avalonia.Framework\Lyt.Messenger\Lyt.Messenger.csproj", "{BC7AC4F3-B23E-2E6B-A651-1844E619C879}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +87,18 @@ Global
 		{07D25B58-C933-1781-7022-C8D8010E7A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D25B58-C933-1781-7022-C8D8010E7A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07D25B58-C933-1781-7022-C8D8010E7A81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91244C02-36CE-479E-9052-FB0EECEA0614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91244C02-36CE-479E-9052-FB0EECEA0614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91244C02-36CE-479E-9052-FB0EECEA0614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91244C02-36CE-479E-9052-FB0EECEA0614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -93,6 +111,8 @@ Global
 		{9C34DA41-0836-77C1-6BE5-37F92A902C2F} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 		{6C151D29-9502-21F6-3646-7D8EC1E556D6} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 		{07D25B58-C933-1781-7022-C8D8010E7A81} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
+		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
+		{BC7AC4F3-B23E-2E6B-A651-1844E619C879} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E157FA9-8A82-43D6-A048-7E82D2534F3F}

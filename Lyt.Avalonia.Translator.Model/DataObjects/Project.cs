@@ -7,10 +7,8 @@ public sealed class Project
     [JsonRequired]
     public required string Name { get; set; } = string.Empty;
 
-    [JsonRequired]
     public required DateTime Created { get; set; } = DateTime.Now;
 
-    [JsonRequired]
     public required DateTime LastUpdated { get; set; } = DateTime.Now;
 
     [JsonRequired]
