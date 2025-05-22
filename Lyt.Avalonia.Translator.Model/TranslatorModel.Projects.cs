@@ -125,7 +125,305 @@ public sealed partial class TranslatorModel : ModelBase
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);    
+            Debug.WriteLine(ex);
+        }
+    }
+
+    public bool PrepareForRunningProject(out string errorMessage)
+    {
+        this.isReadyToRun = false;
+        var currentProject = this.ActiveProject;
+        if ((currentProject is null) || currentProject.IsInvalid)
+        {
+            errorMessage = "No active project";
+            // errorMessage = this.Localizer.Lookup("RunProject.NoActiveProject");
+            return false;
+        }
+
+        if (!this.LoadDictionaries(currentProject, out errorMessage))
+        {
+            return false;
+        }
+
+        if (!this.FindMissingTranslations(currentProject, out errorMessage))
+        {
+            return false;
+        }
+
+        this.isReadyToRun = true;
+        return true;
+    }
+
+    public void AbortProject() => this.abortRequested = true;
+
+    public async Task<bool> RunProject()
+    {
+        var currentProject = this.ActiveProject;
+        if (!this.isReadyToRun || (currentProject is null) || currentProject.IsInvalid)
+        {
+            // Error: no active project 
+            return false;
+        }
+
+        this.abortRequested = false;
+
+        // Loop through target languages 
+        Language sourceLanguage = DataObjects.Language.Languages[currentProject.SourceLanguageCultureKey];
+        string sourceLanguageKey = sourceLanguage.LanguageKey;
+
+        //this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  ", sourceLanguage.LocalName);
+
+        foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+        {
+            //ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[cultureKey];
+            //Dispatch.OnUiThread(() => { vm.InProgress(); });
+
+            if (this.abortRequested)
+            {
+                // Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
+                return false;
+            }
+
+            // Loop through missing target language strings 
+            Language targetLanguage = DataObjects.Language.Languages[cultureKey];
+            // this.TargetLanguageLabel = string.Concat(targetLanguage.EnglishName, "  ~  ", targetLanguage.LocalName);
+            string targetLanguageKey = targetLanguage.LanguageKey;
+            var missingTranslations = this.needTranslationDictionaries[cultureKey];
+
+            void SaveAlreadyTranslated()
+            {
+                if (missingTranslations.Count > 0)
+                {
+                    _ = this.MergeAndSaveTranslations(cultureKey, missingTranslations);
+                }
+            }
+
+            foreach (string targetKey in missingTranslations.Keys)
+            {
+                if (this.abortRequested)
+                {
+                    SaveAlreadyTranslated();
+
+                    //Dispatch.OnUiThread(() =>
+                    //{
+                    //    this.EndProject(aborted: true);
+                    //});
+                    return false;
+                }
+
+                string sourceText = this.sourceDictionary[targetKey];
+
+                // DONT Call the translation service until the UI is complete 
+                //
+                var result =
+                    await this.translatorService.Translate(
+                        this.ActiveProvider,
+                        sourceText, sourceLanguageKey, targetLanguageKey);
+                bool success = result.Item1;
+                string translatedText = result.Item2;
+
+                // Use these lines below to debug the UI, if needed
+                //bool success = true;
+                //string translatedText = "Yolo - " + targetKey;
+
+                // Throttle to avoid overwhelming the service 
+                await Task.Delay(666);
+
+                if (success)
+                {
+                    missingTranslations[targetKey] = translatedText;
+
+                    // Update the right side of the view 
+                    //Dispatch.OnUiThread(() =>
+                    //{
+                    //    this.SourceText = sourceText;
+                    //    this.SourceLanguageKey = targetKey;
+                    //    this.TargetText = translatedText;
+                    //});
+
+                    // Delay so that the UI has a chance to update before the next service call
+                    await Task.Delay(66);
+
+                    // Update the counts and status in the View on the left.
+                    // Delay again, same reason 
+                    // Dispatch.OnUiThread(() => { vm.TranslationAdded(); });
+                    await Task.Delay(66);
+                }
+                else
+                {
+                    this.abortRequested = true;
+                    SaveAlreadyTranslated();
+
+                    //Dispatch.OnUiThread(() =>
+                    //{
+                    //    this.EndProject(aborted: true);
+                    //});
+                    return false;
+                }
+            }
+
+            // Save translations in chosen format 
+            if (this.MergeAndSaveTranslations(cultureKey, missingTranslations))
+            {
+                // Dispatch.OnUiThread(() => { vm.SetComplete(0); });
+            }
+            else
+            {
+                // Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
+                return false;
+            }
+        }
+
+        // Complete 
+        if (!this.abortRequested)
+        {
+            // Dispatch.OnUiThread(() => { this.EndProject(aborted: false); });
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool LoadDictionaries(Project currentProject, out string errorMessage)
+    {
+        errorMessage = string.Empty;
+        ResourceFormat resourceFormat = currentProject.Format;
+        string sourcePath = currentProject.SourceFilePath();
+        var sourceResult = TranslatorModel.ParseResourceFile(resourceFormat, sourcePath);
+        bool sourceLoaded = sourceResult.Item1;
+        if (!sourceLoaded)
+        {
+            // errorMessage = this.Localizer.Lookup("RunProject.FailedLoadingSource");
+            return false;
+        }
+
+        this.sourceDictionary = sourceResult.Item2;
+        this.targetDictionaries.Clear();
+
+        // Loop through target languages 
+        // Check whether of not we have existing translations, if we do load them 
+        // if the file is not there create an empty dictionary 
+        foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+        {
+            string targetPath = currentProject.TargetFilePath(cultureKey);
+            Dictionary<string, string> targetDictionary = [];
+            if (File.Exists(targetPath))
+            {
+                var targetResult = TranslatorModel.ParseResourceFile(resourceFormat, targetPath);
+                if (targetResult.Item1)
+                {
+                    targetDictionary = targetResult.Item2;
+                }
+            }
+
+            this.targetDictionaries.Add(cultureKey, targetDictionary);
+        }
+
+        return true;
+    }
+
+    private bool FindMissingTranslations(Project currentProject, out string errorMessage)
+    {
+        errorMessage = string.Empty;
+        this.needTranslationDictionaries.Clear();
+        this.missingEntries.Clear();
+
+        // Loop through the list of target languages to initialize the nested dictionary 
+        foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+        {
+            this.needTranslationDictionaries.Add(cultureKey, []);
+        }
+
+        // Loop again through the keys of the source language to populate 
+        foreach (string languageKey in this.sourceDictionary.Keys)
+        {
+            // Loop through target languages 
+            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+            {
+                var dictionary = this.targetDictionaries[cultureKey];
+                var needed = this.needTranslationDictionaries[cultureKey];
+                if (dictionary.TryGetValue(languageKey, out string? value))
+                {
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        // Empty translation: Add key and empty string
+                        needed.Add(languageKey, string.Empty);
+                    }
+
+                    // We have a translation: dont change it
+                }
+                else
+                {
+                    // Missing translation: Add key and empty string
+                    needed.Add(languageKey, string.Empty);
+                }
+            }
+        }
+
+        // Loop through the list of target languages to initialize the count of missing entries 
+        foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
+        {
+            int missingEntries = this.needTranslationDictionaries[cultureKey].Values.Count;
+            this.missingEntries.Add(cultureKey, missingEntries);
+        }
+
+        return true;
+    }
+
+    private bool MergeAndSaveTranslations(
+        string cultureKey, Dictionary<string, string> missingTranslations)
+    {
+        try
+        {
+            // Loop through the keys of the source language 
+            Dictionary<string, string> mergedDictionary = [];
+            var targetDictionary = this.targetDictionaries[cultureKey];
+            foreach (string key in this.sourceDictionary.Keys)
+            {
+                // if we already have a translation keep it 
+                bool done = false;
+                if (targetDictionary.TryGetValue(key, out string? maybeTranslated))
+                {
+                    if (!string.IsNullOrEmpty(maybeTranslated))
+                    {
+                        mergedDictionary.Add(key, maybeTranslated);
+                        done = true;
+                    }
+                }
+
+                if (!done)
+                {
+                    // Check if we have it in the provided translations
+                    if (missingTranslations.TryGetValue(key, out string? translated))
+                    {
+                        if (!string.IsNullOrEmpty(translated))
+                        {
+                            mergedDictionary.Add(key, translated);
+                            done = true;
+                        }
+                    }
+                }
+            }
+
+            if (mergedDictionary.Count > 0)
+            {
+
+                var currentProject = this.ActiveProject;
+                ResourceFormat resourceFormat = currentProject.Format;
+                string destinationPath = currentProject.TargetFilePath(cultureKey);
+                TranslatorModel.CreateResourceFile(resourceFormat, destinationPath, mergedDictionary);
+                return true;
+            }
+
+            // Empty ? Should never happen 
+            if (Debugger.IsAttached) { Debugger.Break(); }
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            if (Debugger.IsAttached) { Debugger.Break(); }
+            return false;
         }
     }
 }

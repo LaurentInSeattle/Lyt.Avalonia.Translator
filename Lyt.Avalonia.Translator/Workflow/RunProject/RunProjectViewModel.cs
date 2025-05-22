@@ -230,6 +230,18 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.runProjectToolbarViewModel.IsRunning = true;
         this.abortRequested = false;
         this.TranslationStatus = this.Localizer.Lookup("RunProject.ProjectInProgress");
+        if ((currentProject is null) || currentProject.IsInvalid)
+        {
+            // Error: no active project 
+            this.NoProject() ;
+            return ;
+        }
+
+        this.IsInProgress = true;
+        this.SourceLanguageLabel = string.Empty;
+        this.SourceLanguageKey = string.Empty;
+        this.TargetLanguageLabel = string.Empty;
+
         Task.Run(this.RunTranslation);
     }
 
@@ -262,17 +274,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     private async Task<bool> RunTranslation()
     {
         var currentProject = this.translatorModel.ActiveProject;
-        if ((currentProject is null) || currentProject.IsInvalid)
-        {
-            // Error: no active project 
-            Dispatch.OnUiThread(this.NoProject);
-            return false;
-        }
-
-        this.IsInProgress = true;
-        this.SourceLanguageLabel = string.Empty;
-        this.SourceLanguageKey = string.Empty;
-        this.TargetLanguageLabel = string.Empty;
 
         // Loop through target languages 
         Language sourceLanguage = Language.Languages[currentProject.SourceLanguageCultureKey];
