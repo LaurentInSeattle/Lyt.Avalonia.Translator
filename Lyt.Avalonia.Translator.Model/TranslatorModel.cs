@@ -1,5 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Model;
 
+using Lyt.Avalonia.Interfaces.Dispatch;
 using static FileManagerModel;
 
 public sealed partial class TranslatorModel : ModelBase
@@ -21,6 +22,7 @@ public sealed partial class TranslatorModel : ModelBase
 
     private readonly FileManagerModel fileManager;
     private readonly TranslatorService translatorService;
+    private readonly IDispatch dispatcher; 
     private readonly ILocalizer localizer;
     private readonly Lock lockObject = new();
     private readonly FileId modelFileId;
@@ -47,12 +49,14 @@ public sealed partial class TranslatorModel : ModelBase
     public TranslatorModel(
         FileManagerModel fileManager,
         TranslatorService translatorService,
+        IDispatch dispatcher,
         ILocalizer localizer,
         IMessenger messenger,
         ILogger logger) : base(messenger, logger)
     {
         this.fileManager = fileManager;
         this.translatorService = translatorService;
+        this.dispatcher = dispatcher;
         this.localizer = localizer;
         this.modelFileId = new FileId(Area.User, Kind.Json, TranslatorModel.TranslatorModelFilename);
         this.ShouldAutoSave = true;

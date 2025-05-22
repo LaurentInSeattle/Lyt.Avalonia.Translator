@@ -5,44 +5,59 @@ using static ToolbarCommandMessage;
 public sealed class RunProjectViewModel : Bindable<RunProjectView>
 {
     private readonly TranslatorModel translatorModel;
-    private readonly TranslatorService translatorService;
     private readonly RunProjectToolbarViewModel runProjectToolbarViewModel;
     private readonly IToaster toaster;
 
-    private readonly Dictionary<string, Dictionary<string, string>> targetDictionaries;
-    private readonly Dictionary<string, Dictionary<string, string>> needTranslationDictionaries;
-    private readonly Dictionary<string, int> missingEntries;
     private readonly Dictionary<string, ExtLanguageInfoViewModel> targetLanguageViewModels;
-
-    private Dictionary<string, string> sourceDictionary;
     private bool isPopulated;
-    private bool abortRequested;
 
     public RunProjectViewModel(
         TranslatorModel translatorModel,
-        TranslatorService translatorService,
         RunProjectToolbarViewModel runProjectToolbarViewModel,
         IToaster toaster)
     {
         this.translatorModel = translatorModel;
-        this.translatorService = translatorService;
         this.runProjectToolbarViewModel = runProjectToolbarViewModel;
         this.toaster = toaster;
 
         this.DisablePropertyChangedLogging = true;
-        this.sourceDictionary = [];
-        this.targetDictionaries = [];
-        this.needTranslationDictionaries = [];
-        this.missingEntries = [];
         this.SelectedLanguages = [];
         this.targetLanguageViewModels = [];
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+        this.Messenger.Subscribe<BeginSourceLanguageMessage>(this.OnBeginSourceLanguage, withUiDispatch: true);
+        this.Messenger.Subscribe<BeginTargetLanguageMessage>(this.OnTargetSourceLanguage, withUiDispatch: true);
+        this.Messenger.Subscribe<TranslationAddedMessage>(this.OnTranslationAdded, withUiDispatch: true);
     }
 
     public override void Activate(object? activationParameters)
     {
         base.Activate(activationParameters);
         Dispatch.OnUiThread(this.Populate);
+    }
+
+    private void OnBeginSourceLanguage(BeginSourceLanguageMessage message)
+    {
+        this.SourceLanguageLabel = 
+            string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+    }
+
+    private void OnTargetSourceLanguage(BeginTargetLanguageMessage message)
+    {
+        ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.CultureKey];
+        vm.InProgress();
+        this.TargetLanguageLabel = string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+    }
+
+    private void OnTranslationAdded(TranslationAddedMessage message)
+    {
+        // Update the right side of the view 
+        this.SourceText = message.SourceText;
+        this.SourceLanguageKey = message.TargetLanguageKey;
+        this.TargetText = message.TargetText;
+
+        // Update the counts and status in the View on the left.
+        ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.TargetLanguageKey];
+        vm.TranslationAdded();
     }
 
     private void OnToolbarCommand(ToolbarCommandMessage message)
@@ -81,7 +96,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             return;
         }
 
-        ResourceFormat resourceFormat = currentProject.Format;
         this.TranslationStatus = this.Localizer.Lookup("RunProject.Idle");
         this.ErrorMessage = string.Empty;
         this.ProjectName = currentProject.Name;
@@ -100,85 +114,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.SourceLanguageKey = string.Empty;
         this.TargetLanguageLabel = string.Empty;
 
-        void LoadDictionaries()
-        {
-            string sourcePath = currentProject.SourceFilePath();
-            var sourceResult = TranslatorModel.ParseResourceFile(resourceFormat, sourcePath);
-            bool sourceLoaded = sourceResult.Item1;
-            if (!sourceLoaded)
-            {
-                this.ErrorMessage = this.Localizer.Lookup("RunProject.FailedLoadingSource");
-                return;
-            }
-
-            this.sourceDictionary = sourceResult.Item2;
-            this.targetDictionaries.Clear();
-
-            // Loop through target languages 
-            // Check whether of not we have existing translations, if we do load them 
-            // if the file is not there create an empty dictionary 
-            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-            {
-                string targetPath = currentProject.TargetFilePath(cultureKey);
-                Dictionary<string, string> targetDictionary = [];
-                if (File.Exists(targetPath))
-                {
-                    var targetResult = TranslatorModel.ParseResourceFile(resourceFormat, targetPath);
-                    if (targetResult.Item1)
-                    {
-                        targetDictionary = targetResult.Item2;
-                    }
-                }
-
-                this.targetDictionaries.Add(cultureKey, targetDictionary);
-            }
-        }
-
-        void FindMissingTranslations()
-        {
-            this.needTranslationDictionaries.Clear();
-            this.missingEntries.Clear();
-
-            // Loop through the list of target languages to initialize the nested dictionary 
-            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-            {
-                this.needTranslationDictionaries.Add(cultureKey, []);
-            }
-
-            // Loop again through the keys of the source language to populate 
-            foreach (string languageKey in this.sourceDictionary.Keys)
-            {
-                // Loop through target languages 
-                foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-                {
-                    var dictionary = this.targetDictionaries[cultureKey];
-                    var needed = this.needTranslationDictionaries[cultureKey];
-                    if (dictionary.TryGetValue(languageKey, out string? value))
-                    {
-                        if (string.IsNullOrWhiteSpace(value))
-                        {
-                            // Empty translation: Add key and empty string
-                            needed.Add(languageKey, string.Empty);
-                        }
-
-                        // We have a translation: dont change it
-                    }
-                    else
-                    {
-                        // Missing translation: Add key and empty string
-                        needed.Add(languageKey, string.Empty);
-                    }
-                }
-            }
-
-            // Loop through the list of target languages to initialize the count of missing entries 
-            foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-            {
-                int missingEntries = this.needTranslationDictionaries[cultureKey].Values.Count;
-                this.missingEntries.Add(cultureKey, missingEntries);
-            }
-        }
-
         void PopulateTargetLanguages()
         {
             this.targetLanguageViewModels.Clear();
@@ -188,7 +123,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
             foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
             {
                 ExtLanguageInfoViewModel vm = new(Language.Languages[cultureKey]);
-                int missingEntries = this.missingEntries[cultureKey];
+                int missingEntries = this.translatorModel.MissingEntriesCount(cultureKey);
                 vm.SetComplete(missing: missingEntries);
                 this.targetLanguageViewModels.Add(cultureKey, vm);
             }
@@ -198,8 +133,12 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
         try
         {
-            LoadDictionaries();
-            FindMissingTranslations();
+            if ( !this.translatorModel.PrepareForRunningProject(out string errorMessage))
+            {
+                this.ErrorMessage = this.Localizer.Lookup("RunProject.FailedLoadingSource");
+                return ;
+            }
+
             PopulateTargetLanguages();
         }
         catch (Exception ex)
@@ -228,7 +167,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         }
 
         this.runProjectToolbarViewModel.IsRunning = true;
-        this.abortRequested = false;
         this.TranslationStatus = this.Localizer.Lookup("RunProject.ProjectInProgress");
         if ((currentProject is null) || currentProject.IsInvalid)
         {
@@ -245,7 +183,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         Task.Run(this.RunTranslation);
     }
 
-    private void StopProject() => this.abortRequested = true;
+    private void StopProject() => this.translatorModel.AbortProject() ;
 
     private void EndProject(bool aborted)
     {
@@ -259,191 +197,20 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
         if (aborted)
         {
-            // May need to try to save if some translations completed 
-
             this.toaster.Show(
                 this.Localizer.Lookup("Shell.Error"),
                 this.Localizer.Lookup("RunProject.Aborted"),
                 3_000, InformationLevel.Error);
 
-            // Reload 
+            // Reload to update current state
             this.Populate();
         }
     }
 
     private async Task<bool> RunTranslation()
     {
-        var currentProject = this.translatorModel.ActiveProject;
-
-        // Loop through target languages 
-        Language sourceLanguage = Language.Languages[currentProject.SourceLanguageCultureKey];
-        string sourceLanguageKey = sourceLanguage.LanguageKey;
-        this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  ", sourceLanguage.LocalName);
-
-        foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
-        {
-            ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[cultureKey];
-            Dispatch.OnUiThread(() => { vm.InProgress(); });
-
-            if (this.abortRequested)
-            {
-                Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
-                return false;
-            }
-
-            // Loop through missing target language strings 
-            Language targetLanguage = Language.Languages[cultureKey];
-            this.TargetLanguageLabel = string.Concat(targetLanguage.EnglishName, "  ~  ", targetLanguage.LocalName);
-            string targetLanguageKey = targetLanguage.LanguageKey;
-            var missingTranslations = this.needTranslationDictionaries[cultureKey];
-
-            void SaveAlreadyTranslated()
-            {
-                if (missingTranslations.Count > 0)
-                {
-                    _ = this.MergeAndSaveTranslations(cultureKey, missingTranslations);
-                }
-            }
-
-            foreach (string targetKey in missingTranslations.Keys)
-            {
-                if (this.abortRequested)
-                {
-                    Dispatch.OnUiThread(() =>
-                    {
-                        SaveAlreadyTranslated();
-                        this.EndProject(aborted: true);
-                    });
-                    return false;
-                }
-
-                string sourceText = this.sourceDictionary[targetKey];
-
-                // DONT Call the translation service until the UI is complete 
-                //
-                var result =
-                    await this.translatorService.Translate(
-                      this.translatorModel.ActiveProvider,
-                      sourceText, sourceLanguageKey, targetLanguageKey);
-                bool success = result.Item1;
-                string translatedText = result.Item2;
-
-                // Use these lines below to debug the UI, if needed
-                //bool success = true;
-                //string translatedText = "Yolo - " + targetKey;
-
-                // Throttle to avoid overwhelming the service 
-                await Task.Delay(666);
-
-                if (success)
-                {
-                    missingTranslations[targetKey] = translatedText;
-
-                    // Update the right side of the view 
-                    Dispatch.OnUiThread(() =>
-                    {
-                        this.SourceText = sourceText;
-                        this.SourceLanguageKey = targetKey;
-                        this.TargetText = translatedText;
-                    });
-
-                    // Delay so that the UI has a chance to update before the next service call
-                    await Task.Delay(66);
-
-                    // Update the counts and status in the View on the left.
-                    // Delay again, same reason 
-                    Dispatch.OnUiThread(() => { vm.TranslationAdded(); });
-                    await Task.Delay(66);
-                }
-                else
-                {
-                    this.abortRequested = true;
-                    Dispatch.OnUiThread(() =>
-                    {
-                        SaveAlreadyTranslated();
-                        this.EndProject(aborted: true);
-                    });
-                    return false;
-                }
-            }
-
-            // Save translations in chosen format 
-            if (this.MergeAndSaveTranslations(cultureKey, missingTranslations))
-            {
-                Dispatch.OnUiThread(() => { vm.SetComplete(0); });
-            }
-            else
-            {
-                Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
-                return false;
-            }
-        }
-
-        // Complete 
-        if (!this.abortRequested)
-        {
-            Dispatch.OnUiThread(() => { this.EndProject(aborted: false); });
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool MergeAndSaveTranslations(
-        string cultureKey, Dictionary<string, string> missingTranslations)
-    {
-        try
-        {
-            // Loop through the keys of the source language 
-            Dictionary<string, string> mergedDictionary = [];
-            var targetDictionary = this.targetDictionaries[cultureKey];
-            foreach (string key in this.sourceDictionary.Keys)
-            {
-                // if we already have a translation keep it 
-                bool done = false;
-                if (targetDictionary.TryGetValue(key, out string? maybeTranslated))
-                {
-                    if (!string.IsNullOrEmpty(maybeTranslated))
-                    {
-                        mergedDictionary.Add(key, maybeTranslated);
-                        done = true;
-                    }
-                }
-
-                if (!done)
-                {
-                    // Check if we have it in the provided translations
-                    if (missingTranslations.TryGetValue(key, out string? translated))
-                    {
-                        if (!string.IsNullOrEmpty(translated))
-                        {
-                            mergedDictionary.Add(key, translated);
-                            done = true;
-                        }
-                    }
-                }
-            }
-
-            if (mergedDictionary.Count > 0)
-            {
-
-                var currentProject = this.translatorModel.ActiveProject;
-                ResourceFormat resourceFormat = currentProject.Format;
-                string destinationPath = currentProject.TargetFilePath(cultureKey);
-                TranslatorModel.CreateResourceFile(resourceFormat, destinationPath, mergedDictionary);
-                return true;
-            }
-
-            // Empty ? Should never happen 
-            if (Debugger.IsAttached) { Debugger.Break(); }
-            return false;
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine(ex);
-            if (Debugger.IsAttached) { Debugger.Break(); }
-            return false;
-        }
+        bool status = await this.translatorModel.RunProject(this.EndProject); 
+        return status;
     }
 
     private void NoProject()
@@ -453,6 +220,8 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.TranslationStatus = string.Empty;
         this.ErrorMessage = this.Localizer.Lookup("RunProject.NoActiveProject");
     }
+
+    #region Bound Properties 
 
     public string? ErrorMessage { get => this.Get<string?>(); set => this.Set(value); }
 
@@ -491,4 +260,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         get => this.Get<FileFormatViewModel?>();
         set => this.Set(value);
     }
+
+    #endregion Bound Properties 
 }

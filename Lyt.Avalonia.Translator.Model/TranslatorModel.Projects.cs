@@ -1,4 +1,6 @@
-﻿namespace Lyt.Avalonia.Translator.Model;
+﻿using Lyt.Avalonia.Translator.Model.Messaging;
+
+namespace Lyt.Avalonia.Translator.Model;
 
 public sealed partial class TranslatorModel : ModelBase
 {
@@ -156,7 +158,17 @@ public sealed partial class TranslatorModel : ModelBase
 
     public void AbortProject() => this.abortRequested = true;
 
-    public async Task<bool> RunProject()
+    public int MissingEntriesCount(string key)
+    {
+        if (this.missingEntries.TryGetValue(key, out int entries))
+        {
+            return entries;
+        }
+
+        return 0;
+    } 
+
+    public async Task<bool> RunProject(Action<bool> endProject)
     {
         var currentProject = this.ActiveProject;
         if (!this.isReadyToRun || (currentProject is null) || currentProject.IsInvalid)
@@ -171,22 +183,24 @@ public sealed partial class TranslatorModel : ModelBase
         Language sourceLanguage = DataObjects.Language.Languages[currentProject.SourceLanguageCultureKey];
         string sourceLanguageKey = sourceLanguage.LanguageKey;
 
-        //this.SourceLanguageLabel = string.Concat(sourceLanguage.EnglishName, "  ~  ", sourceLanguage.LocalName);
+        // Begin source language 
+        this.Messenger.Publish(
+            new BeginSourceLanguageMessage(sourceLanguageKey, sourceLanguage.EnglishName, sourceLanguage.LocalName));
 
         foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
         {
-            //ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[cultureKey];
-            //Dispatch.OnUiThread(() => { vm.InProgress(); });
-
             if (this.abortRequested)
             {
-                // Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
+                this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
                 return false;
             }
 
             // Loop through missing target language strings 
             Language targetLanguage = DataObjects.Language.Languages[cultureKey];
-            // this.TargetLanguageLabel = string.Concat(targetLanguage.EnglishName, "  ~  ", targetLanguage.LocalName);
+            // Begin target language 
+            this.Messenger.Publish(
+                new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName)); 
+
             string targetLanguageKey = targetLanguage.LanguageKey;
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
 
@@ -203,11 +217,7 @@ public sealed partial class TranslatorModel : ModelBase
                 if (this.abortRequested)
                 {
                     SaveAlreadyTranslated();
-
-                    //Dispatch.OnUiThread(() =>
-                    //{
-                    //    this.EndProject(aborted: true);
-                    //});
+                    this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
                     return false;
                 }
 
@@ -233,31 +243,19 @@ public sealed partial class TranslatorModel : ModelBase
                 {
                     missingTranslations[targetKey] = translatedText;
 
-                    // Update the right side of the view 
-                    //Dispatch.OnUiThread(() =>
-                    //{
-                    //    this.SourceText = sourceText;
-                    //    this.SourceLanguageKey = targetKey;
-                    //    this.TargetText = translatedText;
-                    //});
-
+                    // Message Translation Added 
+                    this.Messenger.Publish(
+                        new TranslationAddedMessage(
+                            sourceLanguageKey, cultureKey, 
+                            sourceText, translatedText));
                     // Delay so that the UI has a chance to update before the next service call
-                    await Task.Delay(66);
-
-                    // Update the counts and status in the View on the left.
-                    // Delay again, same reason 
-                    // Dispatch.OnUiThread(() => { vm.TranslationAdded(); });
                     await Task.Delay(66);
                 }
                 else
                 {
                     this.abortRequested = true;
                     SaveAlreadyTranslated();
-
-                    //Dispatch.OnUiThread(() =>
-                    //{
-                    //    this.EndProject(aborted: true);
-                    //});
+                    this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
                     return false;
                 }
             }
@@ -265,11 +263,14 @@ public sealed partial class TranslatorModel : ModelBase
             // Save translations in chosen format 
             if (this.MergeAndSaveTranslations(cultureKey, missingTranslations))
             {
+                // Message Complete target language  
                 // Dispatch.OnUiThread(() => { vm.SetComplete(0); });
+                // Delay so that the UI has a chance to update before the next service call
+                await Task.Delay(66);
             }
             else
             {
-                // Dispatch.OnUiThread(() => { this.EndProject(aborted: true); });
+                this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
                 return false;
             }
         }
@@ -277,7 +278,7 @@ public sealed partial class TranslatorModel : ModelBase
         // Complete 
         if (!this.abortRequested)
         {
-            // Dispatch.OnUiThread(() => { this.EndProject(aborted: false); });
+            this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ false); });
             return true;
         }
 
@@ -293,7 +294,7 @@ public sealed partial class TranslatorModel : ModelBase
         bool sourceLoaded = sourceResult.Item1;
         if (!sourceLoaded)
         {
-            // errorMessage = this.Localizer.Lookup("RunProject.FailedLoadingSource");
+            errorMessage = "RunProject.FailedLoadingSource";
             return false;
         }
 
