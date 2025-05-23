@@ -19,6 +19,7 @@
     <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Translator.Service\Lyt.Avalonia.Translator.Service.csproj" />
     <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Console\Lyt.Console.csproj" />
     <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Messenger\Lyt.Messenger.csproj" />
+    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Utilities\Lyt.Utilities.csproj" />
     <ProjectReference Include="..\Lyt.Avalonia.Translator.Model\Lyt.Avalonia.Translator.Model.csproj" />
   </ItemGroup>
 

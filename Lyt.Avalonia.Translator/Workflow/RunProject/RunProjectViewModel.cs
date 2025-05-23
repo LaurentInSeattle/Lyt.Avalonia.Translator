@@ -27,6 +27,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.Messenger.Subscribe<BeginSourceLanguageMessage>(this.OnBeginSourceLanguage, withUiDispatch: true);
         this.Messenger.Subscribe<BeginTargetLanguageMessage>(this.OnTargetSourceLanguage, withUiDispatch: true);
         this.Messenger.Subscribe<TranslationAddedMessage>(this.OnTranslationAdded, withUiDispatch: true);
+        this.Messenger.Subscribe<TranslationCompleteMessage>(this.OnTranslationComplete, withUiDispatch: true);
     }
 
     public override void Activate(object? activationParameters)
@@ -59,6 +60,9 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.TargetLanguageKey];
         vm.TranslationAdded();
     }
+
+    private void OnTranslationComplete(TranslationCompleteMessage message)
+        => this.EndProject(message.Aborted); 
 
     private void OnToolbarCommand(ToolbarCommandMessage message)
     {
@@ -208,10 +212,7 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
     }
 
     private async Task<bool> RunTranslation()
-    {
-        bool status = await this.translatorModel.RunProject(this.EndProject); 
-        return status;
-    }
+        => _ = await this.translatorModel.RunProject(); 
 
     private void NoProject()
     {

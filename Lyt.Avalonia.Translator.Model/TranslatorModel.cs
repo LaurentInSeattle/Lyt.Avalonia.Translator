@@ -23,7 +23,6 @@ public sealed partial class TranslatorModel : ModelBase
     private readonly FileManagerModel fileManager;
     private readonly TranslatorService translatorService;
     private readonly IDispatch dispatcher; 
-    private readonly ILocalizer localizer;
     private readonly Lock lockObject = new();
     private readonly FileId modelFileId;
 
@@ -39,7 +38,8 @@ public sealed partial class TranslatorModel : ModelBase
     public TranslatorModel() : base(null, null)
     {
         this.modelFileId = new FileId(Area.User, Kind.Json, TranslatorModel.TranslatorModelFilename);
-        // Do not inject the FileManagerModel instance: a parameter-less ctor is required for Deserialization 
+        // Do not inject the FileManagerModel instance:
+        // => a parameter-less ctor is required for Deserialization 
         // Empty CTOR required for deserialization 
         this.ShouldAutoSave = false;
     }
@@ -50,14 +50,12 @@ public sealed partial class TranslatorModel : ModelBase
         FileManagerModel fileManager,
         TranslatorService translatorService,
         IDispatch dispatcher,
-        ILocalizer localizer,
         IMessenger messenger,
         ILogger logger) : base(messenger, logger)
     {
         this.fileManager = fileManager;
         this.translatorService = translatorService;
         this.dispatcher = dispatcher;
-        this.localizer = localizer;
         this.modelFileId = new FileId(Area.User, Kind.Json, TranslatorModel.TranslatorModelFilename);
         this.ShouldAutoSave = true;
 
@@ -218,10 +216,10 @@ public sealed partial class TranslatorModel : ModelBase
     }
 
     public void SelectLanguage(string languageKey)
-    {
-        this.Language = languageKey;
-        this.localizer.SelectLanguage(languageKey);
-    }
+        // Dont use localizer here as it is dependant on Avalonia 
+        // this.localizer.SelectLanguage(languageKey);
+        => this.Language = languageKey;
+
 
     public static bool CreateResourceFile(
         ResourceFormat resourceFormat, string destinationPath, Dictionary<string, string> dictionary)

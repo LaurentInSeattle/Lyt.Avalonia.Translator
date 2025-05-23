@@ -42,6 +42,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Console", "..\Lyt.Avalo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Messenger", "..\Lyt.Avalonia.Framework\Lyt.Messenger\Lyt.Messenger.csproj", "{BC7AC4F3-B23E-2E6B-A651-1844E619C879}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Utilities", "..\Lyt.Avalonia.Framework\Lyt.Utilities\Lyt.Utilities.csproj", "{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC7AC4F3-B23E-2E6B-A651-1844E619C879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +120,7 @@ Global
 		{07D25B58-C933-1781-7022-C8D8010E7A81} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 		{B3C3AE4E-1875-FBEE-5325-A9E0BFDDE90C} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 		{BC7AC4F3-B23E-2E6B-A651-1844E619C879} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
+		{9363ADFD-7A3B-1F10-6FFB-9C856A8032ED} = {865CD665-0615-4BB1-B1D2-375E263EF3B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9E157FA9-8A82-43D6-A048-7E82D2534F3F}

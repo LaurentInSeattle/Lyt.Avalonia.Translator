@@ -1,9 +1,4 @@
 ﻿
-using Lyt.Avalonia.Interfaces.Dispatch;
-using Lyt.Console;
-using Lyt.Messaging;
-using System.IO;
-
 namespace Lyt.Translator.Cli;
 
 internal sealed class Translator() : ConsoleBase(
@@ -25,10 +20,7 @@ internal sealed class Translator() : ConsoleBase(
         new Tuple<Type, Type>(typeof(ILogger), typeof(BasicLogger)),
         new Tuple<Type, Type>(typeof(IDispatch), typeof(NullDispatcher)),
         new Tuple<Type, Type>(typeof(IMessenger), typeof(Messenger)),
-
-        //new Tuple<Type, Type>(typeof(ILocalizer), typeof(LocalizerModel)),
-        //new Tuple<Type, Type>(typeof(IProfiler), typeof(Profiler)),
-        //new Tuple<Type, Type>(typeof(IRandomizer), typeof(Randomizer)),
+        new Tuple<Type, Type>(typeof(IProfiler), typeof(Profiler)),
     ])
 {
     public const string Organization = "Lyt";
@@ -37,7 +29,7 @@ internal sealed class Translator() : ConsoleBase(
     public const string AssemblyName = "Lyt.Translator.Cli";
     public const string AssetsFolder = "Assets";
 
-    protected override async void OnStartupComplete()
+    protected override async void OnStartupBegin()
     {
         // This needs to complete before all models are initialized.
         var fileManager = GetRequiredService<FileManagerModel>();
@@ -53,7 +45,7 @@ internal sealed class Translator() : ConsoleBase(
         await applicationModel.Shutdown();
     }
 
-    public void Run(string[] parameters)
+    public async Task RunAsync(string[] parameters)
     {
         if (parameters is null || parameters.Length == 0)
         {
@@ -81,7 +73,7 @@ internal sealed class Translator() : ConsoleBase(
             var deserialized = fileManager.Deserialize<Project>(serialized);
             if (deserialized is Project project)
             {
-                this.RunProject(project);
+                await this.RunProjectAsync(project);
             }
             else
             {
@@ -98,13 +90,47 @@ internal sealed class Translator() : ConsoleBase(
         return;
     }
 
-    private void RunProject(Project project)
+    private async Task RunProjectAsync(Project project)
     {
+        IMessenger messenger = GetRequiredService<IMessenger>();
+        messenger.Subscribe<BeginSourceLanguageMessage>(this.OnBeginSourceLanguage, withUiDispatch: true);
+        messenger.Subscribe<BeginTargetLanguageMessage>(this.OnTargetSourceLanguage, withUiDispatch: true);
+        messenger.Subscribe<TranslationAddedMessage>(this.OnTranslationAdded, withUiDispatch: true);
+        messenger.Subscribe<TranslationCompleteMessage>(this.OnTranslationComplete, withUiDispatch: true);
+
         string sourcePath = project.SourceFilePath();
         if (!File.Exists(sourcePath))
         {
             Print("Source language file does not exist. Path: " + sourcePath);
             return;
         }
+
+        var translatorModel = GetRequiredService<TranslatorModel>();
+        translatorModel.ActiveProject = project;
+        translatorModel.PrepareForRunningProject(out string message);
+        if (!string.IsNullOrWhiteSpace(message))
+        {
+            Print("Failed to prepare project: " + message + "  - Path: " + sourcePath);
+            return;
+        }
+        _ = await translatorModel.RunProject();
+        return; 
+    }
+
+    private void OnBeginSourceLanguage(BeginSourceLanguageMessage message)
+        => Print("Begin Source Language: " +
+            string.Concat(message.EnglishName, "  ~  ", message.LocalName));
+
+    private void OnTargetSourceLanguage(BeginTargetLanguageMessage message)
+        => Print("Begin Target Language: " + 
+            string.Concat(message.EnglishName, "  ~  ", message.LocalName)); 
+
+    private void OnTranslationAdded(TranslationAddedMessage message)
+        => Print("Translation Added: " + message.SourceText + "  =>  " + message.TargetText ) ;
+    
+    private void OnTranslationComplete(TranslationCompleteMessage message)
+    {
+        Print ( (message.Aborted ? "*** Run Project: Aborted *** " : "Run  Project Complete"));
+        System.Console.ReadLine();
     }
 }

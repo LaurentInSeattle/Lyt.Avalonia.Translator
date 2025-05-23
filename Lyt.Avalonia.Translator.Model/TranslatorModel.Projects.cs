@@ -71,6 +71,7 @@ public sealed partial class TranslatorModel : ModelBase
         project.LastUpdated = DateTime.Now;
         this.Projects.Add(project);
         this.Save();
+        this.SaveProjectFile(project);
         return true;
     }
 
@@ -131,6 +132,26 @@ public sealed partial class TranslatorModel : ModelBase
         }
     }
 
+    public Project? LoadProjectFile(string path)
+    {
+        try
+        {
+            string serialized = File.ReadAllText(path);
+            object? deserialized = this.fileManager.Deserialize<Project>(serialized);
+            if (deserialized is Project project)
+            {
+                return project;
+            }
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex);
+            return null;
+        }
+    }
+
     public bool PrepareForRunningProject(out string errorMessage)
     {
         this.isReadyToRun = false;
@@ -166,9 +187,9 @@ public sealed partial class TranslatorModel : ModelBase
         }
 
         return 0;
-    } 
+    }
 
-    public async Task<bool> RunProject(Action<bool> endProject)
+    public async Task<bool> RunProject()
     {
         var currentProject = this.ActiveProject;
         if (!this.isReadyToRun || (currentProject is null) || currentProject.IsInvalid)
@@ -191,7 +212,8 @@ public sealed partial class TranslatorModel : ModelBase
         {
             if (this.abortRequested)
             {
-                this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
+                this.isReadyToRun = false;
+                this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
                 return false;
             }
 
@@ -199,7 +221,7 @@ public sealed partial class TranslatorModel : ModelBase
             Language targetLanguage = DataObjects.Language.Languages[cultureKey];
             // Begin target language 
             this.Messenger.Publish(
-                new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName)); 
+                new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName));
 
             string targetLanguageKey = targetLanguage.LanguageKey;
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
@@ -217,7 +239,8 @@ public sealed partial class TranslatorModel : ModelBase
                 if (this.abortRequested)
                 {
                     SaveAlreadyTranslated();
-                    this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
+                    this.isReadyToRun = false;
+                    this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
                     return false;
                 }
 
@@ -246,7 +269,7 @@ public sealed partial class TranslatorModel : ModelBase
                     // Message Translation Added 
                     this.Messenger.Publish(
                         new TranslationAddedMessage(
-                            sourceLanguageKey, cultureKey, 
+                            sourceLanguageKey, cultureKey,
                             sourceText, translatedText));
                     // Delay so that the UI has a chance to update before the next service call
                     await Task.Delay(66);
@@ -255,7 +278,8 @@ public sealed partial class TranslatorModel : ModelBase
                 {
                     this.abortRequested = true;
                     SaveAlreadyTranslated();
-                    this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
+                    this.isReadyToRun = false;
+                    this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
                     return false;
                 }
             }
@@ -270,7 +294,8 @@ public sealed partial class TranslatorModel : ModelBase
             }
             else
             {
-                this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ true); });
+                this.isReadyToRun = false;
+                this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
                 return false;
             }
         }
@@ -278,7 +303,8 @@ public sealed partial class TranslatorModel : ModelBase
         // Complete 
         if (!this.abortRequested)
         {
-            this.dispatcher.OnUiThread(() => { endProject(/* aborted: */ false); });
+            this.isReadyToRun = false;
+            this.Messenger.Publish(new TranslationCompleteMessage(Aborted: false));
             return true;
         }
 
