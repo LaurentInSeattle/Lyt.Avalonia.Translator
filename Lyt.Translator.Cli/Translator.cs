@@ -114,7 +114,7 @@ internal sealed class Translator() : ConsoleBase(
             return;
         }
         _ = await translatorModel.RunProject();
-        return; 
+        return;
     }
 
     private void OnBeginSourceLanguage(BeginSourceLanguageMessage message)
@@ -122,15 +122,12 @@ internal sealed class Translator() : ConsoleBase(
             string.Concat(message.EnglishName, "  ~  ", message.LocalName));
 
     private void OnTargetSourceLanguage(BeginTargetLanguageMessage message)
-        => Print("Begin Target Language: " + 
-            string.Concat(message.EnglishName, "  ~  ", message.LocalName)); 
+        => Print("Begin Target Language: " +
+            string.Concat(message.EnglishName, "  ~  ", message.LocalName));
 
     private void OnTranslationAdded(TranslationAddedMessage message)
-        => Print("Translation Added: " + message.SourceText + "  =>  " + message.TargetText ) ;
-    
+        => Print("Translation Added: " + message.SourceText + "  =>  " + message.TargetText);
+
     private void OnTranslationComplete(TranslationCompleteMessage message)
-    {
-        Print ( (message.Aborted ? "*** Run Project: Aborted *** " : "Run  Project Complete"));
-        System.Console.ReadLine();
-    }
+        => Print((message.Aborted ? "*** Run Project: Aborted *** " : "Run  Project Complete"));
 }
