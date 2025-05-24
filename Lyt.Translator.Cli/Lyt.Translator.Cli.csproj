@@ -13,13 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Interfaces\Lyt.Avalonia.Interfaces.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Model\Lyt.Avalonia.Model.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Persistence\Lyt.Avalonia.Persistence.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Avalonia.Translator.Service\Lyt.Avalonia.Translator.Service.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Console\Lyt.Console.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Messenger\Lyt.Messenger.csproj" />
-    <ProjectReference Include="..\..\Lyt.Avalonia.Framework\Lyt.Utilities\Lyt.Utilities.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Console\Lyt.Console.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Framework.Interfaces\Lyt.Framework.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Messenger\Lyt.Messenger.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Model\Lyt.Model.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Persistence\Lyt.Persistence.csproj" />
+    <ProjectReference Include="..\..\Lyt.Framework\Lyt.Utilities\Lyt.Utilities.csproj" />
     <ProjectReference Include="..\Lyt.Avalonia.Translator.Model\Lyt.Avalonia.Translator.Model.csproj" />
   </ItemGroup>
 

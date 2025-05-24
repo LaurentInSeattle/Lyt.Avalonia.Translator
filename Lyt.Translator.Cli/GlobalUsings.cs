@@ -26,21 +26,21 @@ global using Microsoft.Extensions.Hosting;
 
 #region Framework 
 
-global using Lyt.Avalonia.Interfaces.Dispatch;
-global using Lyt.Avalonia.Interfaces.Logger;
-global using Lyt.Avalonia.Interfaces.Messenger;
-global using Lyt.Avalonia.Interfaces.Model;
-global using Lyt.Avalonia.Interfaces.Profiler;
+global using Lyt.Framework.Interfaces.Dispatching;
+global using Lyt.Framework.Interfaces.Logging;
+global using Lyt.Framework.Interfaces.Messaging;
+global using Lyt.Framework.Interfaces.Modeling;
+global using Lyt.Framework.Interfaces.Profiling;
 
 global using Lyt.Console;
 global using Lyt.Messaging;
 global using Lyt.Utilities.Profiling;
-global using Lyt.Avalonia.Model;
-global using Lyt.Avalonia.Persistence;
+global using Lyt.Model;
+global using Lyt.Persistence;
 
 #endregion Framework 
 
 global using Lyt.Avalonia.Translator.Model;
 global using Lyt.Avalonia.Translator.Model.DataObjects;
 global using Lyt.Avalonia.Translator.Model.Messaging;
-global using Lyt.Avalonia.Translator.Service;
+global using Lyt.Translator.Service;

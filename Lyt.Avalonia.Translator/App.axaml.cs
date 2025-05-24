@@ -1,5 +1,3 @@
-using Lyt.Avalonia.Interfaces.Dispatch;
-
 namespace Lyt.Avalonia.Translator;
 
 public partial class App : ApplicationBase
