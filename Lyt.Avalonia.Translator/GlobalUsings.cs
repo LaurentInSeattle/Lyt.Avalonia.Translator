@@ -65,15 +65,18 @@ global using Lyt.Avalonia.Mvvm;
 global using Lyt.Avalonia.Mvvm.Animations;
 global using Lyt.Avalonia.Mvvm.Core;
 global using Lyt.Avalonia.Mvvm.Dialogs;
-global using Lyt.Avalonia.Mvvm.Extensions;
 global using Lyt.Avalonia.Mvvm.Logging;
-global using Lyt.Avalonia.Mvvm.Messaging;
 global using Lyt.Avalonia.Mvvm.Toasting;
 global using Lyt.Avalonia.Mvvm.Utilities;
 
 global using Lyt.Avalonia.Localizer;
 global using Lyt.Avalonia.Model;
 global using Lyt.Avalonia.Persistence;
+
+global using Lyt.Utilities.Extensions;
+global using Lyt.Utilities.Profiling;
+global using Lyt.Utilities.Randomizing;
+global using Lyt.Messaging;
 
 #endregion Framework 
 
