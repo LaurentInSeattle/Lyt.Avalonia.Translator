@@ -70,8 +70,11 @@ global using Lyt.Avalonia.Mvvm.Toasting;
 global using Lyt.Avalonia.Mvvm.Utilities;
 
 global using Lyt.Avalonia.Localizer;
+
+global using Lyt.Mvvm;
 global using Lyt.Model;
 global using Lyt.Persistence;
+global using Lyt.Translator.Service;
 
 global using Lyt.Utilities.Extensions;
 global using Lyt.Utilities.Profiling;
@@ -80,12 +83,14 @@ global using Lyt.Messaging;
 
 #endregion Framework 
 
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+
 global using Lyt.Avalonia.Translator.Model;
 global using Lyt.Avalonia.Translator.Model.DataObjects;
 global using Lyt.Avalonia.Translator.Model.Messaging;
 
 global using Lyt.Avalonia.Translator.Messaging;
-global using Lyt.Translator.Service;
 global using Lyt.Avalonia.Translator.Shell;
 
 global using Lyt.Avalonia.Translator.Workflow.CreateNew;

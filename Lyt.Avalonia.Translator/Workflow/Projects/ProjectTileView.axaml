@@ -93,7 +93,7 @@
                 ButtonBackground="BorderlessRectangle"
                 GlyphStrokeThickness="0"
                 GlyphAngle="0"
-                Command="{Binding OpenCommand}"
+                Command="{Binding OnOpen}"
                 />
             <glyphs:GlyphButton
                 x:Name="deleteButton"
@@ -109,7 +109,7 @@
                 ButtonBackground="BorderlessRectangle"
                 GlyphStrokeThickness="0"
                 GlyphAngle="0"
-                Command="{Binding DeleteCommand}"
+                Command="{Binding OnDelete}"
                 />
         </Grid>
     </Border>

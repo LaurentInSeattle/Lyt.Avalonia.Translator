@@ -4,7 +4,7 @@ using static MessagingExtensions;
 using static ToolbarCommandMessage;
 using static ViewActivationMessage;
 
-public sealed class CreateNewViewModel : Bindable<CreateNewView>
+public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
 {
     private readonly TranslatorModel translatorModel;
     private readonly IToaster toaster;
@@ -16,14 +16,18 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
     private ResourceFormat selectedFileFormat;
     private Project? project;
 
-    public CreateNewViewModel(
-        TranslatorModel translatorModel,
-        IToaster toaster)
+    public CreateNewViewModel(TranslatorModel translatorModel, IToaster toaster)
     {
         this.translatorModel = translatorModel;
         this.toaster = toaster;
         this.languages = [];
         this.clickableLanguages = [];
+
+        this.FileFormats = [];
+        this.SourceLanguages = [];
+        this.AvailableLanguages = [];
+        this.SelectedLanguages = [];
+
         this.PopulateLanguageAndFormats();
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
         this.Messenger.Subscribe<DropFileMessage>(this.OnDropFile);
@@ -95,17 +99,17 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
     private void SaveProject()
     {
-        if ( this.project is null )
+        if (this.project is null)
         {
             this.toaster.Show(
                 this.Localizer.Lookup("CreateNew.CantSaveProjectTitle"),
-                this.Localizer.Lookup("CreateNew.CantSaveProjectText"), 
+                this.Localizer.Lookup("CreateNew.CantSaveProjectText"),
                 3_000, InformationLevel.Warning);
-            return ;
+            return;
         }
 
         this.ErrorMessage = string.Empty;
-        if (!this.project.Validate( out string errorMessageKey))
+        if (!this.project.Validate(out string errorMessageKey))
         {
             this.ErrorMessage = this.Localizer.Lookup(errorMessageKey);
             return;
@@ -119,7 +123,7 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
 
         this.toaster.Show(
             this.Localizer.Lookup("CreateNew.ProjectSavedTitle"),
-            this.Localizer.Lookup("CreateNew.ProjectSavedText"), 
+            this.Localizer.Lookup("CreateNew.ProjectSavedText"),
             3_000, InformationLevel.Success);
 
         // Navigate to load projects 
@@ -209,14 +213,14 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
             SourceFile = fileName,
             TargetFileFormat = targetFileFormat,
             SourceLanguageCultureKey = language.CultureKey,
-            TargetLanguagesCultureKeys = 
+            TargetLanguagesCultureKeys =
                 [.. (from item in this.SelectedLanguages select item.Language.CultureKey)],
             Created = DateTime.Now,
             LastUpdated = DateTime.Now,
         };
 
         // Here it's ok to have errors...
-        _ = this.project.Validate(out string errorMessageKey );
+        _ = this.project.Validate(out string errorMessageKey);
         this.ErrorMessage = this.Localizer.Lookup(errorMessageKey);
 
         // Update UI: Note that we do NOT set the initializing flag. 
@@ -329,118 +333,89 @@ public sealed class CreateNewViewModel : Bindable<CreateNewView>
         viewModel.ToggleAvailability();
         if (this.project is not null)
         {
-            this.project.TargetLanguagesCultureKeys = 
+            this.project.TargetLanguagesCultureKeys =
                 [.. from language in this.SelectedLanguages select language.Language.CultureKey];
-        } 
-    }
-
-    public string? ErrorMessage { get => this.Get<string?>(); set => this.Set(value); }
-
-    public string? ProjectName
-    {
-        get => this.Get<string?>();
-        set
-        {
-            this.Set(value);
-            if ((this.project is not null) && !string.IsNullOrWhiteSpace(value))
-            {
-                this.project.Name = value.Trim();
-            }
         }
     }
 
-    public string? SourceFile { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? errorMessage;
 
-    public int SelectedSourceLanguageIndex
+    [ObservableProperty]
+    private string? projectName;
+
+    partial void OnProjectNameChanged(string? value)
     {
-        get => this.Get<int>();
-        set
+        if ((this.project is not null) && !string.IsNullOrWhiteSpace(value))
         {
-            // Update the UI...
-            int oldValue = this.Get<int>();
-            bool changed = this.Set(value);
-
-            // ... But do not change the language when initializing 
-            if (this.isInitializing)
-            {
-                return;
-            }
-
-            if (changed)
-            {
-                LanguageInfoViewModel selectedVm = this.SourceLanguages[value];
-                this.selectedSourceLanguage = selectedVm.Language;
-                var available = this.Available(selectedVm);
-                if (available is not null)
-                {
-                    this.AvailableLanguages.Remove(available);
-                }
-
-                var selected = this.Selected(selectedVm);
-                if (selected is not null)
-                {
-                    this.SelectedLanguages.Remove(selected);
-                }
-
-                if (this.project is not null)
-                {
-                    this.project.SourceLanguageCultureKey = this.selectedSourceLanguage.CultureKey;
-                }
-
-                // Old value becomes available 
-                Language language = this.SourceLanguages[oldValue].Language;
-                this.AvailableLanguages.Add(
-                    new ClickableLanguageInfoViewModel(this, language, isAvailable: true));
-
-                Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage.LocalName);
-            }
+            this.project.Name = value.Trim();
         }
     }
 
-    public ObservableCollection<LanguageInfoViewModel> SourceLanguages
-    {
-        get => this.Get<ObservableCollection<LanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private string? sourceFile;
 
-    public int SelectedFileFormatIndex
+    [ObservableProperty]
+    private int selectedSourceLanguageIndex;
+
+    partial void OnSelectedSourceLanguageIndexChanged(int oldValue, int newValue)
     {
-        get => this.Get<int>();
-        set
+        // ... But do not change the language when initializing 
+        if (this.isInitializing)
         {
-            // Update the UI...
-            bool changed = this.Set(value);
-
-            // ... But do not change the language when initializing 
-            if (this.isInitializing)
-            {
-                return;
-            }
-
-            if (changed)
-            {
-                this.selectedFileFormat = this.FileFormats[value].ResourceFormat;
-            }
+            return;
         }
+
+        LanguageInfoViewModel selectedVm = this.SourceLanguages[newValue];
+        this.selectedSourceLanguage = selectedVm.Language;
+        var available = this.Available(selectedVm);
+        if (available is not null)
+        {
+            this.AvailableLanguages.Remove(available);
+        }
+
+        var selected = this.Selected(selectedVm);
+        if (selected is not null)
+        {
+            this.SelectedLanguages.Remove(selected);
+        }
+
+        if (this.project is not null)
+        {
+            this.project.SourceLanguageCultureKey = this.selectedSourceLanguage.CultureKey;
+        }
+
+        // Old value becomes available 
+        Language language = this.SourceLanguages[oldValue].Language;
+        this.AvailableLanguages.Add(
+            new ClickableLanguageInfoViewModel(this, language, isAvailable: true));
+
+        Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage.LocalName);
     }
 
-    public ObservableCollection<FileFormatViewModel> FileFormats
+    [ObservableProperty]
+    private ObservableCollection<LanguageInfoViewModel> sourceLanguages;
+
+    [ObservableProperty]
+    private int selectedFileFormatIndex;
+
+    partial void OnSelectedFileFormatIndexChanged(int value)
     {
-        get => this.Get<ObservableCollection<FileFormatViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
+        // Do not change the language when initializing 
+        if (this.isInitializing)
+        {
+            return;
+        }
+
+        this.selectedFileFormat = this.FileFormats[value].ResourceFormat;
     }
 
+    [ObservableProperty]
+    private ObservableCollection<FileFormatViewModel> fileFormats;
 
-    public ObservableCollection<ClickableLanguageInfoViewModel> AvailableLanguages
-    {
-        get => this.Get<ObservableCollection<ClickableLanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private ObservableCollection<ClickableLanguageInfoViewModel> availableLanguages;
 
-    public ObservableCollection<ClickableLanguageInfoViewModel> SelectedLanguages
-    {
-        get => this.Get<ObservableCollection<ClickableLanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
-
+    [ObservableProperty]
+    public ObservableCollection<ClickableLanguageInfoViewModel> selectedLanguages;
 }

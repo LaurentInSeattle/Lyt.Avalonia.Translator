@@ -72,6 +72,8 @@ public partial class App : ApplicationBase
 
     protected override async Task OnStartupBegin()
     {
+        ViewModel.TypeInitialize(ApplicationBase.AppHost); 
+
         var logger = App.GetRequiredService<ILogger>();
         logger.Debug("OnStartupBegin begins");
 

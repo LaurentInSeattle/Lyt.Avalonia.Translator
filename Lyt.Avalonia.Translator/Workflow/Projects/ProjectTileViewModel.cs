@@ -3,15 +3,22 @@
 using static ToolbarCommandMessage;
 using static MessagingExtensions;
 
-public sealed class ProjectTileViewModel : Bindable<ProjectTileView>
+public sealed partial class ProjectTileViewModel : ViewModel<ProjectTileView>
 {
-    private readonly Project project; 
+    private readonly Project project;
+
+    [ObservableProperty]
+    private string name;
+
+    [ObservableProperty]
+    private string opened;
+
+    [ObservableProperty]
+    private string description;
 
     public ProjectTileViewModel(Project project)
     {
         this.project = project;
-
-        this.DisablePropertyChangedLogging = true;
         this.Name = project.Name;
         this.Opened =
             string.Format(
@@ -27,23 +34,9 @@ public sealed class ProjectTileViewModel : Bindable<ProjectTileView>
                 this.project.TargetLanguagesCultureKeys.Count);
     }
 
-    #region Methods invoked by the Framework using reflection 
-#pragma warning disable IDE0051 // Remove unused private members
+    [RelayCommand]
+    public void OnOpen() => Command(ToolbarCommand.RunProject, this.project);
 
-    private void OnOpen(object? _) => Command(ToolbarCommand.RunProject, this.project);
-
-    private void OnDelete(object? _) => Command(ToolbarCommand.DeleteProject, this.project);
-
-#pragma warning restore IDE0051 // Remove unused private members
-    #endregion Methods invoked by the Framework using reflection 
-
-    public ICommand OpenCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand DeleteCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public string Name { get => this.Get<string>()!; set => this.Set(value); }
-
-    public string Opened { get => this.Get<string>()!; set => this.Set(value); }
-
-    public string Description { get => this.Get<string>()!; set => this.Set(value); }
+    [RelayCommand]
+    public void OnDelete() => Command(ToolbarCommand.DeleteProject, this.project);
 }

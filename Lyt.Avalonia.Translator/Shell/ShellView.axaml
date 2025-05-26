@@ -101,7 +101,7 @@
 				GlyphAngle="0"
 				Text="{DynamicResource Shell.Translate}"
 				IsSelected="True"
-				Command="{Binding TranslateCommand}"
+				Command="{Binding OnTranslate}"
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
 			<glyphs:GlyphButton
@@ -116,7 +116,7 @@
 				GlyphStrokeThickness="0"
 				GlyphAngle="0"
 				Text="{DynamicResource Shell.ProjectList}"
-				Command="{Binding ProjectsCommand}"
+				Command="{Binding OnProjects}"
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
 			<glyphs:GlyphButton
@@ -131,7 +131,7 @@
 				GlyphStrokeThickness="0"
 				GlyphAngle="0"
 				Text="{DynamicResource Shell.RunProject}"
-				Command="{Binding RunProjectCommand}"
+				Command="{Binding OnRunProject}"
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
 			<glyphs:GlyphButton
@@ -146,7 +146,7 @@
 				GlyphStrokeThickness="0"
 				GlyphAngle="0"
 				Text="{DynamicResource Shell.CreateNew}"
-				Command="{Binding CreateNewCommand}"
+				Command="{Binding OnCreateNew}"
 				Group="{Binding ElementName=SelectionGroup}"
 				/>
 			<!-- 
@@ -237,7 +237,7 @@
 				ButtonBackground="BorderlessRectangle"
 				GlyphStrokeThickness="0"
 				Text="{DynamicResource Shell.Close}"
-				Command="{Binding CloseCommand}"
+				Command="{Binding OnClose}"
 				/>
 		</StackPanel>
 

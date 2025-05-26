@@ -31,7 +31,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource CreateNew.AddAllLanguages}"
-			Command="{Binding AddAllLanguagesCommand}"
+			Command="{Binding OnAddAllLanguages}"
 			/>
 		<glyphs:GlyphButton
 			Style="{StaticResource ToolbarIconButton}"
@@ -44,7 +44,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource CreateNew.ClearAllLanguages}"
-			Command="{Binding ClearAllLanguagesCommand}"
+			Command="{Binding OnClearAllLanguages}"
 			/>
 		<glyphs:GlyphButton
 			Style="{StaticResource ToolbarIconButton}"
@@ -57,7 +57,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource CreateNew.SaveProject}"
-			Command="{Binding SaveProjectCommand}"
+			Command="{Binding OnSaveProject}"
 			/>
 	</StackPanel>
 </UserControl>

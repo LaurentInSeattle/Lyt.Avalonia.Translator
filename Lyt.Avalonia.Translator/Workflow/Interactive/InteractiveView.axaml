@@ -87,7 +87,7 @@
 			Padding="8 8 52 8"
 			>
 			<TextBox.KeyBindings>
-				<KeyBinding  Command="{Binding EnterCommand}" Gesture="Enter" />
+				<KeyBinding  Command="{Binding OnEnter}" Gesture="Enter" />
 			</TextBox.KeyBindings>
 		</TextBox>
 		<glyphs:GlyphButton
@@ -103,7 +103,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource Interactive.ClearSource}"
-			Command="{Binding ClearSourceCommand}"
+			Command="{Binding OnClearSource}"
 			/>
 		<glyphs:GlyphButton
 			Grid.Column="1" Grid.Row="3"
@@ -118,7 +118,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="90"
 			Text="{DynamicResource Interactive.Go}"
-			Command="{Binding GoCommand}"
+			Command="{Binding OnGo}"
 			/>
 		<Rectangle
 			Fill="#30000018"
@@ -189,7 +189,7 @@
 			GlyphStrokeThickness="0"
 			GlyphAngle="0"
 			Text="{DynamicResource Interactive.CopyTarget}"
-			Command="{Binding CopyTargetCommand}"
+			Command="{Binding OnCopyTarget}"
 			/>
 
 		<TextBlock

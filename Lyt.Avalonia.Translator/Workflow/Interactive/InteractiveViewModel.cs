@@ -1,6 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Interactive;
 
-public sealed class InteractiveViewModel : Bindable<InteractiveView>
+public sealed partial class InteractiveViewModel : ViewModel<InteractiveView>
 {
     private readonly TranslatorModel translatorModel;
     private readonly TranslatorService translatorService;
@@ -14,10 +14,11 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
     public InteractiveViewModel(
         TranslatorModel translatorModel, TranslatorService translatorService)
     {
-        this.DisablePropertyChangedLogging = true;
         this.translatorModel = translatorModel;
         this.translatorService = translatorService;
         this.languages = [];
+        this.SourceLanguages = [];
+        this.TargetLanguages = [];
         this.PopulateLanguages();
     }
 
@@ -42,17 +43,8 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         this.isInitializing = false;
     }
 
-#pragma warning disable IDE0079 
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable CA1822 // Mark members as static
-
-    private void OnClearSource(object? _)
-    {
-        this.SourceText = string.Empty;
-        this.TargetText = string.Empty;
-    }
-
-    private async void OnCopyTarget(object? _)
+    [RelayCommand]
+    public async Task OnCopyTarget()
     {
         string? maybeTranslation = this.TargetText;
         if (string.IsNullOrWhiteSpace(maybeTranslation))
@@ -75,9 +67,18 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         await clipboard.SetTextAsync(maybeTranslation);
     }
 
-    private void OnGo(object? discard) => this.OnEnter(discard);
+    [RelayCommand]
+    public void OnClearSource()
+    {
+        this.SourceText = string.Empty;
+        this.TargetText = string.Empty;
+    }
 
-    private void OnEnter(object? _)
+    [RelayCommand]
+    public void OnGo() => this.OnEnter();
+
+    [RelayCommand]
+    public void OnEnter()
     {
         // Nothing to translate
         string? maybeSourceText = this.SourceText;
@@ -143,14 +144,8 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
         this.TryOnlineOperation(TryTranslate);
     }
 
-
-#pragma warning restore CA1822
-#pragma warning restore IDE0051 // Remove unused private members
-#pragma warning restore IDE0079
-
     private void TryOnlineOperation(Func<Task<bool>> action)
     {
-        // string? wasWelcomeMessage = this.Welcome;
         try
         {
             // Check internet 
@@ -199,81 +194,56 @@ public sealed class InteractiveViewModel : Bindable<InteractiveView>
             new ModelUpdateMessage(
                 this.translatorModel, nameof(this.translatorModel.IsInternetConnected)));
 
-    public string? SourceText { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? sourceText;
 
-    public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? targetText;
 
-    public string? TranslatedBackText { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? translatedBackText;
 
-    public bool ProgressRingIsActive { get => this.Get<bool>(); set => this.Set(value); }
+    [ObservableProperty]
+    private bool progressRingIsActive;
 
-    public ICommand EnterCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
+    [ObservableProperty]
+    private int selectedSourceLanguageIndex;
 
-    public ICommand GoCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand ClearSourceCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand CopyTargetCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public int SelectedSourceLanguageIndex
+    partial void OnSelectedSourceLanguageIndexChanged(int value)
     {
-        get => this.Get<int>();
-        set
+        // Do not change the language when initializing 
+        if (this.isInitializing)
         {
-            // Update the UI...
-            bool changed = this.Set(value);
-
-            // ... But do not change the language when initializing 
-            if (this.isInitializing)
-            {
-                return;
-            }
-
-            if (changed)
-            {
-                this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
-                Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
-
-                this.OnClearSource(null);
-            }
+            return;
         }
+
+        this.selectedSourceLanguage = Language.Languages[this.SourceLanguages[value].Key];
+        this.OnClearSource();
+        Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage);
     }
 
-    public ObservableCollection<LanguageInfoViewModel> SourceLanguages
-    {
-        get => this.Get<ObservableCollection<LanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private ObservableCollection<LanguageInfoViewModel> sourceLanguages;
 
-    public int SelectedTargetLanguageIndex
+    [ObservableProperty]
+    private int selectedTargetLanguageIndex;
+
+    partial void OnSelectedTargetLanguageIndexChanged(int value)
     {
-        get => this.Get<int>();
-        set
+        // Do not change the language when initializing 
+        if (this.isInitializing)
         {
-            // Update the UI...
-            bool changed = this.Set(value);
-
-            // ... But do not change the language when initializing 
-            if (this.isInitializing)
-            {
-                return;
-            }
-
-            if (changed)
-            {
-                this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[value].Key];
-                Debug.WriteLine("Selected Target language: " + this.selectedTargetLanguage);
-
-                // Force a new translation
-                this.lastTranslatedText = string.Empty;
-                this.OnEnter(null);
-            }
+            return;
         }
+
+        this.selectedTargetLanguage = Language.Languages[this.TargetLanguages[value].Key];
+        Debug.WriteLine("Selected Target language: " + this.selectedTargetLanguage);
+
+        // Force a new translation
+        this.lastTranslatedText = string.Empty;
+        this.OnEnter();
     }
 
-    public ObservableCollection<LanguageInfoViewModel> TargetLanguages
-    {
-        get => this.Get<ObservableCollection<LanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private ObservableCollection<LanguageInfoViewModel> targetLanguages;
 }

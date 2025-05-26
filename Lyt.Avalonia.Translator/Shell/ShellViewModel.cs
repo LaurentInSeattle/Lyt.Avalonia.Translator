@@ -3,15 +3,19 @@
 using static MessagingExtensions;
 using static ViewActivationMessage;
 
-public sealed partial class ShellViewModel : Bindable<ShellView>
+public sealed partial class ShellViewModel : ViewModel<ShellView>
 {
     private const int MinutesToMillisecs = 60 * 1_000;
 
     private readonly TranslatorModel translatorModel;
     private readonly TranslatorService translatorService;
     private readonly IToaster toaster;
-    private readonly IMessenger messenger;
-    private readonly ILocalizer localizer;
+
+    [ObservableProperty]
+    private bool isInternetConnected;
+
+    [ObservableProperty]
+    private bool mainToolbarIsVisible;
 
     #region To please the XAML viewer 
 
@@ -27,13 +31,11 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     public ShellViewModel(
         TranslatorModel translatorModel,
         TranslatorService translatorService, 
-        ILocalizer localizer, IToaster toaster, IMessenger messenger)
+        IToaster toaster)
     {
         this.translatorModel = translatorModel;
         this.translatorService = translatorService; 
-        this.localizer = localizer;
         this.toaster = toaster;
-        this.messenger = messenger;
 
         this.toaster.BreakOnError = false; 
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
@@ -60,7 +62,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     {
     }
 
-    protected override void OnViewLoaded()
+    public override void OnViewLoaded()
     {
         this.Logger.Debug("OnViewLoaded begins");
 
@@ -73,7 +75,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         // Select default language 
         string preferredLanguage = this.translatorModel.Language;
         this.Logger.Debug("Language: " + preferredLanguage);
-        this.localizer.SelectLanguage(preferredLanguage);
+        this.Localizer.SelectLanguage(preferredLanguage);
 
         this.Logger.Debug("OnViewLoaded language loaded");
 
@@ -89,7 +91,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         if (true)
         {
             this.toaster.Show(
-                this.localizer.Lookup("Shell.Ready"), this.localizer.Lookup("Shell.Greetings"),
+                this.Localizer.Lookup("Shell.Ready"), this.Localizer.Lookup("Shell.Greetings"),
                 3_000, InformationLevel.Info);
         }
 
@@ -143,11 +145,11 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     private void OnViewActivation(ActivatedView activatedView, object? parameter = null, bool isFirstActivation = false)
     {
-        Bindable? CurrentViewModel()
+        ViewModel? CurrentViewModel()
         {
             object? currentView = this.View.ShellViewContent.Content;
             if (currentView is Control control &&
-                control.DataContext is Bindable currentViewModel)
+                control.DataContext is ViewModel currentViewModel)
             {
                 return currentViewModel;
             }
@@ -168,7 +170,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
         bool programmaticNavigation = false;
         ActivatedView hasBeenActivated = ActivatedView.Exit;
-        Bindable? currentViewModel = null;
+        ViewModel? currentViewModel = null;
         if (parameter is bool navigationType)
         {
             programmaticNavigation = navigationType;
@@ -178,8 +180,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         void NoToolbar() => this.View.ShellViewToolbar.Content = null;
 
         void SetupToolbar<TViewModel, TControl>()
-            where TViewModel : Bindable<TControl>
-            where TControl : Control, new()
+            where TViewModel : ViewModel<TControl>
+            where TControl : Control, IView, new()
         {
             if (this.View is null)
             {
@@ -266,8 +268,8 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
     }
 
     private void Activate<TViewModel, TControl>(bool isFirstActivation, object? activationParameters)
-        where TViewModel : Bindable<TControl>
-        where TControl : Control, new()
+        where TViewModel : ViewModel<TControl>
+        where TControl : Control, IView, new()
     {
         if (this.View is null)
         {
@@ -276,7 +278,7 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
         var newViewModel = App.GetRequiredService<TViewModel>();
         object? currentView = this.View.ShellViewContent.Content;
-        if (currentView is Control control && control.DataContext is Bindable currentViewModel)
+        if (currentView is Control control && control.DataContext is ViewModel currentViewModel)
         {
             if (newViewModel == currentViewModel)
             {
@@ -305,17 +307,17 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
         App.GetRequiredService<RunProjectToolbarViewModel>().CreateViewAndBind();
     }
 
-#pragma warning disable IDE0079 
-#pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable CA1822 // Mark members as static
+    [RelayCommand]
+    public void OnTranslate() => this.OnViewActivation(ActivatedView.Interactive);
 
-    private void OnTranslate(object? _) => this.OnViewActivation(ActivatedView.Interactive);
+    [RelayCommand]
+    public void OnCreateNew() => this.OnViewActivation(ActivatedView.CreateNew);
 
-    private void OnCreateNew(object? _) => this.OnViewActivation(ActivatedView.CreateNew);
+    [RelayCommand]
+    public void OnProjects() => this.OnViewActivation(ActivatedView.Projects);
 
-    private void OnProjects(object? _) => this.OnViewActivation(ActivatedView.Projects);
-
-    private void OnRunProject(object? _) => this.OnViewActivation(ActivatedView.RunProject);
+    [RelayCommand]
+    public void OnRunProject() => this.OnViewActivation(ActivatedView.RunProject);
 
     //private void OnSettings(object? _) => this.OnViewActivation(ActivatedView.Settings);
 
@@ -323,31 +325,12 @@ public sealed partial class ShellViewModel : Bindable<ShellView>
 
     //private void OnLanguage(object? _) => this.OnViewActivation(ActivatedView.Language);
 
-    private void OnClose(object? _) => OnExit();
-
-#pragma warning restore CA1822
-#pragma warning restore IDE0051 // Remove unused private members
-#pragma warning restore IDE0079
-
-    public bool IsInternetConnected { get => this.Get<bool>(); set => this.Set(value); }
-
-    public ICommand TranslateCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand CreateNewCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand ProjectsCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand RunProjectCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    //public ICommand CollectionCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    //public ICommand SettingsCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    //public ICommand InfoCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    //public ICommand LanguageCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public ICommand CloseCommand { get => this.Get<ICommand>()!; set => this.Set(value); }
-
-    public bool MainToolbarIsVisible { get => this.Get<bool>()!; set => this.Set(value); }
+#pragma warning disable IDE0079 // Remove unnecessary suppression
+#pragma warning disable CA1822
+    // Mark members as static
+    // Relay commands cannot be static
+    [RelayCommand]
+    public void OnClose() => OnExit();
+#pragma warning restore CA1822 
+#pragma warning restore IDE0079 // Remove unnecessary suppression
 }

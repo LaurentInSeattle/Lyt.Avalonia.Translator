@@ -1,8 +1,11 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Shared;
 
-public sealed class FileFormatViewModel : Bindable<FileFormatView>
+public sealed partial class FileFormatViewModel : ViewModel<FileFormatView>
 {
-    private readonly ResourceFormat resourceFormat; 
+    private readonly ResourceFormat resourceFormat;
+
+    [ObservableProperty]
+    private string name;
 
     public FileFormatViewModel(ResourceFormat resourceFormat)
     {
@@ -12,5 +15,4 @@ public sealed class FileFormatViewModel : Bindable<FileFormatView>
 
     public ResourceFormat ResourceFormat => this.resourceFormat;
 
-    public string Name { get => this.Get<string>()!; set => this.Set(value); }
 }

@@ -1,6 +1,6 @@
 namespace Lyt.Avalonia.Translator.Workflow.Projects;
 
-public partial class ProjectTileView : UserControl
+public partial class ProjectTileView : UserControl, IView
 {
     public ProjectTileView()
     {

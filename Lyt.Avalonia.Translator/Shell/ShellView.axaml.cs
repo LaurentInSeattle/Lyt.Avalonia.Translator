@@ -1,6 +1,16 @@
 ﻿namespace Lyt.Avalonia.Translator.Shell;
 
-public partial class ShellView : UserControl
+public partial class ShellView : UserControl, IView
 {
-    public ShellView() => this.InitializeComponent();
+    public ShellView()
+    {
+        this.InitializeComponent();
+        this.Loaded += (s, e) =>
+        {
+            if (this.DataContext is ViewModel bindable)
+            {
+                bindable.OnViewLoaded();
+            }
+        };
+    }
 }

@@ -1,28 +1,48 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.RunProject;
 
-public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
+public sealed partial class ExtLanguageInfoViewModel : ViewModel<ExtLanguageInfoView>
 {
     private const string UriPath = "avares://Lyt.Avalonia.Translator/Assets/Images/Flags/";
     private const string Extension = ".png";
     private readonly Language language;
 
+    [ObservableProperty]
+    private string key;
+
+    [ObservableProperty]
+    private string name;
+
+    [ObservableProperty]
+    private Bitmap? flagOne;
+
+    [ObservableProperty]
+    private Bitmap? flagTwo;
+
+    [ObservableProperty]
+    private string status;
+
+    [ObservableProperty]
+    private bool isComplete;
+
+    [ObservableProperty]
+    private bool isInProgress;
+
     private int missing; 
 
     public ExtLanguageInfoViewModel(Language language)
     {
-        this.DisablePropertyChangedLogging = true; 
         this.language = language;
         string key = language.CultureKey;
         string name = language.LocalName;
         string flagOne = language.PrimaryFlag;
         string? flagTwo = language.SecondaryFlag;
+        this.status = string.Empty;
 
         static Bitmap? From(string? flag)
             => string.IsNullOrWhiteSpace(flag) ?
                     null :
                     new Bitmap(AssetLoader.Open(new Uri(string.Concat(UriPath, flag, Extension))));
 
-        this.DisablePropertyChangedLogging = true;
         this.Key = key;
         this.Name = name;
 
@@ -38,6 +58,8 @@ public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
             this.FlagTwo = From(flagTwo);
         }
     }
+
+    public Language Language => this.language;
 
     public void SetComplete(int missing)
     {
@@ -79,20 +101,4 @@ public sealed class ExtLanguageInfoViewModel : Bindable<ExtLanguageInfoView>
                 this.Localizer.Lookup("RunProject.Complete") :
                 string.Format(missingFormat, this.missing);
     }
-
-    public Language Language => this.language;
-
-    public string Key { get => this.Get<string>()!; set => this.Set(value); }
-
-    public string Name { get => this.Get<string>()!; set => this.Set(value); }
-
-    public Bitmap? FlagOne { get => this.Get<Bitmap>(); set => this.Set(value); }
-
-    public Bitmap? FlagTwo { get => this.Get<Bitmap>(); set => this.Set(value); }
-
-    public string Status { get => this.Get<string>()!; set => this.Set(value); }
-
-    public bool IsComplete { get => this.Get<bool>(); set => this.Set(value); }
-
-    public bool IsInProgress { get => this.Get<bool>(); set => this.Set(value); }
 }

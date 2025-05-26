@@ -2,7 +2,7 @@ namespace Lyt.Avalonia.Translator.Workflow.Shared;
 
 using static Avalonia.Controls.Utilities;
 
-public partial class ClickableLanguageInfoView : UserControl
+public partial class ClickableLanguageInfoView : UserControl, IView
 {
     private static readonly SolidColorBrush insideBrush;
     private static readonly SolidColorBrush pressedBrush;

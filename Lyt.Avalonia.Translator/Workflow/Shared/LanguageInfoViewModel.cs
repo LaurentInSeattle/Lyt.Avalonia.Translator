@@ -1,10 +1,23 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Shared;
 
-public sealed class LanguageInfoViewModel : Bindable<LanguageInfoView>
+public sealed partial class LanguageInfoViewModel : ViewModel<LanguageInfoView>
 {
     private const string UriPath = "avares://Lyt.Avalonia.Translator/Assets/Images/Flags/";
     private const string Extension = ".png";
+
     private readonly Language language;
+
+    [ObservableProperty]
+    private string key;
+
+    [ObservableProperty]
+    private string name;
+
+    [ObservableProperty]
+    private Bitmap? flagOne;
+
+    [ObservableProperty]
+    private Bitmap? flagTwo;
 
     public LanguageInfoViewModel(Language language)
     {
@@ -19,7 +32,6 @@ public sealed class LanguageInfoViewModel : Bindable<LanguageInfoView>
                     null :
                     new Bitmap(AssetLoader.Open(new Uri(string.Concat(UriPath, flag, Extension))));
 
-        this.DisablePropertyChangedLogging = true;
         this.Key = key;
         this.Name = name;
 
@@ -37,12 +49,4 @@ public sealed class LanguageInfoViewModel : Bindable<LanguageInfoView>
     }
 
     public Language Language => this.language;
-
-    public string Key { get => this.Get<string>()!; set => this.Set(value); }
-
-    public string Name { get => this.Get<string>()!; set => this.Set(value); }
-
-    public Bitmap? FlagOne { get => this.Get<Bitmap>(); set => this.Set(value); }
-
-    public Bitmap? FlagTwo { get => this.Get<Bitmap>(); set => this.Set(value); }
 }

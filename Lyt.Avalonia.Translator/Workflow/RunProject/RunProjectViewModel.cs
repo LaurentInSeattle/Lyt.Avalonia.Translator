@@ -2,7 +2,7 @@
 
 using static ToolbarCommandMessage;
 
-public sealed class RunProjectViewModel : Bindable<RunProjectView>
+public sealed partial class RunProjectViewModel : ViewModel<RunProjectView>
 {
     private readonly TranslatorModel translatorModel;
     private readonly RunProjectToolbarViewModel runProjectToolbarViewModel;
@@ -20,7 +20,6 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         this.runProjectToolbarViewModel = runProjectToolbarViewModel;
         this.toaster = toaster;
 
-        this.DisablePropertyChangedLogging = true;
         this.SelectedLanguages = [];
         this.targetLanguageViewModels = [];
         this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
@@ -148,6 +147,14 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
         catch (Exception ex)
         {
             Debug.WriteLine(ex);
+            this.IsInProgress = false;
+            this.ProjectName = string.Empty;
+            this.ProjectDetails = string.Empty;
+            this.SourceLanguage = null;
+            this.FileFormat = null;
+            this.SourceLanguageLabel = string.Empty;
+            this.SourceLanguageKey = string.Empty;
+            this.TargetLanguageLabel = string.Empty;
             this.ErrorMessage = this.Localizer.Lookup("RunProject.FileSystemError");
             return;
         }
@@ -224,43 +231,44 @@ public sealed class RunProjectViewModel : Bindable<RunProjectView>
 
     #region Bound Properties 
 
-    public string? ErrorMessage { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? errorMessage ;
 
-    public string? ProjectName { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? projectName ;
 
-    public string? ProjectDetails { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? projectDetails ;
 
-    public string? TranslationStatus { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? translationStatus ;
 
-    public string? SourceText { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? sourceText ;
 
-    public string? TargetText { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? targetText ;
 
-    public string? SourceLanguageLabel { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? sourceLanguageLabel ;
 
-    public string? SourceLanguageKey { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? sourceLanguageKey ;
 
-    public string? TargetLanguageLabel { get => this.Get<string?>(); set => this.Set(value); }
+    [ObservableProperty]
+    private string? targetLanguageLabel ;
 
-    public bool IsInProgress { get => this.Get<bool>(); set => this.Set(value); }
+    [ObservableProperty]
+    private bool isInProgress ;
 
-    public ObservableCollection<ExtLanguageInfoViewModel> SelectedLanguages
-    {
-        get => this.Get<ObservableCollection<ExtLanguageInfoViewModel>?>() ?? throw new ArgumentNullException("Languages");
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private ObservableCollection<ExtLanguageInfoViewModel> selectedLanguages;
 
-    public LanguageInfoViewModel? SourceLanguage
-    {
-        get => this.Get<LanguageInfoViewModel?>();
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private LanguageInfoViewModel? sourceLanguage;
 
-    public FileFormatViewModel? FileFormat
-    {
-        get => this.Get<FileFormatViewModel?>();
-        set => this.Set(value);
-    }
+    [ObservableProperty]
+    private FileFormatViewModel? fileFormat; 
 
     #endregion Bound Properties 
 }

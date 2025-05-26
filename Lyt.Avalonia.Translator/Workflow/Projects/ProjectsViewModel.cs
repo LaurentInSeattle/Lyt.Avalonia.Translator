@@ -3,14 +3,19 @@
 using static MessagingExtensions;
 using static ToolbarCommandMessage;
 
-public sealed class ProjectsViewModel : Bindable<ProjectsView>
+public sealed partial class ProjectsViewModel : ViewModel<ProjectsView>
 {
     private readonly TranslatorModel translatorModel;
-    private readonly IToaster toaster; 
+    private readonly IToaster toaster;
+
+    [ObservableProperty]
+    public string? noData;
+
+    [ObservableProperty]
+    private ObservableCollection<ProjectTileViewModel> projectTileViews;
 
     public ProjectsViewModel(TranslatorModel translatorModel, IToaster toaster)
     {
-        this.DisablePropertyChangedLogging = true;
         this.translatorModel = translatorModel;
         this.toaster = toaster;
         this.ProjectTileViews = [];
@@ -108,13 +113,5 @@ public sealed class ProjectsViewModel : Bindable<ProjectsView>
         {
             this.NoData = this.Localizer.Lookup("Projects.None");
         }
-    }
-
-    public string? NoData { get => this.Get<string>(); set => this.Set(value); }
-
-    public ObservableCollection<ProjectTileViewModel> ProjectTileViews
-    {
-        get => this.Get<ObservableCollection<ProjectTileViewModel>>()!;
-        set => this.Set(value);
     }
 }
