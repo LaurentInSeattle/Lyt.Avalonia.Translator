@@ -7,9 +7,9 @@ public partial class ShellView : UserControl, IView
         this.InitializeComponent();
         this.Loaded += (s, e) =>
         {
-            if (this.DataContext is ViewModel bindable)
+            if (this.DataContext is ViewModel viewModel)
             {
-                bindable.OnViewLoaded();
+                viewModel.OnViewLoaded();
             }
         };
     }
