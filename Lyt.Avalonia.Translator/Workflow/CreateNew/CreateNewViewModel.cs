@@ -9,6 +9,33 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
     private readonly TranslatorModel translatorModel;
     private readonly IToaster toaster;
 
+    [ObservableProperty]
+    private string? errorMessage;
+
+    [ObservableProperty]
+    private string? projectName;
+
+    [ObservableProperty]
+    private string? sourceFile;
+
+    [ObservableProperty]
+    private int selectedSourceLanguageIndex;
+
+    [ObservableProperty]
+    private ObservableCollection<LanguageInfoViewModel> sourceLanguages;
+
+    [ObservableProperty]
+    private int selectedFileFormatIndex;
+
+    [ObservableProperty]
+    private ObservableCollection<FileFormatViewModel> fileFormats;
+
+    [ObservableProperty]
+    private ObservableCollection<ClickableLanguageInfoViewModel> availableLanguages;
+
+    [ObservableProperty]
+    public ObservableCollection<ClickableLanguageInfoViewModel> selectedLanguages;
+
     private List<LanguageInfoViewModel> languages;
     private List<ClickableLanguageInfoViewModel> clickableLanguages;
     private bool isInitializing;
@@ -133,6 +160,7 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
 
     private void ProcessSourceLanguageFile(string path)
     {
+        this.ErrorMessage = string.Empty;
         FileInfo fileInfo = new(path);
         if (!fileInfo.Exists)
         {
@@ -330,6 +358,12 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
             this.AvailableLanguages.Add(viewModel);
         }
 
+
+        this.ErrorMessage =
+            this.SelectedLanguages.Count == 0 ?
+                this.Localizer.Lookup("Model.Project.ZeroTargetLanguages") : 
+                string.Empty;
+
         viewModel.ToggleAvailability();
         if (this.project is not null)
         {
@@ -338,12 +372,6 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
         }
     }
 
-    [ObservableProperty]
-    private string? errorMessage;
-
-    [ObservableProperty]
-    private string? projectName;
-
     partial void OnProjectNameChanged(string? value)
     {
         if ((this.project is not null) && !string.IsNullOrWhiteSpace(value))
@@ -351,12 +379,6 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
             this.project.Name = value.Trim();
         }
     }
-
-    [ObservableProperty]
-    private string? sourceFile;
-
-    [ObservableProperty]
-    private int selectedSourceLanguageIndex;
 
     partial void OnSelectedSourceLanguageIndexChanged(int oldValue, int newValue)
     {
@@ -393,12 +415,6 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
         Debug.WriteLine("Selected Source language: " + this.selectedSourceLanguage.LocalName);
     }
 
-    [ObservableProperty]
-    private ObservableCollection<LanguageInfoViewModel> sourceLanguages;
-
-    [ObservableProperty]
-    private int selectedFileFormatIndex;
-
     partial void OnSelectedFileFormatIndexChanged(int value)
     {
         // Do not change the language when initializing 
@@ -409,13 +425,4 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
 
         this.selectedFileFormat = this.FileFormats[value].ResourceFormat;
     }
-
-    [ObservableProperty]
-    private ObservableCollection<FileFormatViewModel> fileFormats;
-
-    [ObservableProperty]
-    private ObservableCollection<ClickableLanguageInfoViewModel> availableLanguages;
-
-    [ObservableProperty]
-    public ObservableCollection<ClickableLanguageInfoViewModel> selectedLanguages;
 }

@@ -219,12 +219,16 @@ public sealed partial class TranslatorModel : ModelBase
 
             // Loop through missing target language strings 
             Language targetLanguage = DataObjects.Language.Languages[cultureKey];
-            // Begin target language 
-            this.Messenger.Publish(
-                new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName));
 
             string targetLanguageKey = targetLanguage.LanguageKey;
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
+
+            // Begin target language 
+            if (missingTranslations.Count > 0)
+            {
+                this.Messenger.Publish(
+                    new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName));
+            }
 
             void SaveAlreadyTranslated()
             {
@@ -248,16 +252,16 @@ public sealed partial class TranslatorModel : ModelBase
 
                 // DONT Call the translation service until the UI is complete 
                 //
+                // Use these lines below to debug the UI, if needed
+                // bool success = true;
+                // string translatedText = "Yolo - " + targetKey;
+
                 var result =
                     await this.translatorService.Translate(
                         this.ActiveProvider,
                         sourceText, sourceLanguageKey, targetLanguageKey);
                 bool success = result.Item1;
                 string translatedText = result.Item2;
-
-                // Use these lines below to debug the UI, if needed
-                //bool success = true;
-                //string translatedText = "Yolo - " + targetKey;
 
                 // Throttle to avoid overwhelming the service 
                 await Task.Delay(666);

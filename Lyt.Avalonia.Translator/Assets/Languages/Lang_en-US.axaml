@@ -78,6 +78,7 @@
 	<system:String x:Key="RunProject.Complete">Complete</system:String>
 	<system:String x:Key="RunProject.Incomplete">Incomplete, missing: {0}</system:String>
 	<system:String x:Key="RunProject.LanguageInProgress">In Progress</system:String>
+	<system:String x:Key="RunProject.FileSystemError">File System Error.</system:String>
 
 	<!-- Model / Service -->
 	<system:String x:Key="Model.Project.Format">Resource file format is invalid or not supported.</system:String>
