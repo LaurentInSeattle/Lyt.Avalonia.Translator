@@ -1,6 +1,4 @@
-﻿using System; 
-
-namespace Lyt.Translator.Cli;
+﻿namespace Lyt.Translator.Cli;
 
 internal class Program
 {
@@ -9,7 +7,6 @@ internal class Program
         System.Console.WriteLine("Welcome to Lyt.Translator! Loading...");
         System.Console.WriteLine("Current directory: " + Environment.CurrentDirectory);
         Run(args); 
-        System.Console.ReadLine();
     }
 
     // Main cannot be async 
@@ -19,21 +16,8 @@ internal class Program
         {
             var translator = new Translator();
             translator.Initialize();
-
-            //#if DEBUG
-            //        if (Debugger.IsAttached)
-            //        {
-            //            string[] testArgs =
-            //            [
-            //                "C:\\Users\\Laurent\\Documents\\Lyt\\Translator\\AstroPic-Hindi.json"
-            //            ];
-            //            await translator.RunAsync(testArgs);
-            //        }
-            //#else
-            //            await translator.RunAsync(args);
-
-            //#endif
             await translator.RunAsync(args);
+            await Task.Delay(500);
             await translator.Shutdown();
         }
         catch (Exception ex) 
