@@ -27,17 +27,17 @@ public sealed class Language(
         {  "nl-NL" , new Language( "nl-NL", "nl", "Dutch", "Hollands", "Netherlands") },
         {  "de-DE" , new Language( "de-DE", "de", "German", "Deutsch", "Germany", "Austria") },
         {  "ka-GE" , new Language( "ka-GE", "ka", "Georgian", "ქართული ენა", "Georgia") },
-        {  "hi-IN" , new Language( "hi-IN", "hi", "Hindi", "हिन्दी", "India") },
         {  "pl-PL" , new Language( "pl-PL", "pl", "Polish", "Polski", "Poland") },
         {  "pt-PT" , new Language( "pt-PT", "pt-PT", "Portuguese", "Português", "Portugal", "Brazil") },
         {  "ro-RO" , new Language( "ro-RO", "ro", "Romanian", "Românesc", "Romania", "Moldova") },
         {  "hy-AM" , new Language( "hy-AM", "hy-AM", "Armenian", "Հայերէն", "Armenia") },
         {  "cs-CS" , new Language( "cs-CS", "cs-CS", "Czech", "Čeština", "Czech") },
-
-        // To Verify 
         {  "zh-CN" , new Language( "zh-CN", "zh-CN", "Chinese (Simplified)", "簡體 中文", "China") },
         {  "zh-TW" , new Language( "zh-TW", "zh-TW", "Chinese (Traditional)", "繁體 中文", "Taiwan") },
-        {  "bn-BN" , new Language( "bn-BN", "bn", "Bengali", "বাঙ্গালী", "Bangladesh", "India" ) },
+        {  "hi-IN" , new Language( "hi-IN", "hi", "Hindi", "हिन्दी", "India") },
+        {  "bn-BD" , new Language( "bn-BD", "bn", "Bengali", "বাঙ্গালী", "Bangladesh") },
+
+        // To Verify 
         {  "hu-HU" , new Language( "hu-HU", "hu", "Hungarian", "Magyar", "Hungary") },
         {  "ko-KO" , new Language( "ko-KO", "ko", "Korean", "한국인 - 조선어", "South_Korea", "North_Korea") },
         {  "th-TH" , new Language( "th-TH", "th", "Thai", "ภาษาไทย", "Thailand") },

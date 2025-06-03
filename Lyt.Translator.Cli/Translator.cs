@@ -17,7 +17,7 @@ internal sealed class Translator() : ConsoleBase(
     ],
     [
         // Services 
-        new Tuple<Type, Type>(typeof(ILogger), typeof(BasicLogger)),
+        new Tuple<Type, Type>(typeof(ILogger), typeof(ConsoleLogger)),
         new Tuple<Type, Type>(typeof(IDispatch), typeof(NullDispatcher)),
         new Tuple<Type, Type>(typeof(IMessenger), typeof(Messenger)),
         new Tuple<Type, Type>(typeof(IProfiler), typeof(Profiler)),
@@ -68,6 +68,7 @@ internal sealed class Translator() : ConsoleBase(
 
         try
         {
+            Print("Loading: " + path);
             string serialized = File.ReadAllText(path);
             var fileManager = GetRequiredService<FileManagerModel>();
             var deserialized = fileManager.Deserialize<Project>(serialized);

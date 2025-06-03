@@ -224,10 +224,18 @@ public sealed partial class TranslatorModel : ModelBase
             var missingTranslations = this.needTranslationDictionaries[cultureKey];
 
             // Begin target language 
+            this.Logger.Info("Begin target language " + targetLanguage.EnglishName);
             if (missingTranslations.Count > 0)
             {
                 this.Messenger.Publish(
                     new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName));
+            }
+            else
+            {
+                this.Logger.Info("Target language " + targetLanguage.EnglishName + " is complete.");
+
+                // Continue to next target language 
+                continue;
             }
 
             void SaveAlreadyTranslated()
@@ -248,6 +256,7 @@ public sealed partial class TranslatorModel : ModelBase
                     return false;
                 }
 
+                this.Logger.Info("Begin target Key:  " + targetKey  + "  for:  " + targetLanguage.EnglishName);
                 string sourceText = this.sourceDictionary[targetKey];
 
                 // DONT Call the translation service until the UI is complete 
@@ -304,6 +313,9 @@ public sealed partial class TranslatorModel : ModelBase
             }
         }
 
+        // Wait a bit so that last message has a chance to show up
+        await Task.Delay(750); 
+
         // Complete 
         if (!this.abortRequested)
         {
@@ -320,6 +332,12 @@ public sealed partial class TranslatorModel : ModelBase
         errorMessage = string.Empty;
         ResourceFormat resourceFormat = currentProject.Format;
         string sourcePath = currentProject.SourceFilePath();
+        if (!File.Exists(sourcePath))
+        {
+            errorMessage = "RunProject.FailedLoadingSource";
+            return false;
+        }
+
         var sourceResult = TranslatorModel.ParseResourceFile(resourceFormat, sourcePath);
         bool sourceLoaded = sourceResult.Item1;
         if (!sourceLoaded)
@@ -345,6 +363,10 @@ public sealed partial class TranslatorModel : ModelBase
                 {
                     targetDictionary = targetResult.Item2;
                 }
+            }
+            else
+            {
+                // This is fine: Add an empty dictionary 
             }
 
             this.targetDictionaries.Add(cultureKey, targetDictionary);
