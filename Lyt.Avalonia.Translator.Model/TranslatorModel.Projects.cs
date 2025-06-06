@@ -267,8 +267,7 @@ public sealed partial class TranslatorModel : ModelBase
 
                 var result =
                     await this.translatorService.Translate(
-                        this.ActiveProvider,
-                        sourceText, sourceLanguageKey, targetLanguageKey);
+                        this.ActiveProvider, sourceText, sourceLanguageKey, targetLanguageKey);
                 bool success = result.Item1;
                 string translatedText = result.Item2;
 
