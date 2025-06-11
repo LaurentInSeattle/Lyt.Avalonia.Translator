@@ -8,6 +8,11 @@ aXaml format for Avalonia applications using Google Translate Web Service.
 
 Verify quality with the reversed translation
 
+# Command Line Translator
+
+Use Lyt.Translator.Cli from the command line to translate your localization files in Visual Studio 
+as a build event. See https://github.com/LaurentInSeattle/Lyt.Avalonia.AstroPic for an example.
+
 # Project Setup
 
 <p align="left"><img src="Screenshots\ProjectSetup.png" height="500"/>
@@ -39,9 +44,10 @@ Translation in progress...
 # Build your own...
 
 - Clone this repo'
-- => Clone the "Lyt.Avalonia.Framework" repo' side by side
-- Open solution in Visual Studio and build.
+- => Clone the "Lyt.Framework" repo' side by side
+- => Clone the "Lyt.Avalonia" repo' side by side
+- Open the solution in Visual Studio and build.
 
-Tested with VS 2022 and Avalonia 11.3.0.
+Tested with VS 2022 and Avalonia 11.3.1.
 Should likely work with Rider, but not tested.
 
