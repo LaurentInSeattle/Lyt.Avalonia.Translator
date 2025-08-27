@@ -1,6 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 using static ToolbarCommandMessage;
 
 public sealed partial class CreateNewToolbarViewModel : ViewModel<CreateNewToolbarView>

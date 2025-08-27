@@ -190,9 +190,8 @@ public sealed partial class InteractiveViewModel : ViewModel<InteractiveView>
 
     private void UpdateInternetConnectionStatus()
         // Could be redundant... but better twice than never.
-        => this.Messenger.Publish(
-            new ModelUpdateMessage(
-                this.translatorModel, nameof(this.translatorModel.IsInternetConnected)));
+        => new ModelUpdateMessage(
+                this.translatorModel, nameof(this.translatorModel.IsInternetConnected)).Publish();
 
     [ObservableProperty]
     private string? sourceText;

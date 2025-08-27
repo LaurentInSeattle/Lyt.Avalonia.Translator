@@ -1,9 +1,9 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Projects;
 
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 using static ToolbarCommandMessage;
 
-public sealed partial class ProjectsViewModel : ViewModel<ProjectsView>
+public sealed partial class ProjectsViewModel : ViewModel<ProjectsView>, IRecipient<ToolbarCommandMessage>
 {
     private readonly TranslatorModel translatorModel;
     private readonly IToaster toaster;
@@ -19,7 +19,7 @@ public sealed partial class ProjectsViewModel : ViewModel<ProjectsView>
         this.translatorModel = translatorModel;
         this.toaster = toaster;
         this.ProjectTileViews = [];
-        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
+        this.Subscribe<ToolbarCommandMessage>();
     }
 
     public override void Activate(object? activationParameters)
@@ -28,7 +28,7 @@ public sealed partial class ProjectsViewModel : ViewModel<ProjectsView>
         this.Populate();
     }
 
-    private void OnToolbarCommand(ToolbarCommandMessage message)
+    public void Receive(ToolbarCommandMessage message)
     {
         if (message.CommandParameter is not Project project)
         {

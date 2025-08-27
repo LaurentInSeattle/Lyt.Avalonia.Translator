@@ -205,15 +205,14 @@ public sealed partial class TranslatorModel : ModelBase
         string sourceLanguageKey = sourceLanguage.LanguageKey;
 
         // Begin source language 
-        this.Messenger.Publish(
-            new BeginSourceLanguageMessage(sourceLanguageKey, sourceLanguage.EnglishName, sourceLanguage.LocalName));
+        new BeginSourceLanguageMessage(sourceLanguageKey, sourceLanguage.EnglishName, sourceLanguage.LocalName).Publish();
 
         foreach (string cultureKey in currentProject.TargetLanguagesCultureKeys)
         {
             if (this.abortRequested)
             {
                 this.isReadyToRun = false;
-                this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
+                new TranslationCompleteMessage(Aborted: true).Publish();
                 return false;
             }
 
@@ -227,8 +226,7 @@ public sealed partial class TranslatorModel : ModelBase
             this.Logger.Info("Begin target language " + targetLanguage.EnglishName);
             if (missingTranslations.Count > 0)
             {
-                this.Messenger.Publish(
-                    new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName));
+                new BeginTargetLanguageMessage(cultureKey, targetLanguage.EnglishName, targetLanguage.LocalName).Publish();
             }
             else
             {
@@ -252,7 +250,7 @@ public sealed partial class TranslatorModel : ModelBase
                 {
                     SaveAlreadyTranslated();
                     this.isReadyToRun = false;
-                    this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
+                    new TranslationCompleteMessage(Aborted: true).Publish();
                     return false;
                 }
 
@@ -278,11 +276,9 @@ public sealed partial class TranslatorModel : ModelBase
                 {
                     missingTranslations[targetKey] = translatedText;
 
-                    // Message Translation Added 
-                    this.Messenger.Publish(
-                        new TranslationAddedMessage(
-                            sourceLanguageKey, cultureKey,
-                            sourceText, translatedText));
+                    // Message Translation Added                    
+                    new TranslationAddedMessage(
+                        sourceLanguageKey, cultureKey,sourceText, translatedText).Publish();
                     // Delay so that the UI has a chance to update before the next service call
                     await Task.Delay(66);
                 }
@@ -291,7 +287,7 @@ public sealed partial class TranslatorModel : ModelBase
                     this.abortRequested = true;
                     SaveAlreadyTranslated();
                     this.isReadyToRun = false;
-                    this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
+                    new TranslationCompleteMessage(Aborted: true).Publish();
                     return false;
                 }
             }
@@ -307,7 +303,7 @@ public sealed partial class TranslatorModel : ModelBase
             else
             {
                 this.isReadyToRun = false;
-                this.Messenger.Publish(new TranslationCompleteMessage(Aborted: true));
+                new TranslationCompleteMessage(Aborted: true).Publish();
                 return false;
             }
         }
@@ -319,7 +315,7 @@ public sealed partial class TranslatorModel : ModelBase
         if (!this.abortRequested)
         {
             this.isReadyToRun = false;
-            this.Messenger.Publish(new TranslationCompleteMessage(Aborted: false));
+            new TranslationCompleteMessage(Aborted: false).Publish();
             return true;
         }
 

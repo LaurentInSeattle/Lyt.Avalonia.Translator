@@ -1,6 +1,6 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.RunProject;
 
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 using static ToolbarCommandMessage;
 
 public sealed partial class RunProjectToolbarViewModel : ViewModel<RunProjectToolbarView>

@@ -1,10 +1,13 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.CreateNew;
 
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 using static ToolbarCommandMessage;
 using static ViewActivationMessage;
 
-public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
+public sealed partial class CreateNewViewModel : 
+    ViewModel<CreateNewView>,
+    IRecipient<ToolbarCommandMessage>,
+    IRecipient<DropFileMessage>
 {
     private readonly TranslatorModel translatorModel;
     private readonly IToaster toaster;
@@ -54,10 +57,10 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
         this.SourceLanguages = [];
         this.AvailableLanguages = [];
         this.SelectedLanguages = [];
-
         this.PopulateLanguageAndFormats();
-        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
-        this.Messenger.Subscribe<DropFileMessage>(this.OnDropFile);
+
+        this.Subscribe<ToolbarCommandMessage>();
+        this.Subscribe<DropFileMessage>();
     }
 
     public override void Activate(object? activationParameters)
@@ -66,7 +69,8 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
         this.PopulateLanguageAndFormats();
     }
 
-    private void OnDropFile(DropFileMessage message)
+
+    public void Receive(DropFileMessage message) 
     {
         if (message.Success)
         {
@@ -78,7 +82,8 @@ public sealed partial class CreateNewViewModel : ViewModel<CreateNewView>
         }
     }
 
-    private void OnToolbarCommand(ToolbarCommandMessage message)
+
+    public void Receive(ToolbarCommandMessage message) 
     {
         switch (message.Command)
         {

@@ -20,6 +20,7 @@ global using System.Windows.Input;
 
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
+global using CommunityToolkit.Mvvm.Messaging;
 
 #endregion System 
 
@@ -79,7 +80,6 @@ global using Lyt.Translator.Service;
 global using Lyt.Utilities.Extensions;
 global using Lyt.Utilities.Profiling;
 global using Lyt.Utilities.Randomizing;
-global using Lyt.Messaging;
 
 #endregion Framework 
 

@@ -1,7 +1,7 @@
 ﻿namespace Lyt.Avalonia.Translator.Workflow.Projects;
 
 using static ToolbarCommandMessage;
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 
 public sealed partial class ProjectTileViewModel : ViewModel<ProjectTileView>
 {

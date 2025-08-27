@@ -1,6 +1,8 @@
 ﻿
 namespace Lyt.Translator.Cli;
 
+using CommunityToolkit.Mvvm.Messaging;
+
 internal sealed class Translator() : ConsoleBase(
     Organization,
     Application,
@@ -19,9 +21,12 @@ internal sealed class Translator() : ConsoleBase(
         // Services 
         new Tuple<Type, Type>(typeof(ILogger), typeof(ConsoleLogger)),
         new Tuple<Type, Type>(typeof(IDispatch), typeof(NullDispatcher)),
-        new Tuple<Type, Type>(typeof(IMessenger), typeof(Messenger)),
         new Tuple<Type, Type>(typeof(IProfiler), typeof(Profiler)),
-    ])
+    ]),
+    IRecipient<BeginSourceLanguageMessage>,
+    IRecipient<BeginTargetLanguageMessage>,
+    IRecipient<TranslationAddedMessage>,
+    IRecipient<TranslationCompleteMessage>
 {
     public const string Organization = "Lyt";
     public const string Application = "Translator.Cli";
@@ -93,11 +98,10 @@ internal sealed class Translator() : ConsoleBase(
 
     private async Task RunProjectAsync(Project project)
     {
-        IMessenger messenger = GetRequiredService<IMessenger>();
-        messenger.Subscribe<BeginSourceLanguageMessage>(this.OnBeginSourceLanguage, withUiDispatch: true);
-        messenger.Subscribe<BeginTargetLanguageMessage>(this.OnTargetSourceLanguage, withUiDispatch: true);
-        messenger.Subscribe<TranslationAddedMessage>(this.OnTranslationAdded, withUiDispatch: true);
-        messenger.Subscribe<TranslationCompleteMessage>(this.OnTranslationComplete, withUiDispatch: true);
+        this.Subscribe<BeginSourceLanguageMessage>();
+        this.Subscribe<BeginTargetLanguageMessage>();
+        this.Subscribe<TranslationAddedMessage>();
+        this.Subscribe<TranslationCompleteMessage>();
 
         string sourcePath = project.SourceFilePath();
         if (!File.Exists(sourcePath))
@@ -118,17 +122,17 @@ internal sealed class Translator() : ConsoleBase(
         return;
     }
 
-    private void OnBeginSourceLanguage(BeginSourceLanguageMessage message)
+    public void Receive(BeginSourceLanguageMessage message)
         => Print("Begin Source Language: " +
             string.Concat(message.EnglishName, "  ~  ", message.LocalName));
 
-    private void OnTargetSourceLanguage(BeginTargetLanguageMessage message)
+    public void Receive(BeginTargetLanguageMessage message)
         => Print("Begin Target Language: " +
             string.Concat(message.EnglishName, "  ~  ", message.LocalName));
 
-    private void OnTranslationAdded(TranslationAddedMessage message)
+    public void Receive(TranslationAddedMessage message)
         => Print("Translation Added: " + message.SourceText + "  =>  " + message.TargetText);
 
-    private void OnTranslationComplete(TranslationCompleteMessage message)
+    public void Receive(TranslationCompleteMessage message)
         => Print((message.Aborted ? "*** Run Project: Aborted *** " : "Run  Project Complete"));
 }

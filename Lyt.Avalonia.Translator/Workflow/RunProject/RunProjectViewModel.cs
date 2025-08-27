@@ -2,7 +2,13 @@
 
 using static ToolbarCommandMessage;
 
-public sealed partial class RunProjectViewModel : ViewModel<RunProjectView>
+public sealed partial class RunProjectViewModel : 
+    ViewModel<RunProjectView>,
+    IRecipient<ToolbarCommandMessage>,
+    IRecipient<BeginSourceLanguageMessage>,
+    IRecipient<BeginTargetLanguageMessage>,
+    IRecipient<TranslationAddedMessage>,
+    IRecipient<TranslationCompleteMessage>
 {
     private readonly TranslatorModel translatorModel;
     private readonly RunProjectToolbarViewModel runProjectToolbarViewModel;
@@ -19,14 +25,14 @@ public sealed partial class RunProjectViewModel : ViewModel<RunProjectView>
         this.translatorModel = translatorModel;
         this.runProjectToolbarViewModel = runProjectToolbarViewModel;
         this.toaster = toaster;
-
         this.SelectedLanguages = [];
         this.targetLanguageViewModels = [];
-        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
-        this.Messenger.Subscribe<BeginSourceLanguageMessage>(this.OnBeginSourceLanguage, withUiDispatch: true);
-        this.Messenger.Subscribe<BeginTargetLanguageMessage>(this.OnTargetSourceLanguage, withUiDispatch: true);
-        this.Messenger.Subscribe<TranslationAddedMessage>(this.OnTranslationAdded, withUiDispatch: true);
-        this.Messenger.Subscribe<TranslationCompleteMessage>(this.OnTranslationComplete, withUiDispatch: true);
+
+        this.Subscribe<ToolbarCommandMessage>();
+        this.Subscribe<BeginSourceLanguageMessage>();
+        this.Subscribe<BeginTargetLanguageMessage>();
+        this.Subscribe<TranslationAddedMessage>();
+        this.Subscribe<TranslationCompleteMessage>();
     }
 
     public override void Activate(object? activationParameters)
@@ -35,35 +41,47 @@ public sealed partial class RunProjectViewModel : ViewModel<RunProjectView>
         Dispatch.OnUiThread(this.Populate);
     }
 
-    private void OnBeginSourceLanguage(BeginSourceLanguageMessage message)
+    public void Receive(BeginSourceLanguageMessage message)
     {
-        this.SourceLanguageLabel = 
-            string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+        Dispatch.OnUiThread(()=>
+        {
+            this.SourceLanguageLabel =
+                string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+        });
     }
 
-    private void OnTargetSourceLanguage(BeginTargetLanguageMessage message)
+    public void Receive(BeginTargetLanguageMessage message)
     {
-        ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.CultureKey];
-        vm.InProgress();
-        this.TargetLanguageLabel = string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+        Dispatch.OnUiThread(() =>
+        {
+            ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.CultureKey];
+            vm.InProgress();
+            this.TargetLanguageLabel = string.Concat(message.EnglishName, "  ~  ", message.LocalName);
+        });
     }
 
-    private void OnTranslationAdded(TranslationAddedMessage message)
+    public void Receive(TranslationAddedMessage message)
     {
-        // Update the right side of the view 
-        this.SourceText = message.SourceText;
-        this.SourceLanguageKey = message.TargetLanguageKey;
-        this.TargetText = message.TargetText;
+        Dispatch.OnUiThread(() =>
+        {
+            // Update the right side of the view 
+            this.SourceText = message.SourceText;
+            this.SourceLanguageKey = message.TargetLanguageKey;
+            this.TargetText = message.TargetText;
 
-        // Update the counts and status in the View on the left.
-        ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.TargetLanguageKey];
-        vm.TranslationAdded();
+            // Update the counts and status in the View on the left.
+            ExtLanguageInfoViewModel vm = this.targetLanguageViewModels[message.TargetLanguageKey];
+            vm.TranslationAdded();
+        });
     }
 
-    private void OnTranslationComplete(TranslationCompleteMessage message)
-        => this.EndProject(message.Aborted); 
+    public void Receive(TranslationCompleteMessage message)
+        => Dispatch.OnUiThread(()=>
+        {
+            this.EndProject(message.Aborted);
+        });
 
-    private void OnToolbarCommand(ToolbarCommandMessage message)
+    public void Receive(ToolbarCommandMessage message)
     {
         var currentProject = this.translatorModel.ActiveProject;
         if ((currentProject is null) || currentProject.IsInvalid)

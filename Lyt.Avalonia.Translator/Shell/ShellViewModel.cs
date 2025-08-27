@@ -1,9 +1,13 @@
 ﻿namespace Lyt.Avalonia.Translator.Shell;
 
-using static MessagingExtensions;
+using static ApplicationMessagingExtensions;
 using static ViewActivationMessage;
 
-public sealed partial class ShellViewModel : ViewModel<ShellView>
+public sealed partial class ShellViewModel : 
+    ViewModel<ShellView>,
+    IRecipient<ViewActivationMessage>,
+    IRecipient<LanguageChangedMessage>,
+    IRecipient<ModelUpdateMessage>
 {
     private const int MinutesToMillisecs = 60 * 1_000;
 
@@ -36,16 +40,18 @@ public sealed partial class ShellViewModel : ViewModel<ShellView>
         this.translatorModel = translatorModel;
         this.translatorService = translatorService; 
         this.toaster = toaster;
-
         this.toaster.BreakOnError = false; 
-        this.Messenger.Subscribe<ToolbarCommandMessage>(this.OnToolbarCommand);
-        this.Messenger.Subscribe<ViewActivationMessage>(this.OnViewActivation);
-        this.Messenger.Subscribe<LanguageChangedMessage>(this.OnLanguageChanged);
-        this.Messenger.Subscribe<ModelUpdateMessage>(this.OnModelUpdate);
+
+        this.Subscribe<ViewActivationMessage>();
+        this.Subscribe<LanguageChangedMessage>();
+        this.Subscribe<ModelUpdateMessage>();
         
     }
 
-    private void OnModelUpdate(ModelUpdateMessage message) 
+    public void Receive(ViewActivationMessage message) 
+        => this.OnViewActivation(message.View, message.ActivationParameter, false);
+
+    public void Receive(ModelUpdateMessage message)
     {
         if (message.PropertyName == nameof(this.translatorModel.IsInternetConnected))
         {
@@ -53,13 +59,9 @@ public sealed partial class ShellViewModel : ViewModel<ShellView>
         }
     }
 
-    private void OnLanguageChanged(LanguageChangedMessage _)
+    public void Receive(LanguageChangedMessage _)
     {
-    }
-
-    
-    private void OnToolbarCommand(ToolbarCommandMessage _)
-    {
+        // TODO 
     }
 
     public override void OnViewLoaded()
@@ -132,16 +134,6 @@ public sealed partial class ShellViewModel : ViewModel<ShellView>
 
         //this.Logger.Debug("OnViewLoaded OnViewActivation complete");
     }
-
-    //private void OnModelUpdated(ModelUpdateMessage message)
-    //{
-    //    string msgProp = string.IsNullOrWhiteSpace(message.PropertyName) ? "<unknown>" : message.PropertyName;
-    //    string msgMethod = string.IsNullOrWhiteSpace(message.MethodName) ? "<unknown>" : message.MethodName;
-    //    this.Logger.Debug("Model update, property: " + msgProp + " method: " + msgMethod);
-    //}
-
-    private void OnViewActivation(ViewActivationMessage message)
-        => this.OnViewActivation(message.View, message.ActivationParameter, false);
 
     private void OnViewActivation(ActivatedView activatedView, object? parameter = null, bool isFirstActivation = false)
     {
@@ -331,6 +323,6 @@ public sealed partial class ShellViewModel : ViewModel<ShellView>
     // Relay commands cannot be static
     [RelayCommand]
     public void OnClose() => OnExit();
-#pragma warning restore CA1822 
+#pragma warning restore CA1822
 #pragma warning restore IDE0079 // Remove unnecessary suppression
 }

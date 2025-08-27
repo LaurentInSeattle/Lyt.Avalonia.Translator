@@ -82,21 +82,21 @@ public partial class DropView : UserControl
                     if (File.Exists(path))
                     {
                         success = true;
-                        Publish(new DropFileMessage(Success: true, Data: path));
+                        new DropFileMessage(Success: true, Data: path).Publish();
                         break;
                     }
                 }
 
                 if (!success)
                 {
-                    Publish(new DropFileMessage(Success: false, Data: "CreateNew.FileDoesNotExist"));
+                    new DropFileMessage(Success: false, Data: "CreateNew.FileDoesNotExist").Publish();
                 }
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine("OnDrop: Exception: " + ex);
-            Publish(new DropFileMessage(Success: false, Data: "CreateNew.Exception"));
+            new DropFileMessage(Success: false, Data: "CreateNew.Exception").Publish();
         }
 
         dragEventArgs.Handled = true;
