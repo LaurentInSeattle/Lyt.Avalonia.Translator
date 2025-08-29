@@ -33,7 +33,6 @@ global using Lyt.Framework.Interfaces.Modeling;
 global using Lyt.Framework.Interfaces.Profiling;
 
 global using Lyt.Console;
-global using Lyt.Messaging;
 global using Lyt.Utilities.Profiling;
 global using Lyt.Model;
 global using Lyt.Persistence;
