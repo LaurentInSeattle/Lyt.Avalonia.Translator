@@ -70,8 +70,7 @@ public partial class DropView : UserControl
                 this.DropRectangle.Stroke = normalBrush;
             }
 
-            IDataObject data = dragEventArgs.Data;
-            var files = data.GetFiles();
+            var files = dragEventArgs.DataTransfer.TryGetFiles(); 
             if (files is not null)
             {
                 bool success = false;
