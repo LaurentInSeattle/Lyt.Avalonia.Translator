@@ -27,7 +27,7 @@ internal class Program
 #else
             await translator.RunAsync(args);
 #endif
-            await Task.Delay(500);
+            await Task.Delay(50);
             await translator.Shutdown();
         }
         catch (Exception ex)

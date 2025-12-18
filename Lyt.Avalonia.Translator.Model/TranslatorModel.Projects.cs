@@ -270,7 +270,7 @@ public sealed partial class TranslatorModel : ModelBase
                 string translatedText = result.Item2;
 
                 // Throttle to avoid overwhelming the service 
-                await Task.Delay(666);
+                await Task.Delay(555);
 
                 if (success)
                 {
